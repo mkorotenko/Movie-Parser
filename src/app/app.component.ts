@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'nice-kinogo';
+  public title = 'nice-kinogo';
+  public data$ = this.service.rootContent;
+
+  constructor(
+    private service: AppService
+  ) {}
+
 }
