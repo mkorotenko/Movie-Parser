@@ -2,5 +2,8 @@
     [title]="movie.title"
     [rating]="movie.rating"
     [href]="movie.href"
-    [image]="movie.imgSrc">
+    [image]="movie.imgSrc"
+    [genre]="movie.details.Genre.join(',')"
+    [quality]="movie.details.Quality.join(',')"
+    [year]="movie.details.Year && movie.details.Year.join(',')">
 </nc-movie-card>

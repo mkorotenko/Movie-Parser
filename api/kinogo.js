@@ -147,7 +147,7 @@ module.exports = function (data) {
 
         const ratingNode = findAttrAll(element, 'current-rating');
         if (ratingNode) {
-            result['rating'] = ratingNode.childNodes[0].value;
+            result['rating'] = parseFloat(ratingNode.childNodes[0].value);
         } else {
             console.error('rating not found', element);
         }
