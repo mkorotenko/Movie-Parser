@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppService } from './app.service';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +11,13 @@ import { AppService } from './app.service';
 })
 export class AppComponent {
   public title = 'nice-kinogo';
-  public data$ = this.service.rootContent;
+  public count$ = this.service.movieCount$.pipe(
+    map(count => Math.round(count / 20 + .5))
+  );
 
   constructor(
-    private service: AppService
+    private service: AppService,
+    private route: ActivatedRoute
   ) {}
 
 }

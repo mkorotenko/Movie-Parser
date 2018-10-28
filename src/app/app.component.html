@@ -1,9 +1,2 @@
-<nc-movie-card *ngFor="let movie of data$|async"
-    [title]="movie.title"
-    [rating]="movie.rating"
-    [href]="movie.href"
-    [image]="movie._id"
-    [genre]="movie.genre"
-    [quality]="movie.quality"
-    [year]="movie.year">
-</nc-movie-card>
+{{count$ | async}}
+<router-outlet></router-outlet>
