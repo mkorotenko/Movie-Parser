@@ -11,8 +11,15 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent {
   public title = 'nice-kinogo';
-  public count$ = this.service.movieCount$.pipe(
-    map(count => Math.round(count / 20 + .5))
+  public pages$ = this.service.movieCount$.pipe(
+    map(count => Math.round(count / 20 + .5)),
+    map(count => {
+      const res = new Array(count);
+      for (let i = 0; i < count; i++) {
+        res[i] = i + 1;
+      }
+      return res;
+    })
   );
 
   constructor(

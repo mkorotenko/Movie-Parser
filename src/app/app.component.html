@@ -1,2 +1,5 @@
-{{count$ | async}}
+<a *ngFor="let page of pages$ | async"
+    [routerLink]="'movies/' + page">
+    {{page}}
+</a>
 <router-outlet></router-outlet>
