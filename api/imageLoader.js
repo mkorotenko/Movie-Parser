@@ -1,6 +1,6 @@
 'use strict';
 const fs = require('fs'),
-    request = require('request');
+         request = require('request');
 
 module.exports = function (reqImg) {
 

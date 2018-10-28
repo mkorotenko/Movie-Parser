@@ -1,6 +1,7 @@
 'use strict';
 
-const MongoClient = require('mongodb').MongoClient;
+const mondoDB = require('mongodb');
+const MongoClient = mondoDB.MongoClient;
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
@@ -13,16 +14,22 @@ const findDocuments = function(db, filter, limits, callback) {
     const collection = db.collection('documents');
     // Find some documents
     let found = collection.find(filter);
-    if (limits.skip) {
-        found = found.skip(limits.skip);
-    }
-    if (limits.limit) {
-        found = found.limit(limits.limit);
-    }
-
-    found.toArray(function(err, docs) {
-      callback(docs);
-    });
+    found.count()
+        .then(length => {
+            if (limits.skip) {
+                found = found.skip(limits.skip);
+            }
+            if (limits.limit) {
+                found = found.limit(limits.limit);
+            }
+        
+            found.toArray(function(err, docs) {
+              callback({
+                  count: length,
+                  docs
+                });
+            });
+        })
 }
 
 function getFilterVal(keyOp, val) {
@@ -37,9 +44,9 @@ function getFilterVal(keyOp, val) {
         const op = keyOp[1];
         switch (op) {
             case 'gt': 
-                return { '$gte': parseFloat(val[0]) }
+                return { '$gte': parseFloat(val) }
             case 'ls': 
-                return { '$lte': parseFloat(val[0]) }
+                return { '$lte': parseFloat(val) }
             case 'or': 
                 return { '$in': val }
         }
@@ -59,7 +66,7 @@ module.exports = {
 
     insertMovies: function(collection) {
         MongoClient.connect(url, function (err, client) {
-            console.log("Connected successfully to server");
+            //console.log("Connected successfully to server");
 
             const db = client.db(dbName);
             insertDocuments(db, collection, function () {
@@ -72,7 +79,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             MongoClient.connect(url, function (err, client) {
-                console.log("Connected correctly to server");
+                //console.log("Connected correctly to server");
 
                 if (err) {
                     reject(err);
@@ -87,7 +94,7 @@ module.exports = {
                     Object.keys(req.query).forEach(key => {
                         if (key !== 'from' && key !== 'till') {
                             const keyOp = key.split('_');
-                            const val = req.query[key].split(',');
+                            const val = req.query[key];
                             filter[keyOp[0]] = getFilterVal(keyOp, val);
                         }
                     });
@@ -106,6 +113,30 @@ module.exports = {
 
             });    
         })
-    }
+    },
 
+    getMovie: function(id) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+                //console.log("Connected correctly to server");
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                const db = client.db(dbName);
+
+                const filter = {"_id" : mondoDB.ObjectId(id)};
+                const limits = {};
+
+                findDocuments(db, filter, limits, function (res) {
+                    client.close();
+                    resolve(res.docs);
+                });
+
+            });    
+
+        })
+    }
 };

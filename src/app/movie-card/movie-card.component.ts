@@ -25,7 +25,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.image) {
-      this.imgSrc = `assets/images/${this.image}`;
+      this.imgSrc = `api/acc/image/${this.image}`;
     }
   }
 }

@@ -1,7 +1,9 @@
 'use strict';
 
 const imgLoader = require('./imageLoader'),
-        db = require('./db');
+        db = require('./db'),
+        fs = require('fs'),
+        path = require('path');
 
 module.exports = function (app) {
 
@@ -42,6 +44,26 @@ module.exports = function (app) {
             db.findMovies(req)
                 .then(movies => res.json(movies))
                 .catch(e => res.json(e))
+        },
+
+        "image/*": function(req, res) {
+            const docID = req.url.split('/').pop();
+            db.getMovie(docID)
+                .then(m => {
+                    const imgSrc = m[0].imgSrc;
+                    const fileName = 'src/assets/images/' + imgSrc.split('/').pop();
+                    if (fs.existsSync(fileName)) {
+                        res.sendFile(path.resolve(fileName));
+                    } else {
+                        imgLoader(imgSrc)
+                            .then(function() {
+                                res.sendFile(path.resolve(fileName));
+                            })
+                            .catch(function(e) {
+                                res.json(e);
+                            })
+                    }
+                })
         },
 
         content: function (req, res) {
