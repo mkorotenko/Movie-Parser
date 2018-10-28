@@ -1,12 +1,7 @@
 'use strict';
 
-const MongoClient = require('mongodb').MongoClient;
-
-// Connection URL
-const url = 'mongodb://localhost:27017';
-
-// Database Name
-const dbName = 'movies_lib';
+const imgLoader = require('./imageLoader'),
+        db = require('./db');
 
 module.exports = function (app) {
 
@@ -28,15 +23,6 @@ module.exports = function (app) {
                 .delete(module.delete[route]);
     }
 
-    const insertDocuments = function (db, data, callback) {
-        // Get the documents collection
-        const collection = db.collection('documents');
-        // Insert some documents
-        collection.insertMany(data, function (err, result) {
-            callback && callback(result);
-        });
-    }
-
     let get = {
         Login: function (req, res) {
             res.json({
@@ -47,92 +33,15 @@ module.exports = function (app) {
         },
 
         assets: function (req, res) {
-            var fs = require('fs'),
-            request = require('request');
-        
-            var download = function(uri, filename, callback){
-            request.head(uri, function(err, res, body){
-                console.log('content-type:', res.headers['content-type']);
-                console.log('content-length:', res.headers['content-length']);
-            
-                request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-            });
-            };
-            
-            download('http://kinogo.cc/' + req.query.img, 'src/assets/images/' + req.query.img.split('/').pop(), function(){
-                console.log('done');
-                res.json(true);
-            });
+            imgLoader(req.query.img)
+                .then(() => res.json(true))
+                .catch((e) => res.json(e))
         },
 
         movies: function (req, res) {
-            const findDocuments = function(db, filter, limits, callback) {
-                // Get the documents collection
-                const collection = db.collection('documents');
-                // Find some documents
-                let found = collection.find(filter);
-                if (limits.skip) {
-                    found = found.skip(limits.skip);
-                }
-                if (limits.limit) {
-                    found = found.limit(limits.limit);
-                }
-
-                found.toArray(function(err, docs) {
-                  callback(docs);
-                });
-              }
-
-            function getFilterVal(keyOp, val) {
-                if (keyOp.length === 1) {
-                    if (val.length === 1) {
-                        return val[0]
-                    }
-                    else {
-                        return { '$in' : val }
-                    }
-                } else {
-                    const op = keyOp[1];
-                    switch (op) {
-                        case 'gt': 
-                            return { '$gte': parseFloat(val[0]) }
-                        case 'ls': 
-                            return { '$lte': parseFloat(val[0]) }
-                        case 'or': 
-                            return { '$in': val }
-                    }
-                }
-            }
-
-            MongoClient.connect(url, function (err, client) {
-                console.log("Connected correctly to server");
-
-                const db = client.db(dbName);
-
-                const filter = {};
-                const limits = {};
-                if (req.query) {
-                    Object.keys(req.query).forEach(key => {
-                        if (key !== 'from' && key !== 'till') {
-                            const keyOp = key.split('_');
-                            const val = req.query[key].split(',');
-                            filter[keyOp[0]] = getFilterVal(keyOp, val);
-                        }
-                    });
-                    if (req.query.from) {
-                        limits['skip'] = Number(req.query.from);
-                    }
-                    if (req.query.till) {
-                        limits['limit'] = Number(req.query.till);
-                    }
-                }
-
-                findDocuments(db, filter, limits, function (docs) {
-                    client.close();
-                    res.json(docs);
-                });
-
-            });
+            db.findMovies(req)
+                .then(movies => res.json(movies))
+                .catch(e => res.json(e))
         },
 
         content: function (req, res) {
@@ -147,21 +56,13 @@ module.exports = function (app) {
             httpClient.get('http://kinogo.cc/' + params, (resp) => {
                 var chunks = [];
 
-                resp.on('data', (chunk) => {
-                    chunks.push(chunk);
-                });
+                resp.on('data', (chunk) => chunks.push(chunk));
 
                 resp.on('end', () => {
                     const data = Buffer.concat(chunks);
                     const collection = kinogoParser(data);
-                    MongoClient.connect(url, function (err, client) {
-                        console.log("Connected successfully to server");
+                    db.insertMovies(collection);
 
-                        const db = client.db(dbName);
-                        insertDocuments(db, collection, function () {
-                            client.close();
-                        });
-                    });
                     res.json(collection.length);
                 });
 

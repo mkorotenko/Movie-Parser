@@ -14,15 +14,30 @@ const allowedExt = [
 const express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
+    fs = require('fs'),
     app = express(),
-    port = process.env.PORT || 3000;
+    port = process.env.PORT || 3000,
+    routes = require('./routes'),
+    imgLoader = require('./imageLoader');
 
-const routes = require('./routes'); //importing route
 routes(app); //register the route
 
 app.get('*', (req, res) => {
     if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
-        res.sendFile(path.resolve(`dist/${req.url}`));
+        if (req.url.indexOf('assets/images') > 0) {
+            if (fs.existsSync(`src${req.url}`)) {
+                res.sendFile(path.resolve(`src${req.url}`));
+            } else {
+                imgLoader(req.url)
+                    .then(function() {
+                        res.sendFile(path.resolve(`src${req.url}`));
+                    })
+                    .catch(function(e) {
+                        res.json(e);
+                    })
+            }
+        } else
+            res.sendFile(path.resolve(`dist${req.url}`));
     } else {
         res.sendFile(path.resolve('dist/index.html'));
     }
