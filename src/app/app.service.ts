@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map, tap, switchMap, shareReplay } from 'rxjs/operators';
-import { BehaviorSubject, Subject, empty } from 'rxjs';
+import { map, switchMap, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, empty } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +48,11 @@ export class AppService {
   constructor(
     private client: HttpClient
   ) { }
+
+  public getLinks(movieID: string) {
+    return this.client.get('api/acc/moviePath/' + movieID).pipe(
+      shareReplay(1)
+    );
+  }
 
 }

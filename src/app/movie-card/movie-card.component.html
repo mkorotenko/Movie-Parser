@@ -8,6 +8,12 @@
         <img src="{{imgSrc}}">
     </div>
     <div>
+        <a *ngFor="let link of links"
+            href="{{link}}">
+            {{fileExt(link)}}
+        </a>
+    </div>
+    <div>
         {{genre}}
     </div>
     <div>

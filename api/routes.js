@@ -4,6 +4,7 @@ const imgLoader = require('./imageLoader'),
         db = require('./db'),
         fs = require('fs'),
         path = require('path');
+const httpClient = require('http');
 
 module.exports = function (app) {
 
@@ -67,7 +68,6 @@ module.exports = function (app) {
         },
 
         content: function (req, res) {
-            const httpClient = require('http');
             const kinogoParser = require('./kinogo');
 
             let params = '';
@@ -91,6 +91,36 @@ module.exports = function (app) {
             }).on("error", (err) => {
                 console.log("Error: " + err.message);
             });
+
+        },
+
+        "moviePath/*": function (req, res) {
+
+            const kinogoParser = require('./kinogo.movie');
+            const docID = req.url.split('/').pop();
+            db.getMovie(docID)
+                .then(m => {
+                    if (m[0].movie && m[0].movie.length)
+                        res.json(m[0].movie);
+                    else 
+                        httpClient.get(m[0].href, (resp) => {
+                            var chunks = [];
+            
+                            resp.on('data', (chunk) => chunks.push(chunk));
+            
+                            resp.on('end', () => {
+                                const data = Buffer.concat(chunks);
+                                const collection = kinogoParser(data);
+                                if (collection && collection.length)
+                                    db.updateMovie(m[0]._id, { movie: collection });
+            
+                                res.json(collection);
+                            });
+            
+                        }).on("error", (err) => {
+                            console.log("Error: " + err.message);
+                        });
+                });
 
         }
     };

@@ -15,10 +15,12 @@ export class MovieCardComponent implements OnInit, OnChanges {
   @Input() genre: string;
   @Input() quality: string;
   @Input() year: string;
+  @Input() links: string[];
 
   public imgSrc = '';
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit() {
   }
@@ -27,5 +29,9 @@ export class MovieCardComponent implements OnInit, OnChanges {
     if (changes.image) {
       this.imgSrc = `api/acc/image/${this.image}`;
     }
+  }
+
+  public fileExt(path: string) {
+    return path.split('.').pop();
   }
 }

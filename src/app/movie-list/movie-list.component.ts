@@ -24,20 +24,9 @@ export class MovieListComponent {
     shareReplay(1)
   );
 
-  // public f = this.route.params
-  //   .subscribe( p => console.info('params', p));
-
   constructor(
     private service: AppService,
     private route: ActivatedRoute
-  ) {
-    // const page = Number(route.snapshot.paramMap.get('id') || '1');
-    // this.service.reqParameters$.next({
-    //   rating_gt: 4.8,
-    //   'details.Genre_or': ['Фэнтези', 'Боевик'],
-    //   from: (page - 1) * 20,
-    //   till: 20
-    // });
-  }
+  ) { }
 
 }
