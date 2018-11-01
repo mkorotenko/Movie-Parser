@@ -9,8 +9,11 @@
     </div>
     <div>
         <a *ngFor="let link of links"
+            class="file-link"
             href="{{link}}">
-            {{fileExt(link)}}
+            <div class="file-link__text">
+                {{fileExt(link)}}
+            </div>
         </a>
     </div>
     <div>

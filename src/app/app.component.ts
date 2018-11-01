@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppService } from './app.service';
-import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -23,8 +22,11 @@ export class AppComponent {
   );
 
   constructor(
-    private service: AppService,
-    private route: ActivatedRoute
+    private service: AppService
   ) {}
+
+  public onSearch(text) {
+      console.info('search:', text.target.value);
+  }
 
 }

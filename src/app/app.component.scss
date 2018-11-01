@@ -4,10 +4,28 @@
     height: 100%;
     position: absolute;
     overflow: auto;
-    
-    iframe {
-        width: 100%;
+
+    .movies-container {
         height: 100%;
-        border: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .movies-container__pages {
+            flex: 0;
+        }
+        
+        .movies-container__search {
+            flex: 0;
+        }
+    }
+
+    .page-link {
+        text-align: center;
+
+        .page-link__text {
+            width: 30px;
+            display: inline-block;
+        }
     }
 }

@@ -1,5 +1,15 @@
-<a *ngFor="let page of pages$ | async"
-    [routerLink]="'movies/' + page">
-    {{page}}
-</a>
-<router-outlet></router-outlet>
+<div class="movies-container">
+    <div class="movies-container__pages">
+        <a *ngFor="let page of pages$ | async"
+            class="page-link"
+            [routerLink]="'movies/' + page">
+            <div class="page-link__text">
+                {{page}}
+            </div>
+        </a>
+    </div>
+    <div class="movies-container__search">
+        <input (change)="onSearch($event)" />
+    </div>
+    <router-outlet></router-outlet>
+</div>

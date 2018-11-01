@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { map, switchMap, shareReplay } from 'rxjs/operators';
-import { BehaviorSubject, empty } from 'rxjs';
+import { BehaviorSubject, empty, merge, combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,30 @@ import { BehaviorSubject, empty } from 'rxjs';
 export class AppService {
 
   public reqParameters$ = new BehaviorSubject<any>(undefined);
+  private req$ = this.reqParameters$.asObservable().pipe(
+    map((param) => (param || {
+      rating_gt: 4.8,
+      'details.Genre_or': ['Фэнтези', 'Боевик']
+    }))
+  );
 
-  private movies$ = this.reqParameters$.asObservable().pipe(
+  public pageParameters$ = new BehaviorSubject<number>(1);
+  private page$ = this.pageParameters$.asObservable().pipe(
+    map(page => ({
+      from: (page - 1) * 20,
+      till: 20
+    }))
+  );
+
+  private movies$ = combineLatest(this.req$, this.page$).pipe(
+    map(([req, page]) => {
+      return {
+        ...req,
+        ...page
+      };
+    }),
     switchMap((parameters: any) => {
+      console.info('params', parameters);
       if (parameters === undefined) {
         return empty();
       } else {
@@ -49,10 +70,15 @@ export class AppService {
     private client: HttpClient
   ) { }
 
+  private f = {};
   public getLinks(movieID: string) {
-    return this.client.get('api/acc/moviePath/' + movieID).pipe(
-      shareReplay(1)
-    );
+    if (this.f[movieID]) {
+      return this.f[movieID];
+    } else {
+      return this.f[movieID] = this.client.get('api/acc/moviePath/' + movieID).pipe(
+        shareReplay(1)
+      );
+    }
   }
 
 }

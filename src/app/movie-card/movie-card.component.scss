@@ -1,3 +1,17 @@
-.nc-card {
-    padding: 10px;
+:host { 
+    display: block;
+
+    .nc-card {
+        padding: 10px;
+    }
+
+    .file-link {
+        text-align: center;
+
+        .file-link__text {
+            width: 40px;
+            display: inline-block;
+        }
+    }
+
 }

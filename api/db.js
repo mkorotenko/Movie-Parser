@@ -89,7 +89,7 @@ module.exports = {
         });
     },
     
-    findMovies: function(req) {
+    findMovies: function(query) {
         return new Promise((resolve, reject) => {
 
             MongoClient.connect(url, function (err, client) {
@@ -104,19 +104,19 @@ module.exports = {
 
                 const filter = {};
                 const limits = {};
-                if (req.query) {
-                    Object.keys(req.query).forEach(key => {
+                if (query) {
+                    Object.keys(query).forEach(key => {
                         if (key !== 'from' && key !== 'till') {
                             const keyOp = key.split('_');
-                            const val = req.query[key];
+                            const val = query[key];
                             filter[keyOp[0]] = getFilterVal(keyOp, val);
                         }
                     });
-                    if (req.query.from) {
-                        limits['skip'] = Number(req.query.from);
+                    if (query.from) {
+                        limits['skip'] = Number(query.from);
                     }
-                    if (req.query.till) {
-                        limits['limit'] = Number(req.query.till);
+                    if (query.till) {
+                        limits['limit'] = Number(query.till);
                     }
                 }
 

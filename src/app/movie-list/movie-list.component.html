@@ -6,5 +6,5 @@
     [genre]="movie.genre"
     [quality]="movie.quality"
     [year]="movie.year"
-    [links]="movie.movie || []">
+    [links]="service.getLinks(movie._id) | async">
 </nc-movie-card>

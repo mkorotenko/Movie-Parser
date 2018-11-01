@@ -42,7 +42,7 @@ module.exports = function (app) {
         },
 
         movies: function (req, res) {
-            db.findMovies(req)
+            db.findMovies(req.query || { till: 20 })
                 .then(movies => res.json(movies))
                 .catch(e => res.json(e))
         },

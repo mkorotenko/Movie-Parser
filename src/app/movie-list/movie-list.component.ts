@@ -14,12 +14,7 @@ export class MovieListComponent {
 
   public title = 'nice-kinogo';
   public data$ = this.route.params.pipe(
-    tap(param => this.service.reqParameters$.next({
-      rating_gt: 4.8,
-      'details.Genre_or': ['Фэнтези', 'Боевик'],
-      from: (Number(param.id || 1) - 1) * 20,
-      till: 20
-    })),
+    tap(param => this.service.pageParameters$.next((Number(param.id || 1)))),
     switchMap(() => this.service.rootContent$),
     shareReplay(1)
   );
