@@ -36,8 +36,7 @@ function getFilterVal(keyOp, val) {
     if (keyOp.length === 1) {
         if (val.length === 1) {
             return val[0]
-        }
-        else {
+        } else {
             return { '$in' : val }
         }
     } else {
@@ -49,6 +48,8 @@ function getFilterVal(keyOp, val) {
                 return { '$lte': parseFloat(val) }
             case 'or': 
                 return { '$in': val }
+            case 'ex':
+                return { '$regex' : `.*${val}.*`, '$options': 'i' }
         }
     }
 }

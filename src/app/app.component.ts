@@ -26,7 +26,14 @@ export class AppComponent {
   ) {}
 
   public onSearch(text) {
-      console.info('search:', text.target.value);
+    const searchText = text.target.value;
+    if (searchText && searchText.length > 1) {
+      this.service.reqParameters$.next({
+        title_ex: searchText
+      });
+    } else {
+      this.service.reqParameters$.next(undefined);
+    }
   }
 
 }

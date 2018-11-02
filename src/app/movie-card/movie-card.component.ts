@@ -15,6 +15,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
   @Input() genre: string;
   @Input() quality: string;
   @Input() year: string;
+  @Input() description: string;
   @Input() links: string[];
 
   public imgSrc = '';

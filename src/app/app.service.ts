@@ -4,9 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
 import { BehaviorSubject, empty, merge, combineLatest } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AppService {
 
   public reqParameters$ = new BehaviorSubject<any>(undefined);
@@ -33,7 +31,6 @@ export class AppService {
       };
     }),
     switchMap((parameters: any) => {
-      console.info('params', parameters);
       if (parameters === undefined) {
         return empty();
       } else {
@@ -50,7 +47,7 @@ export class AppService {
   public rootContent$ = this.movies$.pipe(
     map((res: { docs: any[] }) => {
       const result = res.docs;
-      result.sort((a, b) => b.rating - a.rating);
+      result.sort((a, b) => a.rating - b.rating);
       return result;
     }),
     map((res: any[]) => res.map((e: { details: any, imgSrc: string }) => {

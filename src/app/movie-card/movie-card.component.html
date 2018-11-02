@@ -1,15 +1,25 @@
 <div class="nc-card">
-    <div>
-        <a href="{{href}}">
-            {{title}} rating {{rating}}
+    <div class="nc-card__title">
+        <a class="nc-card__title--ref"
+            href="{{href}}">
+            {{title}}
         </a>
+        <span class="nc-card__title--rating">
+            rating {{rating}}
+        </span>
     </div>
-    <div>
-        <img src="{{imgSrc}}">
+    <div class="nc-card__content">
+        <div class="nc-card__content--img">
+            <img src="{{imgSrc}}">
+        </div>
+        <div class="nc-card__content--description">
+            {{description}}
+        </div>
     </div>
     <div>
         <a *ngFor="let link of links"
             class="file-link"
+            target=”_blank”
             href="{{link}}">
             <div class="file-link__text">
                 {{fileExt(link)}}
@@ -22,9 +32,9 @@
     <div>
         {{quality}}
     </div>
-    <div>
+    <!-- <div>
         {{year}}
-    </div>
+    </div> -->
 </div>
     
     
