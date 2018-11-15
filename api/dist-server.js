@@ -20,6 +20,8 @@ const express = require('express'),
     routes = require('./routes'),
     imgLoader = require('./imageLoader');
 
+global.srcPath = process.env.PATH_SRC || 'src';
+
 routes(app); //register the route
 
 app.get('*', (req, res) => {

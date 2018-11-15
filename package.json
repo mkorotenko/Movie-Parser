@@ -8,6 +8,7 @@
     "mongo_server": "md mongo-db & \"D:/Program Files/MongoDB/Server/3.2/bin/mongod.exe\" --dbpath mongo-db --storageEngine=mmapv1",
     "mongo": "npm run clean_lock && npm run mongo_server",
     "server": "node api/dist-server",
+    "start1": "concurrently \"npm:mongo\" \"sleep 20\" \"npm:server\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -24,6 +25,8 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "concurrently": "^4.0.1",
+    "copy-dir": "^0.4.0",
     "core-js": "^2.5.4",
     "get-urls": "^8.0.0",
     "iconv-lite": "^0.4.24",
@@ -31,6 +34,7 @@
     "parse5": "^5.1.0",
     "request": "^2.88.0",
     "rxjs": "^6.0.0",
+    "xml": "^1.0.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

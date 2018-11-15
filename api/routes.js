@@ -52,7 +52,7 @@ module.exports = function (app) {
             db.getMovie(docID)
                 .then(m => {
                     const imgSrc = m[0].imgSrc;
-                    const fileName = 'src/assets/images/' + imgSrc.split('/').pop();
+                    const fileName = (global.srcPath || 'src') + '/assets/images/' + imgSrc.split('/').pop();
                     if (fs.existsSync(fileName)) {
                         res.sendFile(path.resolve(fileName));
                     } else {

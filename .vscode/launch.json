@@ -9,6 +9,12 @@
             "request": "launch",
             "name": "API Server",
             "program": "${workspaceFolder}\\api\\dist-server"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Node Service",
+            "program": "${workspaceFolder}\\setup_service"
         }
     ]
 }

@@ -1,0 +1,19 @@
+{
+  "name": "server_root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist-server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "get-urls": "^8.0.0",
+    "mongodb": "^3.1.9",
+    "node-windows": "^0.1.14",
+    "parse5": "^5.1.0",
+    "request": "^2.88.0"
+  }
+}
