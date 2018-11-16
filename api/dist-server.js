@@ -18,7 +18,8 @@ const express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
     routes = require('./routes'),
-    imgLoader = require('./imageLoader');
+    imgLoader = require('./imageLoader'),
+    mongo = require('./mongodb-server');
 
 global.srcPath = process.env.PATH_SRC || 'src';
 
@@ -60,3 +61,14 @@ app.on('error', (error) => {
     console.error(new Date(), 'ERROR', error);
 });
 
+let _onExit = mongo.onExit;
+mongo.onExit = function(code) {
+    console.info('Mongo stoped with code:', code);
+    if (_onExit)
+        _onExit.call(mongo, code);
+    setTimeout(() => {
+        console.info('Mongo restarting...');
+        mongo.run();
+    }, 10000);
+}
+mongo.run();
