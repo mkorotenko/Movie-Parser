@@ -9,6 +9,22 @@ const url = 'mongodb://localhost:27017';
 // Database Name
 const dbName = 'movies_lib';
 
+const findApplications = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection('applications');
+    // Find some documents
+    let found = collection.find();
+    found.count()
+        .then(length => {
+            found.toArray(function(err, docs) {
+              callback({
+                  count: length,
+                  docs
+                });
+            });
+        })
+}
+
 const findDocuments = function(db, filter, limits, callback) {
     // Get the documents collection
     const collection = db.collection('documents');
@@ -64,6 +80,27 @@ const insertDocuments = function (db, data, callback) {
 }
 
 module.exports = {
+
+    getApplications: function() {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+                //console.log("Connected correctly to server");
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                const db = client.db(dbName);
+
+                findApplications(db, function (docs) {
+                    client.close();
+                    resolve(docs);
+                });
+
+            });    
+        })
+    },
 
     insertMovies: function(collection) {
         MongoClient.connect(url, function (err, client) {

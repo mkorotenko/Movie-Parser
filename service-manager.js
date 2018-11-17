@@ -5,13 +5,18 @@ var svcSettings = {
     description: 'Home web server.',
     script: require('path').join(__dirname, 'dist-server.js'),
     env: [{
-        name: "PORT",
-        value: 80
-    },
-    {
-        name: "PATH_SRC",
-        value: "dist"
-    }]
+            name: "PORT",
+            value: 80
+        },
+        {
+            name: "PATH_SRC",
+            value: "dist"
+        },
+        {
+            name: "MONGO_DB",
+            value: true
+        }
+    ]
 }
 
 module.exports = {

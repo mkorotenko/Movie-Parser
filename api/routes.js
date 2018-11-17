@@ -1,10 +1,26 @@
 'use strict';
 
-const imgLoader = require('./imageLoader'),
-        db = require('./db'),
-        fs = require('fs'),
-        path = require('path');
+const db = require('./db'),
+      fs = require('fs'),
+      path = require('path'),
+      bodyParser = require('body-parser'),
+      imgLoader = require('./imageLoader');
+    
 const httpClient = require('http');
+// Allowed extensions list can be extended depending on your own needs
+const allowedExt = [
+    '.js',
+    '.ico',
+    '.css',
+    '.png',
+    '.jpg',
+    '.woff2',
+    '.woff',
+    '.ttf',
+    '.svg',
+];
+
+const SRC_PATH = process.env.PATH_SRC || 'src';
 
 module.exports = function (app) {
 
@@ -27,21 +43,14 @@ module.exports = function (app) {
     }
 
     let get = {
-        Login: function (req, res) {
-            res.json({
-                success: true,
-                sessID: "yn4scf1mw3qr2nlthkv3eulh",
-                returnUrl: null
-            });
-        },
 
-        assets: function (req, res) {
+        "assets": function (req, res) {
             imgLoader(req.query.img)
                 .then(() => res.json(true))
                 .catch((e) => res.json(e))
         },
 
-        movies: function (req, res) {
+        "movies": function (req, res) {
             db.findMovies(req.query || { till: 20 })
                 .then(movies => res.json(movies))
                 .catch(e => res.json(e))
@@ -52,7 +61,7 @@ module.exports = function (app) {
             db.getMovie(docID)
                 .then(m => {
                     const imgSrc = m[0].imgSrc;
-                    const fileName = (global.srcPath || 'src') + '/assets/images/' + imgSrc.split('/').pop();
+                    const fileName = SRC_PATH + '/assets/images/' + imgSrc.split('/').pop();
                     if (fs.existsSync(fileName)) {
                         res.sendFile(path.resolve(fileName));
                     } else {
@@ -67,7 +76,7 @@ module.exports = function (app) {
                 })
         },
 
-        content: function (req, res) {
+        "content": function (req, res) {
             const kinogoParser = require('./kinogo');
 
             let params = '';
@@ -100,9 +109,9 @@ module.exports = function (app) {
             const docID = req.url.split('/').pop();
             db.getMovie(docID)
                 .then(m => {
-                    if (m[0].movie && m[0].movie.length)
-                        res.json(m[0].movie);
-                    else 
+                    // if (m[0].movie && m[0].movie.length)
+                    //     res.json(m[0].movie);
+                    // else 
                         httpClient.get(m[0].href, (resp) => {
                             var chunks = [];
             
@@ -126,4 +135,34 @@ module.exports = function (app) {
     };
 
     addRoutesMethods({ get }, 'acc');
+
+    app.get('*', (req, res) => {
+        if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
+            if (req.url.indexOf('assets/images') > 0) {
+                if (fs.existsSync(`src${req.url}`)) {
+                    res.sendFile(path.resolve(`src${req.url}`));
+                } else {
+                    imgLoader(req.url)
+                        .then(function() {
+                            res.sendFile(path.resolve(`src${req.url}`));
+                        })
+                        .catch(function(e) {
+                            res.json(e);
+                        })
+                }
+            } else
+                res.sendFile(path.resolve(`dist${req.url}`));
+        } else {
+            res.sendFile(path.resolve('dist/index.html'));
+        }
+    });
+    
+    app.use(bodyParser.json({ limit: '50mb' }));
+    app.use(bodyParser.raw({ limit: '50mb' }));
+    app.use(bodyParser.text({ limit: '50mb' }));
+    app.use(bodyParser.urlencoded({
+        limit: '50mb',
+        extended: true
+    }));
+
 };
