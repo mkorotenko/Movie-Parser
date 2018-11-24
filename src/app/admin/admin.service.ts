@@ -4,6 +4,7 @@ import { Subject, Observable } from 'rxjs';
 import * as io from 'socket.io-client';
 
 import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class AdminService {
   private socket;
 
   public io$: Subject<MessageEvent> = this.connect();
+
+  constructor(
+    private http: HttpClient
+  ) {}
 
   private connect(): Subject<MessageEvent> {
     console.log('connect');
@@ -44,6 +49,11 @@ export class AdminService {
     // we return our Rx.Subject which is a combination
     // of both an observer and observable.
     return Subject.create(observer, observable);
+  }
+
+  public parseContent(page?: string) {
+    const par = (page && page !== '0' ) ? { params: { page: page } } : {};
+    return this.http.get('api/acc/content', par);
   }
 
 }

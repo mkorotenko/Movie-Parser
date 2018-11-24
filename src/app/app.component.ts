@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
 import { AppService } from './app.service';
 import { map } from 'rxjs/operators';
 
@@ -9,6 +9,9 @@ import { map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
+
+  @ViewChild('yearInput') yearInput: ElementRef;
+
   public title = 'nice-kinogo';
   public pages$ = this.service.movieCount$.pipe(
     map(count => Math.round(count / 20 + .5)),
@@ -30,6 +33,18 @@ export class AppComponent {
     if (searchText && searchText.length > 1) {
       this.service.reqParameters$.next({
         title_ex: searchText
+      });
+    } else {
+      this.service.reqParameters$.next(undefined);
+    }
+  }
+
+  public onYearSearch(text) {
+    const searchYear = text.target.value;
+    if (searchYear && searchYear.length === 4) {
+      this.service.reqParameters$.next({
+        rating_gt: 4.3,
+        'details.Year': searchYear
       });
     } else {
       this.service.reqParameters$.next(undefined);

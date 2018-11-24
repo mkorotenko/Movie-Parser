@@ -13,7 +13,8 @@ module.exports = function (reqImg) {
     };
 
     function assets(img, callback) {
-        download('http://kinogo.cc' + img, 'src/assets/images/' + img.split('/').pop(), callback);
+        const _img = img.replace('http://kinogo.cc', '');
+        download('http://kinogo.cc' + _img, 'src/assets/images/' + _img.split('/').pop(), callback);
     };
 
     return new Promise((resolve, reject) => {

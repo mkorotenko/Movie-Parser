@@ -9,7 +9,7 @@ import { AdminService } from './admin.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(
+    constructor(
     private service: AdminService
   ) { }
 
@@ -18,4 +18,8 @@ export class AdminComponent implements OnInit {
     this.service.io$.subscribe(d => console.info('IO data', d));
   }
 
+  public onClick(page: string) {
+    this.service.parseContent(page || '0')
+      .subscribe(r => console.info('Parse result:', r));
+  }
 }

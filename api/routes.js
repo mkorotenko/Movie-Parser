@@ -78,6 +78,7 @@ module.exports = function (app) {
 
         "content": function (req, res) {
             const kinogoParser = require('./kinogo');
+            const iconv = require('iconv-lite');
 
             let params = '';
             if (req.query && req.query.page) {
@@ -91,15 +92,32 @@ module.exports = function (app) {
 
                 resp.on('end', () => {
                     const data = Buffer.concat(chunks);
-                    const collection = kinogoParser(data);
-                    db.insertMovies(collection);
+                    const html = iconv.decode(data, 'win1251');
+                    const collection = kinogoParser(html)
+                        .filter(i => !i.details.Country.includes("Россия"));
 
-                    res.json(collection.length);
+                    const tasks = collection.map(movie => db.findMovies({ 
+                        title: movie.title 
+                    }));
+
+                    Promise.all(tasks)
+                        .then(function(values) {
+                            const toInsert = values
+                                .filter(d => !d.count)
+                                .map(d => collection.find(c => c.title == d.filter.title));
+
+                            if (toInsert && toInsert.length)
+                                db.insertMovies(toInsert);
+
+                            res.json({new: toInsert.length, count: collection.length});
+                        })
+                        .catch(e => {
+                            console.info('found err', e);
+                            res.json(e);
+                        })
                 });
 
-            }).on("error", (err) => {
-                console.log("Error: " + err.message);
-            });
+            }).on("error", (err) => console.log("Error: " + err.message));
 
         },
 

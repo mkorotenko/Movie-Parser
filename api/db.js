@@ -50,7 +50,10 @@ const findDocuments = function(db, filter, limits, callback) {
 
 function getFilterVal(keyOp, val) {
     if (keyOp.length === 1) {
-        if (val.length === 1) {
+        if (typeof val === 'string') {
+            return val;
+        }
+        else if (val.length === 1) {
             return val[0]
         } else {
             return { '$in' : val }
@@ -160,7 +163,7 @@ module.exports = {
 
                 findDocuments(db, filter, limits, function (docs) {
                     client.close();
-                    resolve(docs);
+                    resolve({...docs, filter: filter});
                 });
 
             });    
