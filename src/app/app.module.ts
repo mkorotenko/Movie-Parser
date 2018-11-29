@@ -12,10 +12,10 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './admin/admin.service';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/movies', pathMatch: 'full' },
-  { path: 'admin', component: AdminComponent },
-  { path: 'movies', component: MovieListComponent },
+  { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
+  { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
+  { path: 'admin', component: AdminComponent },
 ];
 
 @NgModule({

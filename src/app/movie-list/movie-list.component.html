@@ -1,4 +1,5 @@
 <nc-movie-card *ngFor="let movie of data$ | async"
+    [movieID]="movie._id"
     [title]="movie.title"
     [rating]="movie.rating"
     [href]="movie.href"
@@ -6,6 +7,5 @@
     [genre]="movie.genre"
     [quality]="movie.quality"
     [year]="movie.year"
-    [description]="movie.description"
-    [links]="service.getLinks(movie._id) | async">
+    [description]="movie.description">
 </nc-movie-card>

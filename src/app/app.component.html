@@ -1,8 +1,9 @@
 <div class="movies-container">
     <div class="movies-container__pages">
-        <a *ngFor="let page of pages$ | async"
-            class="page-link"
-            [routerLink]="'movies/' + page">
+        <a *ngFor="let page of pages$ | async" 
+            class="page-link" 
+            [routerLink]="'movies/' + page"
+            [queryParams]="params$ | async">
             <div class="page-link__text">
                 {{page}}
             </div>
@@ -10,7 +11,7 @@
     </div>
     <div class="movies-container__search">
         <input (change)="onSearch($event)" />
-        <input (change)="onYearSearch($event)" />
+        <input #yearInput (change)="onYearSearch($event.target.value)" />
     </div>
     <router-outlet></router-outlet>
 </div>

@@ -20,7 +20,7 @@ const allowedExt = [
     '.svg',
 ];
 
-const SRC_PATH = process.env.PATH_SRC || 'src';
+const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
 
 module.exports = function (app) {
 
@@ -70,7 +70,10 @@ module.exports = function (app) {
                                 res.sendFile(path.resolve(fileName));
                             })
                             .catch(function(e) {
-                                res.json(e);
+                                res.json({
+                                    file: imgSrc,
+                                    error: e
+                                });
                             })
                     }
                 })

@@ -2,24 +2,33 @@
 const fs = require('fs'),
          request = require('request');
 
+const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
+
 module.exports = function (reqImg) {
 
-    function download(uri, filename, callback){
+    function download(uri, filename, callback, error){
         request.head(uri, function(err, res, body){
-            request(uri)
-                .pipe(fs.createWriteStream(filename))
-                .on('close', callback);
+            try {
+                request(uri)
+                    .pipe(fs.createWriteStream(filename))
+                    .on('close', callback);
+            }
+            catch(e) {
+                error(e);
+            }
         });
     };
 
-    function assets(img, callback) {
+    function assets(img, callback, error) {
         const _img = img.replace('http://kinogo.cc', '');
-        download('http://kinogo.cc' + _img, 'src/assets/images/' + _img.split('/').pop(), callback);
+        download('http://kinogo.cc' + _img, 
+        SRC_PATH + '/assets/images/' + _img.split('/').pop(), 
+            callback, error);
     };
 
     return new Promise((resolve, reject) => {
         try {
-            assets(reqImg, resolve);
+            assets(reqImg, resolve, reject);
         }
         catch(e) {
             reject(e);

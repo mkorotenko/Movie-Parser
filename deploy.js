@@ -9,16 +9,16 @@ let destDir = 'D:\\server_root';
 let success = true;
 
 function deployFiles() {
-  rimraf(destDir, function (error) {
+  //rimraf(destDir, function (error) {
 
-    if (error) {
-      success = false;
-      console.error(error);
-      return;
-    }
+    // if (error) {
+    //   success = false;
+    //   console.error(error);
+    //   return;
+    // }
 
-    console.log('clear done');
-    fs.mkdirSync(destDir);
+    // console.log('clear done');
+    // fs.mkdirSync(destDir);
 
     copydir.sync(path.join(__dirname, 'api'), destDir, function () { return true }, function (err) {
       console.log('copy api error:', err);
@@ -51,7 +51,7 @@ function deployFiles() {
     //       success = false;
     //   });
 
-  });
+  //});
 
 }
 

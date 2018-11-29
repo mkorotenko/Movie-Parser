@@ -1,6 +1,12 @@
-import { Component, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, ViewChild, ElementRef
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { combineLatest } from 'rxjs';
+import { map, tap, shareReplay } from 'rxjs/operators';
+
 import { AppService } from './app.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +19,17 @@ export class AppComponent {
   @ViewChild('yearInput') yearInput: ElementRef;
 
   public title = 'nice-kinogo';
+
+  public params$ = this.aRoute.queryParams.pipe(
+    map(params => params),
+    shareReplay(1)
+  );
+
   public pages$ = this.service.movieCount$.pipe(
-    map(count => Math.round(count / 20 + .5)),
-    map(count => {
-      const res = new Array(count);
-      for (let i = 0; i < count; i++) {
+    map((count) => {
+      const pageCount = Math.round(Number(count) / 20 + .5);
+      const res = new Array(pageCount);
+      for (let i = 0; i < pageCount; i++) {
         res[i] = i + 1;
       }
       return res;
@@ -25,30 +37,44 @@ export class AppComponent {
   );
 
   constructor(
-    private service: AppService
-  ) {}
+    private service: AppService,
+    private aRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    aRoute.queryParams.subscribe(params => {
+      if (params.year) {
+        this.yearInput.nativeElement.value = params.year;
+        this.service.reqParameters$.next({
+          rating_gt: 4.3,
+          'details.Year': params.year
+        });
+      } else if (params.searchText) {
+        this.service.reqParameters$.next({
+          title_ex: params.searchText
+        });
+      } else {
+        this.service.reqParameters$.next(undefined);
+      }
+    });
+
+  }
 
   public onSearch(text) {
-    const searchText = text.target.value;
-    if (searchText && searchText.length > 1) {
-      this.service.reqParameters$.next({
-        title_ex: searchText
-      });
-    } else {
-      this.service.reqParameters$.next(undefined);
-    }
+    this.router.navigate(['/movies/1'], {
+      queryParams: { searchText: text },
+      relativeTo: this.aRoute
+    });
   }
 
   public onYearSearch(text) {
-    const searchYear = text.target.value;
-    if (searchYear && searchYear.length === 4) {
-      this.service.reqParameters$.next({
-        rating_gt: 4.3,
-        'details.Year': searchYear
-      });
-    } else {
-      this.service.reqParameters$.next(undefined);
+    const query = {};
+    if (text) {
+      query['year'] = text;
     }
+    this.router.navigate(['/movies/1'], {
+      queryParams: query,
+      relativeTo: this.aRoute
+    });
   }
 
 }

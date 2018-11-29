@@ -17,14 +17,18 @@
         </div>
     </div>
     <div>
-        <a *ngFor="let link of links"
-            class="file-link"
-            target=”_blank”
-            href="{{link}}">
-            <div class="file-link__text">
-                {{fileExt(link)}}
-            </div>
-        </a>
+        <button *ngIf="!(hasLinks$ | async)"
+            (click)="onSearchFiles()">Search</button>
+        <ng-container *ngIf="hasLinks$ | async">
+            <a *ngFor="let link of links$ | async"
+                class="file-link"
+                target=”_blank”
+                href="{{link}}">
+                <div class="file-link__text">
+                    {{fileExt(link)}}
+                </div>
+            </a>
+        </ng-container>
     </div>
     <div>
         {{genre}}
