@@ -60,8 +60,12 @@ export class AppComponent {
   }
 
   public onSearch(text) {
+    const query = {};
+    if (text) {
+      query['searchText'] = text;
+    }
     this.router.navigate(['/movies/1'], {
-      queryParams: { searchText: text },
+      queryParams: query,
       relativeTo: this.aRoute
     });
   }

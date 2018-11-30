@@ -29,7 +29,7 @@ const findDocuments = function(db, filter, limits, callback) {
     // Get the documents collection
     const collection = db.collection('documents');
     // Find some documents
-    let found = collection.find(filter);
+    let found = collection.find(filter).sort({ rating: -1 });
     found.count()
         .then(length => {
             if (limits.skip) {
