@@ -14,12 +14,11 @@ export class AdminComponent implements OnInit {
     language: 'json'
   };
 
-  public code = `
-    {
-      "range": 4.9,
-      "description": "some text"
-    }
-  `;
+  public code = `{
+  "range": 4.9,
+  "description": "some text"
+}
+`;
 
   onInit(editor) {
     const line = editor.getPosition();
