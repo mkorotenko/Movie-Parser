@@ -1,2 +1,8 @@
 <input #parsePage />
 <button (click)="onClick(parsePage.value)">Parse</button>
+<ngx-monaco-editor 
+    class="nc-code-editor"
+    [options]="editorOptions" 
+    [(ngModel)]="code" 
+    (onInit)="onInit($event)">
+</ngx-monaco-editor>

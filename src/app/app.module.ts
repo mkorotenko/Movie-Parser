@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -10,6 +11,16 @@ import { AppService } from './app.service';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './admin/admin.service';
+
+import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+
+// const monacoConfig: NgxMonacoEditorConfig = {
+//   baseUrl: 'app-name/assets', // configure base path for monaco editor
+//   defaultOptions: { scrollBeyondLastLine: false }, // pass default options to be used
+//   onMonacoLoad: () => {
+//     console.log((<any>window).monaco);
+//   } // here monaco object will be available as window.monaco use this function to extend monaco editor functionality.
+// };
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
@@ -27,8 +38,10 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot(routes),
-    HttpClientModule
+    HttpClientModule,
+    MonacoEditorModule.forRoot()
   ],
   providers: [
     AppService,

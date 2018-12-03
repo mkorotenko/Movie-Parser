@@ -9,7 +9,24 @@ import { AdminService } from './admin.service';
 })
 export class AdminComponent implements OnInit {
 
-    constructor(
+  public editorOptions = {
+    theme: 'vs-dark',
+    language: 'json'
+  };
+
+  public code = `
+    {
+      "range": 4.9,
+      "description": "some text"
+    }
+  `;
+
+  onInit(editor) {
+    const line = editor.getPosition();
+    console.log(line);
+  }
+
+  constructor(
     private service: AdminService
   ) { }
 
