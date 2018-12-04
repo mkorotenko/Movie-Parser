@@ -18,7 +18,7 @@ export class AppComponent {
 
   @ViewChild('yearInput') yearInput: ElementRef;
 
-  public title = 'nice-kinogo';
+  public title = 'common-site';
 
   public params$ = this.aRoute.queryParams.pipe(
     map(params => params),

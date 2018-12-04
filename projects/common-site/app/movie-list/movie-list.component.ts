@@ -12,7 +12,7 @@ import { switchMap, shareReplay, tap } from 'rxjs/operators';
 })
 export class MovieListComponent {
 
-  public title = 'nice-kinogo';
+  public title = 'common-site';
   public data$ = this.route.params.pipe(
     tap(param => {
       this.service.pageParameters$.next((Number(param.id || 1)));

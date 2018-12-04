@@ -38,5 +38,5 @@ testem.log
 .DS_Store
 Thumbs.db
 mongo-db
-src/assets/images
+projects/common-site/assets/images
 daemon
