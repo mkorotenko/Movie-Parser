@@ -1,5 +1,12 @@
-<input #parsePage />
-<button (click)="onClick(parsePage.value)">Parse</button>
+<div>
+    <input #parsePage />
+    <button (click)="onClick(parsePage.value)">Parse</button>
+</div>
+<div>
+    <input #filter />
+    <button (click)="onQuery(filter.value)">Query</button>
+    <button (click)="onDelete()">Delete</button>
+</div>
 <ngx-monaco-editor 
     class="nc-code-editor"
     [options]="editorOptions" 

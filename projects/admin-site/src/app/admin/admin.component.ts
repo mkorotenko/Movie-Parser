@@ -3,7 +3,7 @@ import { AdminService } from './admin.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'nc-admin',
+  selector: 'adm-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
@@ -14,11 +14,7 @@ export class AdminComponent implements OnInit {
     language: 'json'
   };
 
-  public code = `{
-  "range": 4.9,
-  "description": "some text"
-}
-`;
+  public code = `{}`;
 
   onInit(editor) {
     const line = editor.getPosition();
@@ -37,5 +33,20 @@ export class AdminComponent implements OnInit {
   public onClick(page: string) {
     this.service.parseContent(page || '0')
       .subscribe(r => console.info('Parse result:', r));
+  }
+
+  public onQuery(filter: string) {
+    this.service.queryDocuments(JSON.parse(filter))
+      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        this.code = JSON.stringify(code.docs);
+      });
+  }
+
+  public onDelete() {
+    const ids = JSON.parse(this.code).map(d => d._id);
+    this.service.deleteDocuments(ids)
+      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        this.code = '';
+      });
   }
 }

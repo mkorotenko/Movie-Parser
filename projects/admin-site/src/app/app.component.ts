@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  // tslint:disable-next-line:component-selector
+  selector: 'adm-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

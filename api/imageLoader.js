@@ -1,6 +1,6 @@
 'use strict';
 const fs = require('fs'),
-         request = require('request');
+    request = require('request');
 
 const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
 

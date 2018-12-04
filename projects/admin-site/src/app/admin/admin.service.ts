@@ -56,5 +56,15 @@ export class AdminService {
     return this.http.get('api/acc/content', par);
   }
 
+  public queryDocuments(query: any) {
+    const par = { params: Object.assign({}, query, { till: 20 })};
+    return this.http.get('api/acc/movies', par);
+  }
+
+  public deleteDocuments(query: any) {
+    const par = { params: query };
+    return this.http.delete('api/acc/movies', par);
+  }
+
 }
 

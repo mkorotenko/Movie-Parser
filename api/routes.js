@@ -155,7 +155,18 @@ module.exports = function (app) {
         }
     };
 
+    let del = {
+
+        "movies": function (req, res) {
+            db.deleteMovies(req.query)
+                .then(result => res.json(result))
+                .catch(e => res.json(e))
+        }
+
+    };
+
     addRoutesMethods({ get }, 'acc');
+    addRoutesMethods({ delete: del }, 'acc');
 
     app.get('*', (req, res) => {
         if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {

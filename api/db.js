@@ -129,6 +129,21 @@ module.exports = {
 
         });
     },
+
+    // deleteMovie: function(id) {
+    //     MongoClient.connect(url, function (err, client) {
+    //         //console.log("Connected successfully to server");
+
+    //         const db = client.db(dbName);
+    //         // Get the documents collection
+    //         const collection = db.collection('documents');
+    //         // Insert some documents
+    //         collection.deleteOne({"_id" : mondoDB.ObjectId(id)},(res) => {
+    //             client.close();
+    //         });
+
+    //     });
+    // },
     
     findMovies: function(query) {
         return new Promise((resolve, reject) => {
@@ -167,6 +182,34 @@ module.exports = {
                 });
 
             });    
+        })
+    },
+
+    deleteMovies: function(query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+                //console.log("Connected successfully to server");
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const collection = db.collection('documents');
+                // Delete some documents
+
+                let promises = Object.keys(query).map(key =>
+                    collection.deleteOne({"_id" : mondoDB.ObjectId(query[key])})
+                );
+                
+                Promise.all(promises)
+                    .then((res) => {
+                        client.close();
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        client.close();
+                        reject(err);
+                    });
+    
+            });
         })
     },
 
