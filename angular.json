@@ -20,12 +20,7 @@
             "tsConfig": "projects/common-site/tsconfig.app.json",
             "assets": [
               "projects/common-site/favicon.ico",
-              "projects/common-site/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/ngx-monaco-editor/assets/monaco",
-                "output": "/assets/monaco"
-              }
+              "projects/common-site/assets"
             ],
             "styles": [
               "projects/common-site/styles.scss"
@@ -131,7 +126,7 @@
       "root": "projects/admin-site/",
       "sourceRoot": "projects/admin-site/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "adm",
       "schematics": {},
       "architect": {
         "build": {
@@ -144,10 +139,15 @@
             "tsConfig": "projects/admin-site/tsconfig.app.json",
             "assets": [
               "projects/admin-site/src/favicon.ico",
-              "projects/admin-site/src/assets"
+              "projects/admin-site/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-monaco-editor/assets/monaco",
+                "output": "/assets/monaco"
+              }
             ],
             "styles": [
-              "projects/admin-site/src/styles.css"
+              "projects/admin-site/src/styles.scss"
             ],
             "scripts": []
           },
@@ -196,7 +196,7 @@
             "tsConfig": "projects/admin-site/tsconfig.spec.json",
             "karmaConfig": "projects/admin-site/karma.conf.js",
             "styles": [
-              "projects/admin-site/src/styles.css"
+              "projects/admin-site/src/styles.scss"
             ],
             "scripts": [],
             "assets": [
