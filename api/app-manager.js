@@ -9,11 +9,14 @@ module.exports = function (io) {
             io.emit('broadcast','Mongo stoped with code:' + code)
             if (_onExit)
                 _onExit.call(mongo, code);
-            setTimeout(() => {
-                console.info('Mongo restarting...');
-                io.emit('broadcast','Mongo restarting...')
-                mongo.run();
-            }, 10000);
+
+            if (code !== 48) {
+                setTimeout(() => {
+                    console.info('Mongo restarting...');
+                    io.emit('broadcast','Mongo restarting...')
+                    mongo.run();
+                }, 10000);
+            }
         }
         mongo.run();
     }
