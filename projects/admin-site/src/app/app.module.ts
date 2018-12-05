@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTabsModule} from '@angular/material/tabs';
 
 const routes: Routes = [
   { path: '', redirectTo: '/admin', pathMatch: 'full' },
@@ -27,7 +28,8 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes),
     MonacoEditorModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTabsModule
   ],
   providers: [
     AdminService

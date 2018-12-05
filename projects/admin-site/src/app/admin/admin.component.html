@@ -1,15 +1,17 @@
-<div>
-    <input #parsePage />
-    <button (click)="onClick(parsePage.value)">Parse</button>
-</div>
-<div>
-    <input #filter />
-    <button (click)="onQuery(filter.value)">Query</button>
-    <button (click)="onDelete()">Delete</button>
-</div>
-<ngx-monaco-editor 
-    class="nc-code-editor"
-    [options]="editorOptions" 
-    [(ngModel)]="code" 
-    (onInit)="onInit($event)">
-</ngx-monaco-editor>
+<mat-tab-group>
+    <mat-tab label="Second">
+        <div>
+            <input #filter />
+            <button (click)="onQuery(filter.value)">Query</button>
+            <button (click)="onDelete()">Delete</button>
+        </div>
+        <ngx-monaco-editor class="nc-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
+        </ngx-monaco-editor>
+    </mat-tab>
+    <mat-tab label="First">
+        <div>
+            <input #parsePage />
+            <button (click)="onClick(parsePage.value)">Parse</button>
+        </div>
+    </mat-tab>
+</mat-tab-group>
