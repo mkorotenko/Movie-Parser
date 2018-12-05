@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -16,9 +17,12 @@ export class AdminComponent implements OnInit {
 
   public code = `{}`;
 
+  public parseResult = '';
+
+  public busy$ = new BehaviorSubject(false);
+
   onInit(editor) {
     const line = editor.getPosition();
-    console.log(line);
   }
 
   constructor(
@@ -26,13 +30,18 @@ export class AdminComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.info('AdminService', this.service);
     this.service.io$.subscribe(d => console.info('IO data', d));
   }
 
   public onClick(page: string) {
+    this.parseResult = 'parsing...';
+    this.busy$.next(true);
+
     this.service.parseContent(page || '0')
-      .subscribe(r => console.info('Parse result:', r));
+      .subscribe(r => {
+        this.parseResult = JSON.stringify(r);
+        this.busy$.next(false);
+      });
   }
 
   public onQuery(filter: string) {

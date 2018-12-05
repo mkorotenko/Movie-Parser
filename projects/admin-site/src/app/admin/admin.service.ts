@@ -20,7 +20,6 @@ export class AdminService {
   ) {}
 
   private connect(): Subject<MessageEvent> {
-    console.log('connect');
     // If you aren't familiar with environment variables then
     // you can hard code `environment.ws_url` as `http://localhost:5000`
     this.socket = io(environment.api_path);

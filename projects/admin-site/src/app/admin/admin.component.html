@@ -1,17 +1,41 @@
 <mat-tab-group>
-    <mat-tab label="Second">
-        <div>
-            <input #filter />
-            <button (click)="onQuery(filter.value)">Query</button>
-            <button (click)="onDelete()">Delete</button>
+    <mat-tab label="DB editor">
+        <div class="adml-content-layout">
+            <div>
+                <input #filter />
+                <button (click)="onQuery(filter.value)">Query</button>
+                <button (click)="onDelete()">Delete</button>
+            </div>
+            <ngx-monaco-editor class="nc-code-editor"
+                    [options]="editorOptions"
+                    [(ngModel)]="code"
+                    (onInit)="onInit($event)">
+            </ngx-monaco-editor>
         </div>
-        <ngx-monaco-editor class="nc-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
-        </ngx-monaco-editor>
     </mat-tab>
-    <mat-tab label="First">
-        <div>
-            <input #parsePage />
-            <button (click)="onClick(parsePage.value)">Parse</button>
+    <mat-tab label="Actions">
+        <mat-progress-bar [hidden]="!(busy$ | async)"
+                class="adml-progress-bar" mode="indeterminate">
+        </mat-progress-bar>
+        <div class="adml-content-layout">
+            <div>
+                <mat-form-field>
+                    <mat-select placeholder="Site" value="kinogo.cc">
+                        <mat-option value="kinogo.cc">
+                            "Kinogo"
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="example-full-width">
+                    <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
+                </mat-form-field>
+                <button mat-raised-button color="primary" (click)="onClick(parsePage.value)">Parse</button>
+            </div>
+            <div>
+                <span>{{parseResult}}</span>
+            </div>
         </div>
     </mat-tab>
 </mat-tab-group>
