@@ -47,18 +47,22 @@ export class DBEditorComponent implements OnInit {
   }
 
   public onUpdate() {
+    this.busy$.next(true);
     const data = JSON.parse(this.code);
     this.service.putDocuments(data)
       .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        this.busy$.next(false);
         console.info('on update', code);
       });
   }
 
   public onDelete() {
+    this.busy$.next(true);
     const ids = JSON.parse(this.code).map(d => d._id);
     this.service.deleteDocuments(ids)
       .subscribe((code: { count: Number, docs: any[], filter: any }) => {
         this.code = '';
+        this.busy$.next(false);
       });
   }
 }

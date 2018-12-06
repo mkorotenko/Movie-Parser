@@ -25,27 +25,27 @@ const findApplications = function(db, callback) {
         })
 }
 
-const findDocuments = function(db, filter, limits, callback) {
-    // Get the documents collection
-    const collection = db.collection('documents');
-    // Find some documents
-    let found = collection.find(filter).sort({ rating: -1 });
-    found.count()
-        .then(length => {
-            if (limits.skip) {
-                found = found.skip(limits.skip);
-            }
-            if (limits.limit) {
-                found = found.limit(limits.limit);
-            }
-        
-            found.toArray(function(err, docs) {
-              callback({
-                  count: length,
-                  docs
+const findDocuments = function(collection, filter, limits) {
+    return new Promise((resolve, reject) => {
+        let found = collection.find(filter).sort({ rating: -1 });
+        found.count()
+            .then(length => {
+                if (limits && limits.skip) {
+                    found = found.skip(limits.skip);
+                }
+                if (limits && limits.limit) {
+                    found = found.limit(limits.limit);
+                }
+            
+                found.toArray(function(err, docs) {
+                    resolve({
+                      count: length,
+                      docs
+                    });
                 });
-            });
-        })
+            })
+            .catch(() => reject());
+        });
 }
 
 function getFilterVal(keyOp, val) {
@@ -167,10 +167,15 @@ module.exports = {
                     }
                 }
 
-                findDocuments(db, filter, limits, function (docs) {
-                    client.close();
-                    resolve({...docs, filter: filter});
-                });
+                findDocuments(db.collection('documents'), filter, limits)
+                    .then((docs) => {
+                        client.close();
+                        resolve({...docs, filter: filter});
+                    })
+                    .catch((err) => {
+                        client.close();
+                        reject(err);
+                    });
 
             });    
         })
@@ -252,13 +257,66 @@ module.exports = {
                 const filter = {"_id" : mondoDB.ObjectId(id)};
                 const limits = {};
 
-                findDocuments(db, filter, limits, function (res) {
-                    client.close();
-                    resolve(res.docs);
-                });
-
+                findDocuments(db.collection('documents'), filter, limits)
+                    .then((res) => {
+                        client.close();
+                        resolve(res.docs);
+                    })
+                    .catch((err) => {
+                        client.close();
+                        reject(err);
+                    });
             });    
 
         })
-    }
+    },
+
+    addParser: function(query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+                //console.log("Connected successfully to server");
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const collection = db.collection('parsers');
+                // Insert some documents
+
+                collection.insertOne(query)
+                    .then(res => {
+                        client.close();
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        client.close();
+                        reject(err);
+                    });
+            });
+        })
+    },
+
+    getParser: function(query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                const db = client.db(dbName);
+
+                findDocuments(db.collection('parsers'), query)
+                    .then((res) => {
+                        client.close();
+                        resolve(res.docs);
+                    })
+                    .catch((err) => {
+                        client.close();
+                        reject(err);
+                    });
+            });    
+
+        })
+    },
+
 };

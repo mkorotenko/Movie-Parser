@@ -12,7 +12,16 @@ import { SourceParserService } from './source-parser.service';
 })
 export class SourceParserComponent implements OnInit {
 
-  public parseResult = '';
+  @ViewChild('listParser') listParser: any;
+
+  public editorOptions = {
+    theme: 'vs-dark',
+    language: 'javascript'
+  };
+
+  public dataSorce = this.service.dataSorceList[0].value;
+
+  public code = ``;
 
   public busy$ = new BehaviorSubject(false);
 
@@ -23,6 +32,33 @@ export class SourceParserComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.info(this);
   }
 
+  onInit(editor) {
+    const line = editor.getPosition();
+  }
+
+  public onGetParser() {
+    this.service.getParser(this.dataSorce)
+    .subscribe(res => {
+      console.info('Get parser: ', res);
+      this.listParser._editor.setValue(res[0].listParser);
+    });
+}
+
+  public onPostParser() {
+    const parserCode = this.listParser._editor.getValue();
+
+    if (parserCode) {
+      const data = {
+        'url': this.dataSorce,
+        'listParser': parserCode,
+        'parser': ''
+      };
+      this.service.putParser(data)
+        .subscribe(res => console.info('Put parser: ', res));
+    }
+
+  }
 }

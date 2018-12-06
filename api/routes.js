@@ -53,7 +53,13 @@ module.exports = function (app) {
         "movies": function (req, res) {
             db.findMovies(req.query || { till: 20 })
                 .then(movies => res.json(movies))
-                .catch(e => res.json(e))
+                .catch(err => res.json(err))
+        },
+
+        "parser": function (req, res) {
+            db.getParser(req.query)
+                .then(parser => res.json(parser))
+                .catch(err => res.json(err))
         },
 
         "image/*": function(req, res) {
@@ -155,6 +161,21 @@ module.exports = function (app) {
         }
     };
 
+    let post = {
+        "parser": function(req, res) {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                let data = JSON.parse(body);
+                db.addParser(data)
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            });
+        }
+    };
+
     let put = {
 
         "movies": function (req, res) {
@@ -164,7 +185,6 @@ module.exports = function (app) {
             });
             req.on('end', () => {
                 let data = JSON.parse(body);
-                //res.end('ok');
                 db.putMovies(data)
                     .then(result => res.json(result))
                     .catch(e => res.json(e))
@@ -184,6 +204,7 @@ module.exports = function (app) {
     };
 
     addRoutesMethods({ get }, 'acc');
+    addRoutesMethods({ post }, 'acc');
     addRoutesMethods({ put: put }, 'acc');
     addRoutesMethods({ delete: del }, 'acc');
 

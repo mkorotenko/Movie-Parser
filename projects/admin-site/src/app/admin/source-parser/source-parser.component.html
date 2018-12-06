@@ -3,11 +3,17 @@
 <div class="adml-content-layout">
     <div>
         <mat-form-field>
-            <mat-select placeholder="Data sorces" [value]="dataSorces[0].value">
+            <mat-select placeholder="Data sorces" [(value)]="dataSorce">
                 <mat-option *ngFor="let sorce of dataSorces" [value]="sorce.value">
                     {{sorce.description}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <button mat-raised-button (click)="onGetParser()">Get parser</button>
+        <button mat-raised-button color="primary" (click)="onPostParser()">Put parser</button>
+    </div>
+    <div>
+        <ngx-monaco-editor #listParser class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
+        </ngx-monaco-editor>        
     </div>
 </div>
