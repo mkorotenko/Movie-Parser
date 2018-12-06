@@ -86,23 +86,41 @@ module.exports = function (app) {
         },
 
         "content": function (req, res) {
-            const kinogoParser = require('./kinogo');
+            const sourceParser = require('./sourceParser');
             const iconv = require('iconv-lite');
+
+            function getSourceData(url) {
+                return new Promise((resolve, reject) => {
+
+                    httpClient.get(url, (resp) => {
+                        var chunks = [];
+        
+                        resp.on('data', (chunk) => chunks.push(chunk));
+        
+                        resp.on('end', () => {
+                            const data = Buffer.concat(chunks);
+                            const html = iconv.decode(data, 'win1251');
+
+                            resolve(html);
+                        });
+        
+                    }).on("error", (err) => {
+                        console.log("Error: " + err.errno);
+                        reject(err.errno);
+                    });
+                })
+            }
 
             let params = '';
             if (req.query && req.query.page) {
                 params = 'page/' + req.query.page + '/';
             }
 
-            httpClient.get('http://kinogo.cc/' + params, (resp) => {
-                var chunks = [];
+            let parser = db.getParser(req.query.url);
+            let source = getSourceData('http://kinogo.cc/' + params);
+            Promise.all([source, parser]).then(([html, docParser]) => {
 
-                resp.on('data', (chunk) => chunks.push(chunk));
-
-                resp.on('end', () => {
-                    const data = Buffer.concat(chunks);
-                    const html = iconv.decode(data, 'win1251');
-                    const collection = kinogoParser(html)
+                    const collection = sourceParser(html, docParser.listParser)
                         .filter(i => !i.details.Country.includes("Россия"));
 
                     const tasks = collection.map(movie => db.findMovies({ 
@@ -124,9 +142,8 @@ module.exports = function (app) {
                             console.info('found err', e);
                             res.json(e);
                         })
-                });
-
-            }).on("error", (err) => console.log("Error: " + err.message));
+                })
+                .catch(err => res.json(err))
 
         },
 

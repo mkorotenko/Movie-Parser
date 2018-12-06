@@ -308,7 +308,7 @@ module.exports = {
                 findDocuments(db.collection('parsers'), query)
                     .then((res) => {
                         client.close();
-                        resolve(res.docs);
+                        resolve(res.docs[0]);
                     })
                     .catch((err) => {
                         client.close();

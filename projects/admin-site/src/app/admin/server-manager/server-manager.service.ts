@@ -11,9 +11,8 @@ export class ServerManagerService {
     private http: HttpClient
   ) {}
 
-  public parseContent(page?: string) {
-    const par = (page && page !== '0' ) ? { params: { page: page } } : {};
-    return this.http.get('api/acc/content', par);
+  public parseContent(data: { url: string; page?: string }) {
+    return this.http.get('api/acc/content', { params: data });
   }
 
 }

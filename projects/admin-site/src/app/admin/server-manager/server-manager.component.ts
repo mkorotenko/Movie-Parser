@@ -19,6 +19,8 @@ export class ServerManagerComponent implements OnInit {
 
   public dataSorces = this.admin.dataSorceList;
 
+  public dataSorce = this.dataSorces[0].value;
+
   constructor(
     private service: ServerManagerService,
     private admin: AdminService
@@ -32,7 +34,7 @@ export class ServerManagerComponent implements OnInit {
     this.parseResult = 'parsing...';
     this.busy$.next(true);
 
-    this.service.parseContent(page || '0')
+    this.service.parseContent({ url: this.dataSorce, page: page || '0' })
       .subscribe(r => {
         this.parseResult = JSON.stringify(r);
         this.busy$.next(false);
