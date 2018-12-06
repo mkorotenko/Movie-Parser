@@ -15,6 +15,13 @@ export class AdminService {
 
   public io$: Subject<MessageEvent> = this.connect();
 
+  public dataSorceList = [
+    {
+      description: 'Kinogo',
+      value: 'kinogo.cc'
+    }
+  ];
+
   constructor(
     private http: HttpClient
   ) {}

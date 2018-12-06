@@ -1,0 +1,13 @@
+<mat-progress-bar [hidden]="!(busy$ | async)" class="adml-progress-bar" mode="indeterminate">
+</mat-progress-bar>
+<div class="adml-content-layout">
+    <div>
+        <mat-form-field>
+            <mat-select placeholder="Data sorces" [value]="dataSorces[0].value">
+                <mat-option *ngFor="let sorce of dataSorces" [value]="sorce.value">
+                    {{sorce.description}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>

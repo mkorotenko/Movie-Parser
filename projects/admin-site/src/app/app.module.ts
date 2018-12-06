@@ -1,10 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminComponent } from './admin/admin.component';
-import { AdminService } from './admin/admin.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -14,9 +10,14 @@ import {
   MatProgressBarModule, MatSelectModule
 } from '@angular/material';
 
-import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 import { DBEditorModule } from './admin/db-editor/db-editor.module';
+import { SourceParserModule } from './admin/source-parser/source-parser.module';
 
+import { AppComponent } from './app.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminService } from './admin/admin.service';
+
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 const routes: Routes = [
   { path: '', redirectTo: '/admin', pathMatch: 'full' },
   { path: 'admin', component: AdminComponent },
@@ -39,7 +40,8 @@ const routes: Routes = [
     MatButtonModule,
     MatSelectModule,
     MatProgressBarModule,
-    DBEditorModule
+    DBEditorModule,
+    SourceParserModule
   ],
   providers: [
     AdminService

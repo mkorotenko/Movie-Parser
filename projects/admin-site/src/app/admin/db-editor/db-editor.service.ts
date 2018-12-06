@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AdminService } from '../admin.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DBEditorService {
 
+  public dataSorceList = this.admin.dataSorceList;
+
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private admin: AdminService
   ) {}
 
   public queryDocuments(query: any) {

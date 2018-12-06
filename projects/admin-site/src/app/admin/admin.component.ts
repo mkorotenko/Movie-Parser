@@ -30,12 +30,18 @@ export class AdminComponent implements OnInit {
     })
   );
 
-  public dataSorces = [
-    {
-      description: 'Kinogo',
-      value: 'kinogo.cc'
-    }
-  ];
+  private _sourceParserFetch = false;
+  public isSourceParser$ = this.activeTab$.pipe(
+    map(tabNum => {
+      if (!this._sourceParserFetch && tabNum === 2) {
+        this._sourceParserFetch = true;
+      }
+
+      return this._sourceParserFetch;
+    })
+  );
+
+  public dataSorces = this.service.dataSorceList;
 
   constructor(
     private service: AdminService

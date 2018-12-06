@@ -23,12 +23,7 @@ export class DBEditorComponent implements OnInit {
 
   public busy$ = new BehaviorSubject(false);
 
-  public dataSorces = [
-    {
-      description: 'Kinogo',
-      value: 'kinogo.cc'
-    }
-  ];
+  public  = this.service.dataSorceList;
 
   onInit(editor) {
     const line = editor.getPosition();
