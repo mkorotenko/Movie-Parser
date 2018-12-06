@@ -21,11 +21,7 @@ export class DBEditorComponent implements OnInit {
 
   public code = `{}`;
 
-  public parseResult = '';
-
   public busy$ = new BehaviorSubject(false);
-
-  public activeTab$ = new BehaviorSubject(0);
 
   public dataSorces = [
     {
@@ -43,19 +39,6 @@ export class DBEditorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.info('admin', this);
-    this.service.io$.subscribe(d => console.info('IO data', d));
-  }
-
-  public onClick(page: string) {
-    this.parseResult = 'parsing...';
-    this.busy$.next(true);
-
-    this.service.parseContent(page || '0')
-      .subscribe(r => {
-        this.parseResult = JSON.stringify(r);
-        this.busy$.next(false);
-      });
   }
 
   public onQuery(filter: string) {
