@@ -15,6 +15,7 @@ import {
 } from '@angular/material';
 
 import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+import { DBEditorModule } from './admin/db-editor/db-editor.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/admin', pathMatch: 'full' },
@@ -38,6 +39,7 @@ const routes: Routes = [
     MatButtonModule,
     MatSelectModule,
     MatProgressBarModule,
+    DBEditorModule
   ],
   providers: [
     AdminService

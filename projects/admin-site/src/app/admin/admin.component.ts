@@ -12,15 +12,6 @@ import { AdminService } from './admin.service';
 })
 export class AdminComponent implements OnInit {
 
-  @ViewChild('editor') editor: any;
-
-  public editorOptions = {
-    theme: 'vs-dark',
-    language: 'json'
-  };
-
-  public code = `{}`;
-
   public parseResult = '';
 
   public busy$ = new BehaviorSubject(false);
@@ -34,16 +25,11 @@ export class AdminComponent implements OnInit {
     }
   ];
 
-  onInit(editor) {
-    const line = editor.getPosition();
-  }
-
   constructor(
     private service: AdminService
   ) { }
 
   ngOnInit() {
-    console.info('admin', this);
     this.service.io$.subscribe(d => console.info('IO data', d));
   }
 
@@ -58,29 +44,4 @@ export class AdminComponent implements OnInit {
       });
   }
 
-  public onQuery(filter: string) {
-    this.busy$.next(true);
-    this.service.queryDocuments(JSON.parse(filter))
-      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
-        this.busy$.next(false);
-        this.code = JSON.stringify(code.docs);
-        console.info('query:', code.docs, this.editor);
-      });
-  }
-
-  public onUpdate() {
-    const data = JSON.parse(this.code);
-    this.service.putDocuments(data)
-      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
-        console.info('on update', code);
-      });
-  }
-
-  public onDelete() {
-    const ids = JSON.parse(this.code).map(d => d._id);
-    this.service.deleteDocuments(ids)
-      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
-        this.code = '';
-      });
-  }
 }

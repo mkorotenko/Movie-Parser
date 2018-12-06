@@ -26,28 +26,7 @@
         </div>
     </mat-tab>
     <mat-tab label="DB editor">
-        <ng-container *ngIf="(activeTab$ | async) === 1">
-            <mat-progress-bar [hidden]="!(busy$ | async)"
-                class="adml-progress-bar" mode="indeterminate">
-            </mat-progress-bar>
-            <div class="adml-content-layout">
-                <div>
-                    <input #filter />
-                    <button (click)="onQuery(filter.value)">Query</button>
-                    <button (click)="onUpdate()">Update</button>
-                    <button (click)="onDelete()">Delete</button>
-                </div>
-                <div>
-                    <ngx-monaco-editor 
-                            #editor 
-                            class="adml-code-editor" 
-                            [options]="editorOptions" 
-                            [(ngModel)]="code" 
-                            (onInit)="onInit($event)">
-                    </ngx-monaco-editor>
-                </div>
-            </div>     
-        </ng-container>
+        <adm-db-editor *ngIf="(activeTab$ | async) === 1"></adm-db-editor>
     </mat-tab>
     <mat-tab label="Parsers">
         <mat-progress-bar [hidden]="!(busy$ | async)"
