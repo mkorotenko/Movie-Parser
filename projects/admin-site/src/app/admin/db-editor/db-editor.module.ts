@@ -5,13 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  MatTabsModule, MatInputModule, MatButtonModule,
+  MatInputModule, MatButtonModule,
   MatProgressBarModule, MatSelectModule
 } from '@angular/material';
 
 import { DBEditorComponent } from './db-editor.component';
 
-import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { DBEditorService } from './db-editor.service';
 
 @NgModule({
@@ -24,7 +24,6 @@ import { DBEditorService } from './db-editor.service';
     HttpClientModule,
     MonacoEditorModule,
     BrowserAnimationsModule,
-    MatTabsModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
