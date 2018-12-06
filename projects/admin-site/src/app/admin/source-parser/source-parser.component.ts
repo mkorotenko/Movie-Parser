@@ -41,9 +41,9 @@ export class SourceParserComponent implements OnInit {
 
   public onGetParser() {
     this.service.getParser(this.dataSorce)
-    .subscribe(res => {
+    .subscribe((res: any) => {
       console.info('Get parser: ', res);
-      this.listParser._editor.setValue(res[0].listParser);
+      this.listParser._editor.setValue(res.listParser);
     });
   }
 
