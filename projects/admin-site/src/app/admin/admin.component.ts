@@ -25,6 +25,15 @@ export class AdminComponent implements OnInit {
 
   public busy$ = new BehaviorSubject(false);
 
+  public activeTab$ = new BehaviorSubject(0);
+
+  public dataSorces = [
+    {
+      description: 'Kinogo',
+      value: 'kinogo.cc'
+    }
+  ];
+
   onInit(editor) {
     const line = editor.getPosition();
   }
