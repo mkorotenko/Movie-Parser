@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { AdminService } from './admin.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -17,6 +18,17 @@ export class AdminComponent implements OnInit {
   public busy$ = new BehaviorSubject(false);
 
   public activeTab$ = new BehaviorSubject(0);
+
+  private _dbEditorFetch = false;
+  public isDBEditor$ = this.activeTab$.pipe(
+    map(tabNum => {
+      if (!this._dbEditorFetch && tabNum === 1) {
+        this._dbEditorFetch = true;
+      }
+
+      return this._dbEditorFetch;
+    })
+  );
 
   public dataSorces = [
     {

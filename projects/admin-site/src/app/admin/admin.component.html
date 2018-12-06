@@ -26,7 +26,7 @@
         </div>
     </mat-tab>
     <mat-tab label="DB editor">
-        <adm-db-editor *ngIf="(activeTab$ | async) === 1"></adm-db-editor>
+        <adm-db-editor *ngIf="isDBEditor$ | async"></adm-db-editor>
     </mat-tab>
     <mat-tab label="Parsers">
         <mat-progress-bar [hidden]="!(busy$ | async)"
