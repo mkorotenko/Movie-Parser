@@ -3,8 +3,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest } from 'rxjs';
-import { map, tap, shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 import { AppService } from './app.service';
 
@@ -46,7 +45,7 @@ export class AppComponent {
         this.yearInput.nativeElement.value = params.year;
         this.service.reqParameters$.next({
           rating_gt: 4.3,
-          'details.Year': params.year
+          'year': params.year
         });
       } else if (params.searchText) {
         this.service.reqParameters$.next({

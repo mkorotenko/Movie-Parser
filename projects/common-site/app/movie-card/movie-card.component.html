@@ -16,7 +16,7 @@
             {{description}}
         </div>
     </div>
-    <div>
+    <div class="nc-card__links">
         <button *ngIf="!(hasLinks$ | async)"
             (click)="onSearchFiles()">Search</button>
         <ng-container *ngIf="hasLinks$ | async">

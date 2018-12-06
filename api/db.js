@@ -49,6 +49,12 @@ const findDocuments = function(db, filter, limits, callback) {
 }
 
 function getFilterVal(keyOp, val) {
+    switch (keyOp[0]) {
+        case 'year':
+            val = val.split(',').map(v => parseFloat(v));
+        break;
+    }
+
     if (keyOp.length === 1) {
         if (typeof val === 'string') {
             return val;
@@ -129,21 +135,6 @@ module.exports = {
 
         });
     },
-
-    // deleteMovie: function(id) {
-    //     MongoClient.connect(url, function (err, client) {
-    //         //console.log("Connected successfully to server");
-
-    //         const db = client.db(dbName);
-    //         // Get the documents collection
-    //         const collection = db.collection('documents');
-    //         // Insert some documents
-    //         collection.deleteOne({"_id" : mondoDB.ObjectId(id)},(res) => {
-    //             client.close();
-    //         });
-
-    //     });
-    // },
     
     findMovies: function(query) {
         return new Promise((resolve, reject) => {
@@ -182,6 +173,39 @@ module.exports = {
                 });
 
             });    
+        })
+    },
+
+    putMovies: function(query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+                //console.log("Connected successfully to server");
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const collection = db.collection('documents');
+                // Delete some documents
+
+                let promises = query.map(doc => {
+                    let doc_data = Object.assign({}, doc);
+                    delete doc_data._id;
+                    collection.replaceOne(
+                        {"_id" : mondoDB.ObjectId(doc._id)},
+                        doc_data
+                    );
+                });
+                
+                Promise.all(promises)
+                    .then((res) => {
+                        client.close();
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        client.close();
+                        reject(err);
+                    });
+    
+            });
         })
     },
 

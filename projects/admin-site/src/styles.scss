@@ -8,6 +8,7 @@ body {
     padding: 0;
 
     .nc-code-editor {
+        height: 100%;
         .editor-container {
             height: calc(100vh - 150px);
         }

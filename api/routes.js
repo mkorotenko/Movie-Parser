@@ -155,6 +155,24 @@ module.exports = function (app) {
         }
     };
 
+    let put = {
+
+        "movies": function (req, res) {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                let data = JSON.parse(body);
+                //res.end('ok');
+                db.putMovies(data)
+                    .then(result => res.json(result))
+                    .catch(e => res.json(e))
+            });
+        }
+
+    };
+
     let del = {
 
         "movies": function (req, res) {
@@ -166,6 +184,7 @@ module.exports = function (app) {
     };
 
     addRoutesMethods({ get }, 'acc');
+    addRoutesMethods({ put: put }, 'acc');
     addRoutesMethods({ delete: del }, 'acc');
 
     app.get('*', (req, res) => {

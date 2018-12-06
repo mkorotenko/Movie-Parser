@@ -8,12 +8,13 @@ import { AdminService } from './admin/admin.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatTabsModule, MatInputModule, MatButtonModule,
   MatProgressBarModule, MatSelectModule
 } from '@angular/material';
+
+import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 
 const routes: Routes = [
   { path: '', redirectTo: '/admin', pathMatch: 'full' },

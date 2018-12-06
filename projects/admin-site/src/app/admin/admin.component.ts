@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminService } from './admin.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
 import { BehaviorSubject } from 'rxjs';
+
+import { AdminService } from './admin.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -9,6 +11,8 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+
+  @ViewChild('editor') editor: any;
 
   public editorOptions = {
     theme: 'vs-dark',
@@ -30,6 +34,7 @@ export class AdminComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.info('admin', this);
     this.service.io$.subscribe(d => console.info('IO data', d));
   }
 
@@ -45,9 +50,20 @@ export class AdminComponent implements OnInit {
   }
 
   public onQuery(filter: string) {
+    this.busy$.next(true);
     this.service.queryDocuments(JSON.parse(filter))
       .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        this.busy$.next(false);
         this.code = JSON.stringify(code.docs);
+        console.info('query:', code.docs, this.editor);
+      });
+  }
+
+  public onUpdate() {
+    const data = JSON.parse(this.code);
+    this.service.putDocuments(data)
+      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        console.info('on update', code);
       });
   }
 

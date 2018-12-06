@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { BehaviorSubject, empty, combineLatest } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
-import { BehaviorSubject, empty, merge, combineLatest } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
@@ -56,7 +56,6 @@ export class AppService {
         ...props,
         genre: details.Genre && details.Genre.join(','),
         quality: details.Quality && details.Quality.join(','),
-        year: details.Year && details.Year.join(','),
         img: imgSrc && imgSrc.split('/').pop()
       };
     })),
@@ -67,12 +66,12 @@ export class AppService {
     private client: HttpClient
   ) { }
 
-  private f = {};
+  private _linksCache = {};
   public getLinks(movieID: string) {
-    if (this.f[movieID]) {
-      return this.f[movieID];
+    if (this._linksCache[movieID]) {
+      return this._linksCache[movieID];
     } else {
-      return this.f[movieID] = this.client.get('api/acc/moviePath/' + movieID).pipe(
+      return this._linksCache[movieID] = this.client.get('api/acc/moviePath/' + movieID).pipe(
         shareReplay(1)
       );
     }

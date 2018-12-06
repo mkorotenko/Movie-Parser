@@ -10,7 +10,7 @@
         </a>
     </div>
     <div class="movies-container__search">
-        <input (change)="onSearch($event)" />
+        <input (change)="onSearch($event.target.value)" />
         <input #yearInput (change)="onYearSearch($event.target.value)" />
     </div>
     <router-outlet></router-outlet>

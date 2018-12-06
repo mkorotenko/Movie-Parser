@@ -3,7 +3,7 @@
     margin: 10px auto;
     min-width: 540px;
     width: 80%;
-    height: 430px;
+    height: 415px;
     background: #2b2b2b;
     border-radius: 8px;
     
@@ -28,7 +28,7 @@
             .nc-card__content--img {
                 padding: 10px 0;
                 width: 200px;
-                height: 325px;
+                height: 300px;
                 overflow: hidden;
 
                 img {
@@ -41,6 +41,10 @@
                 padding: 10px;
                 max-height: 300px;
             }
+        }
+
+        .nc-card__links {
+            height: 23px;
         }
     }
 

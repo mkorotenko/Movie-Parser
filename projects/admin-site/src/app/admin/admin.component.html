@@ -1,21 +1,29 @@
 <mat-tab-group>
     <mat-tab label="DB editor">
+        <mat-progress-bar [hidden]="!(busy$ | async)"
+            class="adml-progress-bar" mode="indeterminate">
+        </mat-progress-bar>
         <div class="adml-content-layout">
             <div>
                 <input #filter />
                 <button (click)="onQuery(filter.value)">Query</button>
+                <button (click)="onUpdate()">Update</button>
                 <button (click)="onDelete()">Delete</button>
             </div>
-            <ngx-monaco-editor class="nc-code-editor"
-                    [options]="editorOptions"
-                    [(ngModel)]="code"
-                    (onInit)="onInit($event)">
-            </ngx-monaco-editor>
+            <div>
+                <ngx-monaco-editor 
+                        #editor 
+                        class="nc-code-editor" 
+                        [options]="editorOptions" 
+                        [(ngModel)]="code" 
+                        (onInit)="onInit($event)">
+                </ngx-monaco-editor>
+            </div>
         </div>
     </mat-tab>
     <mat-tab label="Actions">
         <mat-progress-bar [hidden]="!(busy$ | async)"
-                class="adml-progress-bar" mode="indeterminate">
+            class="adml-progress-bar" mode="indeterminate">
         </mat-progress-bar>
         <div class="adml-content-layout">
             <div>

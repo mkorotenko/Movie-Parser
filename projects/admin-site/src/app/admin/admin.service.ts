@@ -56,8 +56,13 @@ export class AdminService {
   }
 
   public queryDocuments(query: any) {
-    const par = { params: Object.assign({}, query, { till: 20 })};
+    const par = { params: Object.assign({}, { till: 20 }, query)};
     return this.http.get('api/acc/movies', par);
+  }
+
+  public putDocuments(query: any) {
+    // const par = { params: query };
+    return this.http.put('api/acc/movies', query);
   }
 
   public deleteDocuments(query: any) {
