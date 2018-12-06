@@ -45,7 +45,7 @@ export class SourceParserComponent implements OnInit {
       console.info('Get parser: ', res);
       this.listParser._editor.setValue(res[0].listParser);
     });
-}
+  }
 
   public onPostParser() {
     const parserCode = this.listParser._editor.getValue();

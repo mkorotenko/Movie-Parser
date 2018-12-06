@@ -12,6 +12,7 @@ import {
 
 import { DBEditorModule } from './admin/db-editor/db-editor.module';
 import { SourceParserModule } from './admin/source-parser/source-parser.module';
+import { ServerManagerModule } from './admin/server-manager/server-manager.module';
 
 import { AppComponent } from './app.component';
 import { AdminComponent } from './admin/admin.component';
@@ -41,7 +42,8 @@ const routes: Routes = [
     MatSelectModule,
     MatProgressBarModule,
     DBEditorModule,
-    SourceParserModule
+    SourceParserModule,
+    ServerManagerModule
   ],
   providers: [
     AdminService
