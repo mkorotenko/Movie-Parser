@@ -50,7 +50,8 @@ export class SourceParserComponent implements OnInit {
     this.service.getParser(this.dataSorce$.getValue().value)
       .subscribe((res: any) => {
         console.info('Get parser: ', res);
-        this.listParser._editor.setValue(res.listParser);
+        const parsCode = (res.listParser || '') + '//detail parser//' + (res.parser || '');
+        this.listParser._editor.setValue(parsCode);
         this.busy$.next(false);
       });
   }
@@ -60,11 +61,12 @@ export class SourceParserComponent implements OnInit {
 
     this.busy$.next(true);
     const source = this.dataSorce$.getValue();
+    const parsList = parserCode.split('//detail parser//');
     const data = {
       'url': source.value,
       'description': source.description,
-      'listParser': parserCode || '',
-      'parser': ''
+      'listParser': parsList[0] || '',
+      'parser': parsList[1] || ''
     };
     this.service.testParser(data)
       .subscribe(res => {
@@ -79,11 +81,12 @@ export class SourceParserComponent implements OnInit {
 
     this.busy$.next(true);
     const source = this.dataSorce$.getValue();
+    const parsList = parserCode.split('//detail parser//');
     const data = {
       'url': source.value,
       'description': source.description,
-      'listParser': parserCode || '',
-      'parser': ''
+      'listParser': parsList[0] || '',
+      'parser': parsList[1] || ''
     };
     this.service.putParser(data)
       .subscribe(res => {
