@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { AdminService } from '../admin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,10 @@ export class SourceParserService {
   public getParser(parser: string) {
     const par = { params: { url: parser } };
     return this.http.get('api/acc/parser', par);
+  }
+
+  public testParser(data) {
+    return this.http.post('api/acc/parserTest', data, { params: { page: 1 } });
   }
 
   public putParser(data) {

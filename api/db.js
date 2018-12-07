@@ -407,7 +407,7 @@ module.exports = {
                 if (query._id)
                     delete query._id;
 
-                collection.findOneAndReplace({ url: query.url }, query, { upsert: true })
+                collection.update({ url: query.url }, { $set: { listParser: query.listParser, parser: query.parser } })
                     .then(res => {
                         client.close();
                         resolve(res);

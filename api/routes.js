@@ -30,6 +30,29 @@ const getCollectionName = function(req) {
     };
     return collectionName;
 }
+    
+function _getSourceData(url, coding) {
+    const iconv = require('iconv-lite');
+    return new Promise((resolve, reject) => {
+
+        httpClient.get(url, (resp) => {
+            var chunks = [];
+
+            resp.on('data', (chunk) => chunks.push(chunk));
+
+            resp.on('end', () => {
+                const data = Buffer.concat(chunks);
+                const html = iconv.decode(data, coding || 'utf8');
+
+                resolve(html);
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.errno);
+            reject(err.errno);
+        });
+    })
+}
 
 module.exports = function (app) {
 
@@ -218,6 +241,49 @@ module.exports = function (app) {
             });
         },
 
+        "parserTest": function(req, res) {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                let data = JSON.parse(body);
+
+                const sourceParser = require('./sourceParser');
+    
+                let params = '';
+                if (req.query && req.query.page) {
+                    params = 'page/' + req.query.page + '/';
+                }
+    
+                let parser = db.getParser(req.query.url);
+                let source = _getSourceData('http://' + data.url + '/' + params);
+                Promise.all([source, parser]).then(([html, docParser]) => {
+
+                    const collection = sourceParser(html, data.listParser)
+                        .filter(i => !i.details.Country.includes("Россия"));
+
+                    const tasks = collection.map(movie => db.findMovies({
+                        title: movie.title
+                    }));
+
+                    Promise.all(tasks)
+                        .then(function (values) {
+                            const toInsert = values
+                                .filter(d => !d.count)
+                                .map(d => collection.find(c => c.title == d.filter.title));
+
+                            res.json({ new: toInsert, count: collection.length });
+                        })
+                        .catch(e => {
+                            console.info('found err', e);
+                            res.json(e);
+                        })
+                })
+                    .catch(err => res.json(err))
+            });
+        },
+        
         "documents/*": function(req, res) {
             let body = '';
             req.on('data', chunk => {

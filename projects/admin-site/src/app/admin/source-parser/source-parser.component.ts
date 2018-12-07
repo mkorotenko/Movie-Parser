@@ -55,6 +55,25 @@ export class SourceParserComponent implements OnInit {
       });
   }
 
+  public onTestParser() {
+    const parserCode = this.listParser._editor.getValue();
+
+    this.busy$.next(true);
+    const source = this.dataSorce$.getValue();
+    const data = {
+      'url': source.value,
+      'description': source.description,
+      'listParser': parserCode || '',
+      'parser': ''
+    };
+    this.service.testParser(data)
+      .subscribe(res => {
+        this.busy$.next(false);
+        console.info('Test parser: ', res);
+      });
+
+  }
+
   public onPostParser() {
     const parserCode = this.listParser._editor.getValue();
 

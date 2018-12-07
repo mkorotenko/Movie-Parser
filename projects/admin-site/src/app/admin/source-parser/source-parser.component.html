@@ -13,6 +13,7 @@
         </mat-form-field>
         <button mat-raised-button (click)="onGetParser()">Get parser</button>
         <button mat-raised-button color="primary" (click)="onPostParser()">Put parser</button>
+        <button mat-raised-button (click)="onTestParser()">Test parser</button>
     </div>
     <div>
         <ngx-monaco-editor #listParser class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
