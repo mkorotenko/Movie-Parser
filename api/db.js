@@ -172,11 +172,12 @@ module.exports = {
                 // Put some documents
 
                 let promises = query.map(doc => {
-                    let doc_data = Object.assign({}, doc);
-                    delete doc_data._id;
-                    _collection.replaceOne(
-                        {"_id" : mondoDB.ObjectId(doc._id)},
-                        doc_data
+                    // let doc_data = Object.assign({}, doc);
+                    // delete doc_data._id;
+                    doc._id = mondoDB.ObjectId(doc._id);
+                    return _collection.replaceOne(
+                        { _id : doc._id },
+                        doc
                     );
                 });
                 
@@ -204,7 +205,7 @@ module.exports = {
                 // Delete some documents
 
                 let promises = Object.keys(query).map(key =>
-                    _collection.deleteOne({"_id" : mondoDB.ObjectId(query[key])})
+                    _collection.deleteOne({ _id : mondoDB.ObjectId(query[key])})
                 );
                 
                 Promise.all(promises)
@@ -314,12 +315,12 @@ module.exports = {
                 const db = client.db(dbName);
                 // Get the documents collection
                 const collection = db.collection('documents');
-                // Delete some documents
+                // Put some documents
 
                 let promises = query.map(doc => {
                     let doc_data = Object.assign({}, doc);
                     delete doc_data._id;
-                    collection.replaceOne(
+                    return collection.replaceOne(
                         {"_id" : mondoDB.ObjectId(doc._id)},
                         doc_data
                     );

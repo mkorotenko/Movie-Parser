@@ -6,7 +6,7 @@
             <mat-select placeholder="Data sorces" 
                 [value]="dataSorce$ | async"
                 (valueChange)="dataSorce$.next($event)">
-                <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce.value">
+                <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce">
                     {{sorce.description}}
                 </mat-option>
             </mat-select>

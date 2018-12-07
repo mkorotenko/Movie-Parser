@@ -26,7 +26,7 @@ export class SourceParserComponent implements OnInit {
   public busy$ = new BehaviorSubject(false);
 
   public dataSorces$ = this.admin.dataSorceList$.pipe(
-    tap(list => this.dataSorce$.next(list[0].value)),
+    tap(list => this.dataSorce$.next(list[0])),
     shareReplay(1)
   );
 
@@ -47,7 +47,7 @@ export class SourceParserComponent implements OnInit {
 
   public onGetParser() {
     this.busy$.next(true);
-    this.service.getParser(this.dataSorce$.getValue())
+    this.service.getParser(this.dataSorce$.getValue().value)
       .subscribe((res: any) => {
         console.info('Get parser: ', res);
         this.listParser._editor.setValue(res.listParser);
@@ -59,9 +59,10 @@ export class SourceParserComponent implements OnInit {
     const parserCode = this.listParser._editor.getValue();
 
     this.busy$.next(true);
-
+    const source = this.dataSorce$.getValue();
     const data = {
-      'url': this.dataSorce$.getValue(),
+      'url': source.value,
+      'description': source.description,
       'listParser': parserCode || '',
       'parser': ''
     };
