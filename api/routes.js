@@ -5,7 +5,9 @@ const db = require('./db'),
       path = require('path'),
       bodyParser = require('body-parser'),
       imgLoader = require('./imageLoader');
-    
+
+const serializeError = require('serialize-error');
+
 const httpClient = require('http');
 // Allowed extensions list can be extended depending on your own needs
 const allowedExt = [
@@ -256,30 +258,45 @@ module.exports = function (app) {
                     params = 'page/' + req.query.page + '/';
                 }
     
-                let parser = db.getParser(req.query.url);
-                let source = _getSourceData('http://' + data.url + '/' + params);
-                Promise.all([source, parser]).then(([html, docParser]) => {
+                let parser = db.getParser({ url: data.url });
 
-                    const collection = sourceParser(html, data.listParser)
-                        .filter(i => !i.details.Country.includes("Россия"));
-
-                    const tasks = collection.map(movie => db.findMovies({
-                        title: movie.title
-                    }));
-
-                    Promise.all(tasks)
-                        .then(function (values) {
-                            const toInsert = values
-                                .filter(d => !d.count)
-                                .map(d => collection.find(c => c.title == d.filter.title));
-
-                            res.json({ new: toInsert, count: collection.length });
+                parser.then(docParser => {
+                        let source = _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
+                        source.then((html) => {
+        
+                            let rawCollection;
+        
+                            try {
+                                rawCollection = sourceParser(html, data.listParser);
+                            } catch (error) {
+                                res.set('Content-Type', 'application/json; charset=utf-8')
+                                res.send(serializeError(error));
+                                return;
+                            }
+        
+                            const collection = rawCollection
+                                .filter(i => !i.details.Country.includes("Россия"));
+        
+                            res.json({ result: collection });
+                            // const tasks = collection.map(movie => db.findMovies({
+                            //     title: movie.title
+                            // }));
+        
+                            // Promise.all(tasks)
+                            //     .then(function (values) {
+                            //         // const toInsert = values
+                            //         //     .filter(d => !d.count)
+                            //         //     .map(d => collection.find(c => c.title == d.filter.title));
+        
+                            //         res.json({ result: collection });
+                            //     })
+                            //     .catch(e => {
+                            //         console.info('found err', e);
+                            //         res.json(e);
+                            //     })
                         })
-                        .catch(e => {
-                            console.info('found err', e);
-                            res.json(e);
-                        })
-                })
+                        .catch(err => res.json(err))
+                    })
                     .catch(err => res.json(err))
             });
         },

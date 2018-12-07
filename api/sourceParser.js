@@ -8,6 +8,10 @@ module.exports = function (html, listParserCode) {
 
     let listParser = eval(listParserCode);
 
-    return listParser(dom.window);
+    let result;
+
+    result = listParser(dom.window);
+
+    return result;
 
 }
