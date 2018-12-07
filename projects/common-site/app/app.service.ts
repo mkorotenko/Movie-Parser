@@ -55,7 +55,6 @@ export class AppService {
       return {
         ...props,
         genre: details.Genre && details.Genre.join(','),
-        quality: details.Quality && details.Quality.join(','),
         img: imgSrc && imgSrc.split('/').pop()
       };
     })),
