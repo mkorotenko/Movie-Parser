@@ -90,10 +90,140 @@ const insertDocuments = function (db, data, callback) {
 
 module.exports = {
 
+    getDocuments: function(collectionName, query) {
+        return new Promise((resolve, reject) => {
+
+            MongoClient.connect(url, function (err, client) {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                const db = client.db(dbName);
+
+                const filter = {};
+                const limits = {};
+                if (query) {
+                    Object.keys(query).forEach(key => {
+                        if (key !== 'from' && key !== 'till') {
+                            const keyOp = key.split('_');
+                            const val = query[key];
+                            filter[keyOp[0]] = getFilterVal(keyOp, val);
+                        }
+                    });
+                    if (query.from) {
+                        limits['skip'] = Number(query.from);
+                    }
+                    if (query.till) {
+                        limits['limit'] = Number(query.till);
+                    }
+                }
+
+                findDocuments(db.collection(collectionName), filter, limits)
+                    .then((docs) => {
+                        client.close();
+                        resolve({...docs, filter: filter});
+                    })
+                    .catch((err) => {
+                        client.close();
+                        reject(err);
+                    });
+
+            });    
+        })
+    },
+
+    insertDocuments: function(collectionName, query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const _collection = db.collection(collectionName);
+                // Insert some documents
+
+                query.forEach(doc => {
+                    if (doc._id)
+                        delete doc._id;
+                });
+
+                _collection.insertMany(query)
+                .then((res) => {
+                    client.close();
+                    resolve(res);
+                })
+                .catch(err => {
+                    client.close();
+                    reject(err);
+                });
+
+            });
+        })
+    },
+
+    putDocuments: function(collectionName, query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const _collection = db.collection(collectionName);
+                // Put some documents
+
+                let promises = query.map(doc => {
+                    let doc_data = Object.assign({}, doc);
+                    delete doc_data._id;
+                    _collection.replaceOne(
+                        {"_id" : mondoDB.ObjectId(doc._id)},
+                        doc_data
+                    );
+                });
+                
+                Promise.all(promises)
+                    .then((res) => {
+                        client.close();
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        client.close();
+                        reject(err);
+                    });
+    
+            });
+        })
+    },
+
+    deleteDocuments: function(collectionName, query) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(url, function (err, client) {
+    
+                const db = client.db(dbName);
+                // Get the documents collection
+                const _collection = db.collection(collectionName);
+                // Delete some documents
+
+                let promises = Object.keys(query).map(key =>
+                    _collection.deleteOne({"_id" : mondoDB.ObjectId(query[key])})
+                );
+                
+                Promise.all(promises)
+                    .then((res) => {
+                        client.close();
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        client.close();
+                        reject(err);
+                    });
+    
+            });
+        })
+    },
+
     getApplications: function() {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected correctly to server");
 
                 if (err) {
                     reject(err);
@@ -113,8 +243,6 @@ module.exports = {
 
     insertMovies: function(collection) {
         MongoClient.connect(url, function (err, client) {
-            //console.log("Connected successfully to server");
-
             const db = client.db(dbName);
             insertDocuments(db, collection, function () {
                 client.close();
@@ -124,7 +252,6 @@ module.exports = {
 
     updateMovie: function(id, data) {
         MongoClient.connect(url, function (err, client) {
-            //console.log("Connected successfully to server");
 
             const db = client.db(dbName);
             // Get the documents collection
@@ -140,7 +267,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected correctly to server");
 
                 if (err) {
                     reject(err);
@@ -184,7 +310,6 @@ module.exports = {
     putMovies: function(query) {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected successfully to server");
     
                 const db = client.db(dbName);
                 // Get the documents collection
@@ -217,7 +342,6 @@ module.exports = {
     deleteMovies: function(query) {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected successfully to server");
     
                 const db = client.db(dbName);
                 // Get the documents collection
@@ -245,7 +369,6 @@ module.exports = {
     getMovie: function(id) {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected correctly to server");
 
                 if (err) {
                     reject(err);
@@ -271,17 +394,19 @@ module.exports = {
         })
     },
 
-    addParser: function(query) {
+    updateParser: function(query) {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, function (err, client) {
-                //console.log("Connected successfully to server");
     
                 const db = client.db(dbName);
                 // Get the documents collection
                 const collection = db.collection('parsers');
                 // Insert some documents
 
-                collection.insertOne(query)
+                if (query._id)
+                    delete query._id;
+
+                collection.findOneAndReplace({ url: query.url }, query, { upsert: true })
                     .then(res => {
                         client.close();
                         resolve(res);

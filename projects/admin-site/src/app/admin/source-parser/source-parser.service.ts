@@ -8,11 +8,8 @@ import { AdminService } from '../admin.service';
 })
 export class SourceParserService {
 
-  public dataSorceList = this.admin.dataSorceList;
-
   constructor(
     private http: HttpClient,
-    private admin: AdminService
   ) {}
 
   public getParser(parser: string) {

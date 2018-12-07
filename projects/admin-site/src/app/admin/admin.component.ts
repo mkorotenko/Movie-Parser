@@ -41,8 +41,6 @@ export class AdminComponent implements OnInit {
     })
   );
 
-  public dataSorces = this.service.dataSorceList;
-
   constructor(
     private service: AdminService
   ) { }

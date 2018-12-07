@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { Subject, Observable } from 'rxjs';
+import { shareReplay, map } from 'rxjs/operators';
 
 import * as io from 'socket.io-client';
 
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,11 @@ export class AdminService {
       value: 'kinogo.cc'
     }
   ];
+
+  public dataSorceList$ = this.http.get('api/acc/sources').pipe(
+    map(result => result || []),
+    shareReplay(1)
+  );
 
   constructor(
     private http: HttpClient

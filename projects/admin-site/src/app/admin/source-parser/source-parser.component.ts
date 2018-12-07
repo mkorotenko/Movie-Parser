@@ -3,6 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { SourceParserService } from './source-parser.service';
+import { AdminService } from '../admin.service';
+import { tap, shareReplay } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,16 +21,20 @@ export class SourceParserComponent implements OnInit {
     language: 'javascript'
   };
 
-  public dataSorce = this.service.dataSorceList[0].value;
-
   public code = ``;
 
   public busy$ = new BehaviorSubject(false);
 
-  public dataSorces = this.service.dataSorceList;
+  public dataSorces$ = this.admin.dataSorceList$.pipe(
+    tap(list => this.dataSorce$.next(list[0].value)),
+    shareReplay(1)
+  );
+
+  public dataSorce$ = new BehaviorSubject(undefined);
 
   constructor(
-    private service: SourceParserService
+    private service: SourceParserService,
+    private admin: AdminService
   ) { }
 
   ngOnInit() {
@@ -40,25 +46,30 @@ export class SourceParserComponent implements OnInit {
   }
 
   public onGetParser() {
-    this.service.getParser(this.dataSorce)
-    .subscribe((res: any) => {
-      console.info('Get parser: ', res);
-      this.listParser._editor.setValue(res.listParser);
-    });
+    this.busy$.next(true);
+    this.service.getParser(this.dataSorce$.getValue())
+      .subscribe((res: any) => {
+        console.info('Get parser: ', res);
+        this.listParser._editor.setValue(res.listParser);
+        this.busy$.next(false);
+      });
   }
 
   public onPostParser() {
     const parserCode = this.listParser._editor.getValue();
 
-    if (parserCode) {
-      const data = {
-        'url': this.dataSorce,
-        'listParser': parserCode,
-        'parser': ''
-      };
-      this.service.putParser(data)
-        .subscribe(res => console.info('Put parser: ', res));
-    }
+    this.busy$.next(true);
+
+    const data = {
+      'url': this.dataSorce$.getValue(),
+      'listParser': parserCode || '',
+      'parser': ''
+    };
+    this.service.putParser(data)
+      .subscribe(res => {
+        this.busy$.next(false);
+        console.info('Put parser: ', res);
+      });
 
   }
 }

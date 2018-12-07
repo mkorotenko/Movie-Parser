@@ -1,32 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AdminService } from '../admin.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DBEditorService {
 
-  public dataSorceList = this.admin.dataSorceList;
-
   constructor(
-    private http: HttpClient,
-    private admin: AdminService
+    private http: HttpClient
   ) {}
 
-  public queryDocuments(query: any) {
-    const par = { params: Object.assign({}, { till: 20 }, query)};
-    return this.http.get('api/acc/movies', par);
+  public queryDocuments(query: { collection: string, filter: any }) {
+    const par = { params: Object.assign({}, { till: 20 }, query.filter)};
+    return this.http.get('api/acc/documents/' + query.collection, par);
   }
 
-  public putDocuments(query: any) {
-    // const par = { params: query };
-    return this.http.put('api/acc/movies', query);
+  public postDocuments(query: { collection: string, data: any }) {
+    return this.http.post('api/acc/documents/' + query.collection, query.data);
   }
 
-  public deleteDocuments(query: any) {
-    const par = { params: query };
-    return this.http.delete('api/acc/movies', par);
+  public putDocuments(query: { collection: string, data: any }) {
+    return this.http.put('api/acc/documents/' + query.collection, query.data);
+  }
+
+  public deleteDocuments(query: { collection: string, data: any }) {
+    const par = { params: query.data };
+    return this.http.delete('api/acc/documents/' + query.collection, par);
   }
 
 }

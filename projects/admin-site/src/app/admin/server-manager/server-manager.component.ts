@@ -4,6 +4,7 @@ import { BehaviorSubject, from } from 'rxjs';
 
 import { ServerManagerService } from './server-manager.service';
 import { AdminService } from '../admin.service';
+import { tap, shareReplay } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -17,9 +18,12 @@ export class ServerManagerComponent implements OnInit {
 
   public busy$ = new BehaviorSubject(false);
 
-  public dataSorces = this.admin.dataSorceList;
+  public dataSorces$ = this.admin.dataSorceList$.pipe(
+    tap(list => this.dataSorce$.next(list[0].value)),
+    shareReplay(1)
+  );
 
-  public dataSorce = this.dataSorces[0].value;
+  public dataSorce$ = new BehaviorSubject(undefined);
 
   constructor(
     private service: ServerManagerService,
@@ -34,8 +38,9 @@ export class ServerManagerComponent implements OnInit {
     this.parseResult = 'parsing...';
     this.busy$.next(true);
 
-    this.service.parseContent({ url: this.dataSorce, page: page || '0' })
+    this.service.parseContent({ url: this.dataSorce$.getValue(), page: page || '0' })
       .subscribe(r => {
+        console.info('Parse result:', r);
         this.parseResult = JSON.stringify(r);
         this.busy$.next(false);
       });

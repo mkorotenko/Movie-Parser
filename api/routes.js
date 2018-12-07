@@ -22,6 +22,15 @@ const allowedExt = [
 
 const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
 
+const getCollectionName = function(req) {
+    let collectionName = 'documents';
+    if (req.params) {
+        if (req.params[0])
+            collectionName = req.params[0];
+    };
+    return collectionName;
+}
+
 module.exports = function (app) {
 
     function addRoutesMethods(module, controllerName) {
@@ -53,6 +62,12 @@ module.exports = function (app) {
         "movies": function (req, res) {
             db.findMovies(req.query || { till: 20 })
                 .then(movies => res.json(movies))
+                .catch(err => res.json(err))
+        },
+
+        "documents/*": function (req, res) {
+            db.getDocuments(getCollectionName(req), req.query || { till: 20 })
+                .then(docs => res.json(docs))
                 .catch(err => res.json(err))
         },
 
@@ -136,7 +151,7 @@ module.exports = function (app) {
                             if (toInsert && toInsert.length)
                                 db.insertMovies(toInsert);
 
-                            res.json({new: toInsert.length, count: collection.length});
+                            res.json({new: toInsert, count: collection.length});
                         })
                         .catch(e => {
                             console.info('found err', e);
@@ -175,10 +190,21 @@ module.exports = function (app) {
                         });
                 });
 
+        },
+
+        "sources": function (req, res) {
+            db.getDocuments('parsers', req.query || { till: 20 })
+                .then(result => {
+                    let sources = result.docs.map(s => ({ value: s.url, description: s.description || '' }));
+                    res.json(sources);
+                })
+                .catch(err => res.json(err))
         }
+
     };
 
     let post = {
+
         "parser": function(req, res) {
             let body = '';
             req.on('data', chunk => {
@@ -186,11 +212,25 @@ module.exports = function (app) {
             });
             req.on('end', () => {
                 let data = JSON.parse(body);
-                db.addParser(data)
+                db.updateParser(data)
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            });
+        },
+
+        "documents/*": function(req, res) {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                let data = JSON.parse(body);
+                db.insertDocuments(getCollectionName(req), data)
                     .then(result => res.json(result))
                     .catch(err => res.json(err));
             });
         }
+
     };
 
     let put = {
@@ -206,6 +246,19 @@ module.exports = function (app) {
                     .then(result => res.json(result))
                     .catch(e => res.json(e))
             });
+        },
+
+        "documents/*": function (req, res) {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                let data = JSON.parse(body);
+                db.putDocuments(getCollectionName(req), data)
+                    .then(result => res.json(result))
+                    .catch(e => res.json(e))
+            });
         }
 
     };
@@ -214,6 +267,12 @@ module.exports = function (app) {
 
         "movies": function (req, res) {
             db.deleteMovies(req.query)
+                .then(result => res.json(result))
+                .catch(e => res.json(e))
+        },
+
+        "documents/*": function (req, res) {
+            db.deleteDocuments(getCollectionName(req), req.query)
                 .then(result => res.json(result))
                 .catch(e => res.json(e))
         }

@@ -3,8 +3,10 @@
 <div class="adml-content-layout">
     <div>
         <mat-form-field>
-            <mat-select placeholder="Data sorces" [(value)]="dataSorce">
-                <mat-option *ngFor="let sorce of dataSorces" [value]="sorce.value">
+            <mat-select placeholder="Data sorces" 
+                [value]="dataSorce$ | async"
+                (valueChange)="dataSorce$.next($event)">
+                <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce.value">
                     {{sorce.description}}
                 </mat-option>
             </mat-select>
