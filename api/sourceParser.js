@@ -1,17 +1,31 @@
 'use strict';
 const jsdom = require("jsdom");
+const getUrls = require('get-urls');
+const iconv = require('iconv-lite');
+
 const { JSDOM } = jsdom;
 
-module.exports = function (html, listParserCode) {
+module.exports = {
+    list: function (html, listParserCode) {
 
-    const dom = new JSDOM(html);
+        const dom = new JSDOM(html);
 
-    let listParser = eval(listParserCode);
+        let listParser = eval(listParserCode);
 
-    let result;
+        let result;
 
-    result = listParser(dom.window);
+        result = listParser(dom.window);
 
-    return result;
+        return result;
 
+    },
+    details: function (html, doc, parserCode) {
+
+        const dom = new JSDOM(html);
+
+        let parser = eval(parserCode);
+
+        parser(dom.window, doc);
+
+    }
 }

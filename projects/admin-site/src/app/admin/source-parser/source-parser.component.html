@@ -5,7 +5,7 @@
         <mat-form-field>
             <mat-select placeholder="Data sorces" 
                 [value]="dataSorce$ | async"
-                (valueChange)="dataSorce$.next($event)">
+                (valueChange)="dataSorceChange($event)">
                 <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce">
                     {{sorce.description}}
                 </mat-option>

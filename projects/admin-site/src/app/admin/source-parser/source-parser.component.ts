@@ -95,4 +95,9 @@ export class SourceParserComponent implements OnInit {
       });
 
   }
+
+  public dataSorceChange(value: any) {
+    this.listParser._editor.setValue('{}');
+    this.dataSorce$.next(value);
+  }
 }

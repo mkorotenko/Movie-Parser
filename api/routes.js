@@ -7,6 +7,7 @@ const db = require('./db'),
       imgLoader = require('./imageLoader');
 
 const serializeError = require('serialize-error');
+const sourceParser = require('./sourceParser');
 
 const httpClient = require('http');
 // Allowed extensions list can be extended depending on your own needs
@@ -21,6 +22,8 @@ const allowedExt = [
     '.ttf',
     '.svg',
 ];
+
+const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36';
 
 const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
 
@@ -37,7 +40,7 @@ function _getSourceData(url, coding) {
     const iconv = require('iconv-lite');
     return new Promise((resolve, reject) => {
 
-        httpClient.get(url, (resp) => {
+        httpClient.get(url, { headers: { 'User-Agent': USER_AGENT } }, (resp) => {
             var chunks = [];
 
             resp.on('data', (chunk) => chunks.push(chunk));
@@ -49,12 +52,49 @@ function _getSourceData(url, coding) {
                 resolve(html);
             });
 
-        }).on("error", (err) => {
+        })
+        .on("error", (err) => {
             console.log("Error: " + err.errno);
             reject(err.errno);
         });
     })
 }
+
+function loadJSON(req) {
+    return new Promise((resolve, reject) => {
+        let body = '';
+        req.on('data', chunk => body += chunk.toString());
+        req.on('end', () => resolve(JSON.parse(body)));
+        req.on('error', err => reject(err));
+    })
+}
+
+async function parseSource(req) {
+
+    let params = '';
+    if (req.query && req.query.page) {
+        params = 'page/' + req.query.page + '/';
+    }
+
+    const data = await loadJSON(req);
+
+    const docParser = await db.getParser({ url: data.url });
+
+    const html = await _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
+
+    const rawCollection = sourceParser.list(html, data.listParser);
+
+    const collection = rawCollection
+        .filter(i => !i.details.Country.includes("Россия"));
+
+    await Promise.all(collection.map(async (doc) => {
+        const _html = await _getSourceData(doc.href, docParser.coding)
+        sourceParser.details(_html, doc, data.parser);
+    }));
+
+    return collection;
+
+};
 
 module.exports = function (app) {
 
@@ -244,61 +284,12 @@ module.exports = function (app) {
         },
 
         "parserTest": function(req, res) {
-            let body = '';
-            req.on('data', chunk => {
-                body += chunk.toString();
-            });
-            req.on('end', () => {
-                let data = JSON.parse(body);
-
-                const sourceParser = require('./sourceParser');
-    
-                let params = '';
-                if (req.query && req.query.page) {
-                    params = 'page/' + req.query.page + '/';
-                }
-    
-                let parser = db.getParser({ url: data.url });
-
-                parser.then(docParser => {
-                        let source = _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
-                        source.then((html) => {
-        
-                            let rawCollection;
-        
-                            try {
-                                rawCollection = sourceParser(html, data.listParser);
-                            } catch (error) {
-                                res.set('Content-Type', 'application/json; charset=utf-8')
-                                res.send(serializeError(error));
-                                return;
-                            }
-        
-                            const collection = rawCollection
-                                .filter(i => !i.details.Country.includes("Россия"));
-        
-                            res.json({ result: collection });
-                            // const tasks = collection.map(movie => db.findMovies({
-                            //     title: movie.title
-                            // }));
-        
-                            // Promise.all(tasks)
-                            //     .then(function (values) {
-                            //         // const toInsert = values
-                            //         //     .filter(d => !d.count)
-                            //         //     .map(d => collection.find(c => c.title == d.filter.title));
-        
-                            //         res.json({ result: collection });
-                            //     })
-                            //     .catch(e => {
-                            //         console.info('found err', e);
-                            //         res.json(e);
-                            //     })
-                        })
-                        .catch(err => res.json(err))
-                    })
-                    .catch(err => res.json(err))
-            });
+            parseSource(req)
+                .then(list => res.json({ result: list }))
+                .catch(error => {
+                    res.set('Content-Type', 'application/json; charset=utf-8')
+                    res.send(serializeError(error));                    
+                });
         },
         
         "documents/*": function(req, res) {
