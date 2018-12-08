@@ -166,93 +166,69 @@ module.exports = function (app) {
         },
 
         "content": function (req, res) {
-            const sourceParser = require('./sourceParser');
-            const iconv = require('iconv-lite');
-
-            function getSourceData(url) {
-                return new Promise((resolve, reject) => {
-
-                    httpClient.get(url, (resp) => {
-                        var chunks = [];
-        
-                        resp.on('data', (chunk) => chunks.push(chunk));
-        
-                        resp.on('end', () => {
-                            const data = Buffer.concat(chunks);
-                            const html = iconv.decode(data, 'win1251');
-
-                            resolve(html);
-                        });
-        
-                    }).on("error", (err) => {
-                        console.log("Error: " + err.errno);
-                        reject(err.errno);
-                    });
-                })
-            }
-
-            let params = '';
-            if (req.query && req.query.page) {
-                params = 'page/' + req.query.page + '/';
-            }
-
-            let parser = db.getParser(req.query.url);
-            let source = getSourceData('http://kinogo.cc/' + params);
-            Promise.all([source, parser]).then(([html, docParser]) => {
-
-                    const collection = sourceParser(html, docParser.listParser)
-                        .filter(i => !i.details.Country.includes("Россия"));
-
+            parseSource(req)
+                .then(list => {
+                    const collection = list;
+            
                     const tasks = collection.map(movie => db.findMovies({ 
                         title: movie.title 
                     }));
-
+            
                     Promise.all(tasks)
                         .then(function(values) {
                             const toInsert = values
                                 .filter(d => !d.count)
                                 .map(d => collection.find(c => c.title == d.filter.title));
-
+            
                             if (toInsert && toInsert.length)
                                 db.insertMovies(toInsert);
-
+            
                             res.json({new: toInsert, count: collection.length});
                         })
                         .catch(e => {
                             console.info('found err', e);
                             res.json(e);
                         })
+                        //res.json({ result: list })
                 })
-                .catch(err => res.json(err))
+                .catch(error => {
+                    res.set('Content-Type', 'application/json; charset=utf-8')
+                    res.send(serializeError(error));                    
+                });
 
         },
 
         "moviePath/*": function (req, res) {
 
-            const kinogoParser = require('./kinogo.movie');
-            const docID = req.url.split('/').pop();
+            const pathParts = req.url.split('/');
+            const docID = pathParts.pop();
+
             db.getMovie(docID)
-                .then(m => {
-                    // if (m[0].movie && m[0].movie.length)
-                    //     res.json(m[0].movie);
-                    // else 
-                        httpClient.get(m[0].href, (resp) => {
-                            var chunks = [];
+                .then(async (_doc) => {
+
+                    if (!_doc || !_doc.length)
+                        throw { message: 'Doc by id "' + docID + '" not found.' }
+
+                    let doc = _doc[0];
+
+                    // if (doc.movie) {
+                    //     res.json(doc.movie);
+                    //     return;
+                    // }
+
+                    const docParser = await db.getParser({ url: doc.href.split('/')[2] });
+
+                    const _html = await _getSourceData(doc.href, docParser.coding)
+                    sourceParser.details(_html, doc, docParser.parser);
             
-                            resp.on('data', (chunk) => chunks.push(chunk));
-            
-                            resp.on('end', () => {
-                                const data = Buffer.concat(chunks);
-                                const collection = kinogoParser(data);
-                                if (collection && collection.length)
-                                    db.updateMovie(m[0]._id, { movie: collection });
-            
-                                res.json(collection);
-                            });
-            
-                        }).on("error", (err) => {
-                            console.log("Error: " + err.message);
-                        });
+                    db.updateMovie(doc._id, { movie: doc.movie });
+                    res.json(doc.movie);
+
+                })
+                .catch(error => {
+                    res.set('Content-Type', 'application/json; charset=utf-8');
+                    res.code(500);
+                    res.send(serializeError(error));                    
                 });
 
         },
