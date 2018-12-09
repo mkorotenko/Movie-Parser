@@ -82,14 +82,14 @@ async function parseSource(req) {
 
     const html = await _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
 
-    const rawCollection = sourceParser.list(html, data.listParser);
+    const rawCollection = await sourceParser.list(html, data.listParser);
 
     const collection = rawCollection
         .filter(i => !i.details.Country.includes("Россия"));
 
     await Promise.all(collection.map(async (doc) => {
-        const _html = await _getSourceData(doc.href, docParser.coding)
-        sourceParser.details(_html, doc, data.parser);
+        const _html = await _getSourceData(doc.href, docParser.coding);
+        await sourceParser.details(_html, doc, data.parser);
     }));
 
     return collection;

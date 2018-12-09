@@ -5,27 +5,31 @@ const iconv = require('iconv-lite');
 
 const { JSDOM } = jsdom;
 
-module.exports = {
-    list: function (html, listParserCode) {
+let cache = {};
 
+module.exports = {
+    list: async function (html, listParserCode) {
+
+        cache = {};
+        
         const dom = new JSDOM(html);
 
         let listParser = eval(listParserCode);
 
         let result;
 
-        result = listParser(dom.window);
+        result = await listParser(dom.window);
 
         return result;
 
     },
-    details: function (html, doc, parserCode) {
+    details: async function (html, doc, parserCode) {
 
         const dom = new JSDOM(html);
 
         let parser = eval(parserCode);
 
-        parser(dom.window, doc);
+        await parser(dom.window, doc);
 
     }
 }
