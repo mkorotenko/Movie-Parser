@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BehaviorSubject, from } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { tap, shareReplay } from 'rxjs/operators';
 
 import { ServerManagerService } from './server-manager.service';
 import { AdminService } from '../admin.service';
-import { tap, shareReplay } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
