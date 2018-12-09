@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1",
     "get-urls": "^8.0.0",
