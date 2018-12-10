@@ -68,7 +68,7 @@ export class SourceParserComponent implements OnInit {
       'listParser': parsList[0] || '',
       'parser': parsList[1] || ''
     };
-    this.service.testParser(data)
+    this.service.testParser(data, source.value)
       .subscribe(res => {
         this.busy$.next(false);
         console.info('Test parser: ', res);

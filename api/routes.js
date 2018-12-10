@@ -76,20 +76,23 @@ async function parseSource(req) {
         params = 'page/' + req.query.page + '/';
     }
 
-    const data = await loadJSON(req);
+    let data = {}
+    if (req.method !== "GET") {
+        data = await loadJSON(req);
+    }
 
-    const docParser = await db.getParser({ url: data.url });
+    const docParser = await db.getParser({ url: req.query.url });
 
     const html = await _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
 
-    const rawCollection = await sourceParser.list(html, data.listParser);
+    const rawCollection = await sourceParser.list(html, data.listParser || docParser.listParser);
 
     const collection = rawCollection
         .filter(i => !i.details.Country.includes("Россия"));
 
     await Promise.all(collection.map(async (doc) => {
         const _html = await _getSourceData(doc.href, docParser.coding);
-        await sourceParser.details(_html, doc, data.parser);
+        await sourceParser.details(_html, doc, data.parser || docParser.parser);
     }));
 
     return collection;

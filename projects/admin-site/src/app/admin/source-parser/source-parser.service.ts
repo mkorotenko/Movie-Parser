@@ -16,8 +16,8 @@ export class SourceParserService {
     return this.http.get('api/acc/parser', par);
   }
 
-  public testParser(data) {
-    return this.http.post('api/acc/parserTest', data, { params: <any>{ page: 1 } });
+  public testParser(data, url) {
+    return this.http.post('api/acc/parserTest', data, { params: <any>{ page: 1, url: url } });
   }
 
   public putParser(data) {
