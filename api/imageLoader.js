@@ -1,8 +1,8 @@
 'use strict';
 const fs = require('fs'),
-    request = require('request');
+         request = require('request');
 
-const SRC_PATH = process.env.PATH_SRC || 'd:/server_root/dist';
+const SRC_PATH = process.env.PATH_SRC || 'src';
 
 module.exports = function (reqImg) {
 
@@ -20,8 +20,8 @@ module.exports = function (reqImg) {
     };
 
     function assets(img, callback, error) {
-        const _img = img.replace('http://kinogo.cc', '');
-        download('http://kinogo.cc' + _img, 
+        const _img = img;//.replace('http://kinogo.cc', '');
+        download(_img, 
         SRC_PATH + '/assets/images/' + _img.split('/').pop(), 
             callback, error);
     };
