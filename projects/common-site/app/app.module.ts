@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -10,11 +10,13 @@ import { MovieListComponent } from './movie-list/movie-list.component';
 import { AppService } from './app.service';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MoviePlayerComponent } from './movie-player/movie-player.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
+  { path: 'player', component: MoviePlayerComponent },
 ];
 
 @NgModule({
@@ -22,6 +24,7 @@ const routes: Routes = [
     AppComponent,
     MovieListComponent,
     MovieCardComponent,
+    MoviePlayerComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +37,7 @@ const routes: Routes = [
     AppService,
   ],
   exports: [ RouterModule ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ AppComponent ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }
