@@ -16,11 +16,7 @@ module.exports = {
 
         let listParser = eval(listParserCode);
 
-        let result;
-
-        result = await listParser(dom.window);
-
-        return result;
+        return await listParser(dom.window);
 
     },
     details: async function (html, doc, parserCode) {
