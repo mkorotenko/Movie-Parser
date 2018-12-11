@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
-  { path: 'player', component: MoviePlayerComponent },
+  { path: 'player/:file', component: MoviePlayerComponent },
 ];
 
 @NgModule({
