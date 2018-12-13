@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
-import { tap, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, empty } from 'rxjs';
+import { tap, shareReplay, catchError } from 'rxjs/operators';
 
 import { ServerManagerService } from './server-manager.service';
 import { AdminService } from '../admin.service';
@@ -38,8 +38,13 @@ export class ServerManagerComponent implements OnInit {
     this.parseResult = 'parsing...';
     this.busy$.next(true);
 
-    this.service.parseContent({ url: this.dataSorce$.getValue(), page: page || '0' })
-      .subscribe(r => {
+    this.service.parseContent({ url: this.dataSorce$.getValue(), page: page || '0' }).pipe(
+      catchError(error => {
+        this.busy$.next(false);
+        this.parseResult = JSON.stringify(error.error);
+        return empty();
+      })
+    ).subscribe(r => {
         console.info('Parse result:', r);
         this.parseResult = JSON.stringify(r);
         this.busy$.next(false);

@@ -53,9 +53,8 @@ function _getSourceData(url, coding) {
             });
 
         })
-        .on("error", (err) => {
-            console.log("Error: " + err.errno);
-            reject(err.errno);
+        .on("error", (error) => {
+            reject(error);
         });
     })
 }
@@ -186,16 +185,62 @@ module.exports = function (app) {
                             if (toInsert && toInsert.length)
                                 db.insertMovies(toInsert);
             
-                            res.json({new: toInsert, count: collection.length});
+                            const toUpdate = values
+                                .filter(d => {
+                                    let result = false;
+                                    if (d.count) {
+                                        const doc = d.docs[0];
+                                        const newDoc = collection.find(c => c.title == doc.title);
+
+                                        if ((newDoc['quality'] || '').toLowerCase() === 'hdrip' &&
+                                            (doc['quality'] || '').toLowerCase() !== 'hdrip') {
+                                            result = true;
+                                        } else {
+                                            const docKeys = Object.keys(doc);
+                                            const newDocKeys = Object.keys(newDoc);
+    
+                                            if (docKeys.length !== newDocKeys.length) {
+                                                result = true;
+                                            } else {
+                                                const simpleFields = [
+                                                    'description',
+                                                    'href',
+                                                    'imgSrc',
+                                                    'quality',
+                                                    'rating',
+                                                    'year'
+                                                ];
+                                                newDocKeys.some(key => {
+                                                    if (simpleFields.includes(key)) {
+                                                        return doc[key] != newDoc[key];
+                                                    } else {
+                                                        if (key === 'details') {
+                                                            if (newDoc.details['Actors'] && newDoc.details['Actors'].length &&
+                                                            (!doc.details || !doc.details['Actors'] || newDoc.details['Actors'].length > doc.details['Actors'].length)) {
+                                                                result = true;
+                                                            }
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+
+                                    }
+                                    return result;
+                                })
+                                .map(d => d);
+
+                            res.json({new: toInsert, update: toUpdate, count: collection.length});
                         })
-                        .catch(e => {
-                            console.info('found err', e);
-                            res.json(e);
+                        .catch(error => {
+                            console.info('found err', error);
+                            res.json(error);
                         })
                         //res.json({ result: list })
                 })
                 .catch(error => {
                     res.set('Content-Type', 'application/json; charset=utf-8')
+                    res.statusCode = 500;
                     res.send(serializeError(error));                    
                 });
 
@@ -230,7 +275,7 @@ module.exports = function (app) {
                 })
                 .catch(error => {
                     res.set('Content-Type', 'application/json; charset=utf-8');
-                    res.code(500);
+                    res.statusCode = 500;
                     res.send(serializeError(error));                    
                 });
 
