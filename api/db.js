@@ -251,17 +251,17 @@ module.exports = {
         });
     },
 
-    updateMovie: function(id, data) {
-        MongoClient.connect(url, function (err, client) {
+    updateMovie: async function(id, data) {
+        let client = await MongoClient.connect(url);//, function (err, client) {
 
-            const db = client.db(dbName);
-            // Get the documents collection
-            const collection = db.collection('documents');
-            // Insert some documents
-            collection.update({"_id" : mondoDB.ObjectId(id)}, { $set: data });
-            client.close();
+        const db = client.db(dbName);
+        // Get the documents collection
+        const collection = db.collection('documents');
+        // Insert some documents
+        await collection.update({ "_id": mondoDB.ObjectId(id) }, { $set: data });
+        client.close();
 
-        });
+        //});
     },
     
     findMovies: function(query) {

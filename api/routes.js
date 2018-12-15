@@ -196,10 +196,10 @@ module.exports = function (app) {
                                             (doc['quality'] || '').toLowerCase() !== 'hdrip') {
                                             result = true;
                                         } else {
-                                            const docKeys = Object.keys(doc);
+                                            const docKeys = Object.keys(doc);//_id field
                                             const newDocKeys = Object.keys(newDoc);
     
-                                            if (docKeys.length !== newDocKeys.length) {
+                                            if ((docKeys.length - 1) < newDocKeys.length) {
                                                 result = true;
                                             } else {
                                                 const simpleFields = [
@@ -228,15 +228,33 @@ module.exports = function (app) {
                                     }
                                     return result;
                                 })
-                                .map(d => d);
+                                .map(d => {
+                                    return Object.assign(
+                                        collection.find(c => c.title == d.filter.title),
+                                        { _id: d.docs[0]._id }
+                                    )
+                                });
 
-                            res.json({new: toInsert, update: toUpdate, count: collection.length});
+                            let updates = toUpdate.map(doc => {
+                                let { _id, ..._doc} = doc;
+                                return db.updateMovie(doc._id, _doc);
+                            });
+
+                            Promise.all(updates)
+                                .then(() => {
+                                    res.json({new: toInsert, update: toUpdate, count: collection.length});
+                                })
+                                .catch(error => {
+                                    res.set('Content-Type', 'application/json; charset=utf-8')
+                                    res.statusCode = 500;
+                                    res.send(serializeError(error));                    
+                                });                
                         })
                         .catch(error => {
-                            console.info('found err', error);
-                            res.json(error);
-                        })
-                        //res.json({ result: list })
+                            res.set('Content-Type', 'application/json; charset=utf-8')
+                            res.statusCode = 500;
+                            res.send(serializeError(error));                    
+                        });
                 })
                 .catch(error => {
                     res.set('Content-Type', 'application/json; charset=utf-8')
@@ -269,7 +287,7 @@ module.exports = function (app) {
                     const _html = await _getSourceData(doc.href, docParser.coding)
                     sourceParser.details(_html, doc, docParser.parser);
             
-                    db.updateMovie(doc._id, { movie: doc.movie });
+                    await db.updateMovie(doc._id, { movie: doc.movie });
                     res.json(doc.movie);
 
                 })
