@@ -24,10 +24,11 @@ var kill = function (pid, signal, callback) {
     }
 };
 
-function createChildProcess(name, path) {
+function createChildProcess(name, path, parameters) {
 
     this.name = name;
     this.path = path;
+    this.parameters = parameters || {};
     this.running = false;
 
 }
@@ -57,7 +58,7 @@ createChildProcess.prototype.run = function () {
 
         this.beforeStart();
 
-        const childProcess = this.process = exec(this.path, (err, stdout, stderr) => {
+        const childProcess = this.process = exec(this.path, this.parameters, (err, stdout, stderr) => {
             if (err) {
                 this.running = false;
                 this.onError(err);

@@ -1,0 +1,29 @@
+{
+  "name": "server_root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist-server",
+  "scripts": {
+    "clean_lock": "rimraf mongo-db/mongod.lock",
+    "mongo_server": "md mongo-db & \"D:/Program Files/MongoDB/Server/3.2/bin/mongod.exe\" --dbpath mongo-db --storageEngine=mmapv1",
+    "mongo": "npm run clean_lock && npm run mongo_server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.16.4",
+    "fs-extra": "^7.0.1",
+    "get-urls": "^8.0.0",
+    "jsdom": "^13.0.0",
+    "mongodb": "^3.1.9",
+    "node-windows": "^0.1.14",
+    "parse5": "^5.1.0",
+    "ps-tree": "^1.1.0",
+    "request": "^2.88.0",
+    "rimraf": "^2.6.2",
+    "serialize-error": "^3.0.0",
+    "socket.io": "^2.1.1"
+  }
+}

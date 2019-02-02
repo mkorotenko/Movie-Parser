@@ -40,3 +40,4 @@ Thumbs.db
 mongo-db
 projects/common-site/assets/images
 daemon
+api/home-portal/node_modules

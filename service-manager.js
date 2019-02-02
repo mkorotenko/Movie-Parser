@@ -6,7 +6,7 @@ var svcSettings = {
     script: require('path').join(__dirname, 'dist-server.js'),
     env: [{
             name: "PORT",
-            value: 80
+            value: 3100
         },
         {
             name: "PATH_SRC",
@@ -39,7 +39,7 @@ module.exports = {
             // Listen for the "start" event and let us know when the
             // process has actually started working.
             svc.on('start',function(){
-                console.log(svc.name+' started!\nVisit http://192.168.1.104');
+                console.log(svc.name+' started!\nVisit http://192.168.1.105');
                 resolve();
             });
     

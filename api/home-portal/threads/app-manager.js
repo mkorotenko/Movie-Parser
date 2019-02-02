@@ -1,5 +1,6 @@
 const mongo = require('./mongodb-server'),
-    db = require('./db');
+    thread = require('./application-thread'),
+    db = require('../../db');
 
 module.exports = function (io) {
     if (process.env.MONGO_DB) {
@@ -10,7 +11,7 @@ module.exports = function (io) {
             if (_onExit)
                 _onExit.call(mongo, code);
 
-            if (code !== 48) {
+            if (code !== 48 && code !== 100) {
                 setTimeout(() => {
                     console.info('Mongo restarting...');
                     io.emit('broadcast','Mongo restarting...')
@@ -20,10 +21,18 @@ module.exports = function (io) {
         }
         mongo.run();
     }
+
+    thread.onExit = function(code) {
+        console.info('Thread #1 stoped with code:', code);
+        io.emit('broadcast','Thread #1 stoped with code:' + code)
+    };
+
+    //thread.run();
     
     db.getApplications()
         .then(data => {
             io.emit('broadcast', 'Get applications success: ' + JSON.stringify(data));
+
         })
         .catch(err => io.emit('broadcast', 'Get applications error.'));
 }

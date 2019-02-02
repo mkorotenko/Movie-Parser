@@ -3,13 +3,13 @@
     routes = require('./routes'),
     server = require('http').createServer(app); 
     io = require('socket.io')(server),
-    manager = require('./app-manager');
+    manager = require('./threads/app-manager');
 
 const port = process.env.PORT || 3000;
 
 routes(app); //register the route
 
-server.listen(port, () => console.log(`http is started ${port}`));
+server.listen(port, () => console.log(`Admin server is started ${port}`));
 
 // Catch errors
 app.on('error', (error) => {
