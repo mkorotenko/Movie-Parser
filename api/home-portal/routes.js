@@ -5,7 +5,7 @@ const db = require('../db'),
         bodyParser = require('body-parser');
 
 const serializeError = require('serialize-error');
-const sourceParser = require('../sourceParser');
+const sourceParser = require('./sourceParser');
 
 const httpClient = require('http');
 // Allowed extensions list can be extended depending on your own needs
