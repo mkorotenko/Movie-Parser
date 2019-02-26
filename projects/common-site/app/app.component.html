@@ -10,8 +10,9 @@
         </a>
     </div>
     <div class="movies-container__search">
-        <input (change)="onSearch($event.target.value)" />
+        <input #titleInput (change)="onSearch($event.target.value)" />
         <input #yearInput (change)="onYearSearch($event.target.value)" />
+        <input #actorInput (change)="onActorSearch($event.target.value)" />
     </div>
     <router-outlet></router-outlet>
 </div>

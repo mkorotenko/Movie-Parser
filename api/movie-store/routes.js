@@ -6,7 +6,7 @@ const db = require('../db'),
     bodyParser = require('body-parser'),
     imgLoader = require('./imageLoader'),
     serializeError = require('serialize-error'),
-    sourceParser = require('./sourceParser');
+    sourceParser = require('../sourceParser');
 
 const httpClient = require('http');
 // Allowed extensions list can be extended depending on your own needs
@@ -133,8 +133,8 @@ module.exports = function (app) {
                     const _html = await _getSourceData(doc.href, docParser.coding)
                     sourceParser.details(_html, doc, docParser.parser);
             
-                    await db.updateMovie(doc._id, { movie: doc.movie });
-                    res.json(doc.movie);
+                    await db.updateMovie(doc._id, { movie: doc.movies });
+                    res.json(doc.movies);
 
                 })
                 .catch(error => {

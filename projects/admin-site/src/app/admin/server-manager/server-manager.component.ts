@@ -19,7 +19,7 @@ export class ServerManagerComponent implements OnInit {
   public busy$ = new BehaviorSubject(false);
 
   public dataSorces$ = this.admin.dataSorceList$.pipe(
-    tap(list => this.dataSorce$.next(list[0].value)),
+    tap(list => this.dataSorce$.next((list[0] || {}).value)),
     shareReplay(1)
   );
 
