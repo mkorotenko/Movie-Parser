@@ -11,12 +11,14 @@ import { AppService } from './app.service';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MoviePlayerComponent } from './movie-player/movie-player.component';
+import { HLSPlayerComponent } from './movie-player-hls/hls-player.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
   { path: 'player/:file', component: MoviePlayerComponent },
+  { path: 'hls/:file', component: HLSPlayerComponent },
 ];
 
 @NgModule({
@@ -25,6 +27,7 @@ const routes: Routes = [
     MovieListComponent,
     MovieCardComponent,
     MoviePlayerComponent,
+    HLSPlayerComponent,
   ],
   imports: [
     BrowserModule,

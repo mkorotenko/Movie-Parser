@@ -23,7 +23,7 @@
             <a *ngFor="let link of links$ | async"
                 class="file-link"
                 target=”_blank”
-                href="{{link}}">
+                href="{{getFileLink(link)}}">
                 <div class="file-link__text">
                     {{fileExt(link)}}
                 </div>

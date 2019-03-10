@@ -16,7 +16,7 @@
             "request": "launch",
             "name": "Admin API Server",
             "env": {
-                "PORT": 3000,
+                "PORT": 3200,
                 "DIST": "../../dist/admin-site"
             },
             "program": "${workspaceFolder}\\api\\home-portal\\dist-server"

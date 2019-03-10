@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppService } from '../app.service';
 
@@ -6,7 +6,8 @@ import { AppService } from '../app.service';
   // tslint:disable-next-line:component-selector
   selector: 'nc-movie-card',
   templateUrl: './movie-card.component.html',
-  styleUrls: ['./movie-card.component.scss']
+  styleUrls: ['./movie-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovieCardComponent implements OnInit, OnChanges {
 
@@ -46,6 +47,11 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   public onSearchFiles() {
     this.hasLinks$.next(true);
+  }
+
+  public getFileLink(link: string): string {
+    console.info('fileLink', link);
+    return link;
   }
 
 }

@@ -5,7 +5,7 @@
     io = require('socket.io')(server),
     manager = require('./threads/app-manager');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3200;
 
 routes(app); //register the route
 
