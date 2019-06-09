@@ -19,6 +19,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './admin/admin.service';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { ThreadsManagerComponent } from './admin/threads-manager/threads-manager.component';
 const routes: Routes = [
   { path: '', redirectTo: '/admin', pathMatch: 'full' },
   { path: 'admin', component: AdminComponent },
@@ -27,7 +28,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    AdminComponent
+    AdminComponent,
+    ThreadsManagerComponent
   ],
   imports: [
     BrowserModule,

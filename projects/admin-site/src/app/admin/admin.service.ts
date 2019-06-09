@@ -20,6 +20,11 @@ export class AdminService {
     shareReplay(1)
   );
 
+  public threadList$: Observable<any[]> = this.http.get<any[]>('api/threads/stats').pipe(
+    map(result => result || []),
+    shareReplay(1)
+  );
+
   constructor(
     private http: HttpClient
   ) { }
