@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -46,7 +46,7 @@ export class AdminComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.service.io$.subscribe(d => console.info('IO data', d));
+    this.service.io$.subscribe(message => console.info('~', message));
   }
 
   public onClick(page: string) {

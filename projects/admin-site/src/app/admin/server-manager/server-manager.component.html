@@ -1,25 +1,24 @@
 <mat-progress-bar [hidden]="!(busy$ | async)" class="adml-progress-bar" mode="indeterminate">
 </mat-progress-bar>
 <div class="adml-content-layout">
+  <div class="adml-content-wrapper">
     <div>
-        <mat-form-field>
-            <mat-select placeholder="Site" 
-                [value]="dataSorce$ | async"
-                (valueChange)="dataSorce$.next($event)">
-                <mat-option *ngFor="let sorce of dataSorces$ | async" 
-                    [value]="sorce.value">
-                    {{sorce.description}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Site" [value]="dataSorce$ | async" (valueChange)="dataSorce$.next($event)">
+          <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce.value">
+            {{sorce.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div>
-        <mat-form-field class="example-full-width">
-            <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="onClick(parsePage.value)">Parse</button>
+      <mat-form-field class="example-full-width">
+        <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="onClick(parsePage.value)">Parse</button>
     </div>
     <div>
-        <span>{{parseResult}}</span>
+      <span>{{parseResult}}</span>
     </div>
+  </div>
 </div>

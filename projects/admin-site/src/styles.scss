@@ -19,7 +19,13 @@ body {
         .mat-tab-body-wrapper {
             height: 100%;
             .adml-content-layout {
-                padding: 15px;
+                overflow: hidden;
+                height: 100%;
+                .adml-content-wrapper {
+                  padding: 15px;
+                  height: 100%;
+                  overflow: hidden;
+              }
             }
         }
     }

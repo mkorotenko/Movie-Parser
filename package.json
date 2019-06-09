@@ -11,6 +11,7 @@
     "mongo": "npm run clean_lock && npm run mongo_server",
     "start1": "concurrently \"npm:mongo\" \"sleep 20\" \"npm:server\"",
     "build": "ng build",
+    "build:admin": "ng build --prod --project admin-site",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

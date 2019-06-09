@@ -38,7 +38,7 @@ createChildProcess.prototype.onError = function (error) {
 }
 
 createChildProcess.prototype.onMessage = function (message) {
-    //console.error(`Child "${this.name}":`, message);
+    console.error(`Child "${this.name}":`, message);
 }
 
 createChildProcess.prototype.onExit = function (code) {

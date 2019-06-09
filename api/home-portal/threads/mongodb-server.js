@@ -3,7 +3,7 @@ const rimraf = require('rimraf');
 
 const childProcess = require('./child-manager');
 
-const mongoPath = '\"C:\\Program Files\\MongoDB\\Server\\4.0\\bin\\mongod.exe\" --dbpath \"G:\\MongoDB\\data\" --storageEngine=mmapv1';
+const mongoPath = '\"C:\\Program Files\\MongoDB\\Server\\4.0\\bin\\mongod.exe\" --dbpath \"F:\\MongoDB\\data\" --storageEngine=mmapv1';
 const mongo = new childProcess('mongoDB', mongoPath);
 
 mongo.beforeStart = function () {

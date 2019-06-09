@@ -1,22 +1,23 @@
 <mat-progress-bar [hidden]="!(busy$ | async)" class="adml-progress-bar" mode="indeterminate">
 </mat-progress-bar>
 <div class="adml-content-layout">
+  <div class="adml-content-wrapper">
     <div>
-        <mat-form-field>
-            <mat-select placeholder="Data sorces" 
-                [value]="dataSorce$ | async"
-                (valueChange)="dataSorceChange($event)">
-                <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce">
-                    {{sorce.description}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-raised-button (click)="onGetParser()">Get parser</button>
-        <button mat-raised-button color="primary" (click)="onPostParser()">Put parser</button>
-        <button mat-raised-button (click)="onTestParser()">Test parser</button>
+      <mat-form-field>
+        <mat-select placeholder="Data sorces" [value]="dataSorce$ | async" (valueChange)="dataSorceChange($event)">
+          <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce">
+            {{sorce.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button (click)="onGetParser()">Get parser</button>
+      <button mat-raised-button color="primary" (click)="onPostParser()">Put parser</button>
+      <button mat-raised-button (click)="onTestParser()">Test parser</button>
     </div>
     <div>
-        <ngx-monaco-editor #listParser class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
-        </ngx-monaco-editor>        
+      <ngx-monaco-editor #listParser class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code"
+        (onInit)="onInit($event)">
+      </ngx-monaco-editor>
     </div>
+  </div>
 </div>

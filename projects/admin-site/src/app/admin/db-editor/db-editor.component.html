@@ -1,24 +1,27 @@
 <mat-progress-bar [hidden]="!(busy$ | async)" class="adml-progress-bar" mode="indeterminate">
 </mat-progress-bar>
 <div class="adml-content-layout">
+  <div class="adml-content-wrapper">
     <div>
-        <mat-form-field>
-            <mat-select placeholder="Collection" [(value)]="collectionName">
-                <mat-option *ngFor="let collection of collectionList" [value]="collection.value">
-                    {{collection.description}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <input #filter />
-        <button mat-raised-button color="primary" (click)="onQuery(filter.value)">Query</button>
+      <mat-form-field>
+        <mat-select placeholder="Collection" [(value)]="collectionName">
+          <mat-option *ngFor="let collection of collectionList" [value]="collection.value">
+            {{collection.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <input #filter />
+      <button mat-raised-button color="primary" (click)="onQuery(filter.value)">Query</button>
     </div>
     <div>
-        <button mat-raised-button (click)="onCreate()">Create</button>
-        <button mat-raised-button (click)="onUpdate()">Update</button>
-        <button mat-raised-button (click)="onDelete()">Delete</button>
+      <button mat-raised-button (click)="onCreate()">Create</button>
+      <button mat-raised-button (click)="onUpdate()">Update</button>
+      <button mat-raised-button (click)="onDelete()">Delete</button>
     </div>
     <div>
-        <ngx-monaco-editor #editor class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)">
-        </ngx-monaco-editor>
+      <ngx-monaco-editor #editor class="adml-code-editor" [options]="editorOptions" [(ngModel)]="code"
+        (onInit)="onInit($event)">
+      </ngx-monaco-editor>
     </div>
+  </div>
 </div>

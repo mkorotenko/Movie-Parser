@@ -2,8 +2,7 @@
 
 const db = require('./db'),
   path = require('path'),
-  bodyParser = require('body-parser'),
-  request = require('request');
+  bodyParser = require('body-parser');
 
 const serializeError = require('serialize-error');
 const sourceParser = require('./sourceParser');
@@ -36,14 +35,42 @@ const getCollectionName = function (req) {
 function _getSourceData(url, coding) {
   const iconv = require('iconv-lite');
   return new Promise((resolve, reject) => {
-    request({url: url, encoding:null}, function (error, response, body) {
-      if (error) {
+
+    httpClient.get(url, { headers: { 'User-Agent': USER_AGENT } }, (resp) => {
+      var chunks = [];
+
+      resp.on('data', (chunk) => chunks.push(chunk));
+
+      resp.on('end', () => {
+        const data = Buffer.concat(chunks);
+        const html = iconv.decode(data, coding || 'utf8');
+
+        resolve(html);
+      });
+
+    })
+      .on("error", (error) => {
         reject(error);
-        return;
+      });
+  })
+}
+
+function _getHttpsSourceData(url, coding) {
+  const request = require('request');
+  const iconv = require('iconv-lite');
+  return new Promise((resolve, reject) => {
+    request({
+      url: url, 
+      headers: { 'User-Agent': USER_AGENT } 
+    }, (error, response, body) => {
+      if (!error && response.statusCode == 200) {
+          const html = body;//iconv.decode(body, coding || 'utf8');
+          resolve(html);
+      } else {
+        reject(error);
       }
-      const html = iconv.decode(body, coding || 'utf8');
-      resolve(html);
-    });
+
+    })
   })
 }
 
@@ -62,7 +89,12 @@ async function parseSource(parserName, params, _data) {
 
   const docParser = await db.getParser({ url: parserName });//req.query.url });
 
-  const html = await _getSourceData('https://' + docParser.url + '/' + params, docParser.coding);
+  let html;
+  if (docParser.protocol === 'https') {
+    html = await _getHttpsSourceData('httpы://' + docParser.url + '/' + params, docParser.coding);
+  } else {
+    html = await _getSourceData('http://' + docParser.url + '/' + params, docParser.coding);
+  }
 
   const rawCollection = await sourceParser.list(html, data.listParser || docParser.listParser);
 
@@ -70,7 +102,13 @@ async function parseSource(parserName, params, _data) {
     .filter(i => !i.details.Country.includes("Россия"));
 
   await Promise.all(collection.map(async (doc) => {
-    const _html = await _getSourceData(doc.href, docParser.coding);
+    let _html;
+    if (docParser.protocol === 'https') {
+      _html = await _getHttpsSourceData(doc.href, docParser.coding);
+    } else {
+      _html = await _getSourceData(doc.href, docParser.coding);
+    }
+
     try {
       await sourceParser.details(_html, doc, data.parser || docParser.parser);
     } catch (error) {
