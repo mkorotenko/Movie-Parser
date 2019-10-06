@@ -1,44 +1,51 @@
 <div class="nc-card">
-    <div class="nc-card__title">
-        <a class="nc-card__title--ref"
-            href="{{href}}">
-            {{title}}
-        </a>
-        <span class="nc-card__title--rating">
-            rating {{rating}}
-        </span>
+  <div class="nc-card__title">
+    <a class="nc-card__title--ref"
+      href="{{href}}">
+      {{title}}
+    </a>
+    <span class="nc-card__title--rating">
+      rating {{rating}}
+    </span>
+  </div>
+  <div class="nc-card__content">
+    <div class="nc-card__content--img">
+      <img src="{{imgSrc}}">
     </div>
-    <div class="nc-card__content">
-        <div class="nc-card__content--img">
-            <img src="{{imgSrc}}">
+    <div class="nc-card__content--description">
+      {{description}}
+    </div>
+  </div>
+  <div class="nc-card__links">
+    <button *ngIf="!(hasLinks$ | async)"
+      (click)="onSearchFiles()">
+      Search
+    </button>
+    <ng-container *ngIf="hasLinks$ | async">
+      <mat-spinner *ngIf="busy$ | async"
+        color="warn"
+        diameter="23"></mat-spinner>
+      <a *ngFor="let link of directLinks$ | async"
+        class="file-link"
+        target=”_blank”
+        href="{{getFileLink(link)}}">
+        <div class="file-link__text">
+          {{fileExt(link)}}
         </div>
-        <div class="nc-card__content--description">
-            {{description}}
-        </div>
-    </div>
-    <div class="nc-card__links">
-        <button *ngIf="!(hasLinks$ | async)"
-            (click)="onSearchFiles()">Search</button>
-        <ng-container *ngIf="hasLinks$ | async">
-            <a *ngFor="let link of links$ | async"
-                class="file-link"
-                target=”_blank”
-                href="{{getFileLink(link)}}">
-                <div class="file-link__text">
-                    {{fileExt(link)}}
-                </div>
-            </a>
-        </ng-container>
-    </div>
-    <div>
-        {{genre}}
-    </div>
-    <div>
-        {{quality}}
-    </div>
-    <!-- <div>
+      </a>
+      <button *ngFor="let stream of streamLinks$ | async; let num = index"
+        (click)="onStreamSelect(num)">
+        {{fileExt(stream.link)}}
+      </button>
+    </ng-container>
+  </div>
+  <div>
+    {{genre}}
+  </div>
+  <div>
+    {{quality}}
+  </div>
+  <!-- <div>
         {{year}}
     </div> -->
 </div>
-    
-    

@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, empty, combineLatest } from 'rxjs';
+import { BehaviorSubject, empty, combineLatest, Observable } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
+
+export interface StreamPathResult{
+  link: string;
+  token?: any;
+}
+
+interface MoviePathResult{
+  directLinks?: String[];
+  streams?: StreamPathResult[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
@@ -66,14 +76,22 @@ export class AppService {
   ) { }
 
   private _linksCache = {};
-  public getLinks(movieID: string) {
+  public getLinks(movieID: string): Observable<MoviePathResult> {
     if (this._linksCache[movieID]) {
       return this._linksCache[movieID];
     } else {
-      return this._linksCache[movieID] = this.client.get('api/acc/moviePath/' + movieID).pipe(
+      return this._linksCache[movieID] = this.client.get(`api/acc/moviePath/${movieID}`).pipe(
         shareReplay(1)
       );
     }
+  }
+
+  public getStream(movieID: string, index: number): Observable<any> {
+    return this.client.get(`api/acc/proxy/${movieID}?movie=${index}`, {
+      responseType: 'text'
+    }).pipe(
+      map(l => l.split('\n')[2])
+    );
   }
 
 }

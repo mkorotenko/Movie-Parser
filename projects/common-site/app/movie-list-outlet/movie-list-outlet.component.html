@@ -1,0 +1,25 @@
+<div class="movies-container">
+  <div class="movies-container__pages">
+    <a *ngFor="let page of pages$ | async"
+      class="page-link"
+      [routerLink]="'/movies/' + page"
+      [queryParams]="params$ | async">
+      <div class="page-link__text">
+        {{page}}
+      </div>
+    </a>
+  </div>
+  <div class="movies-container__search">
+    <input #titleInput
+      (change)="onSearch($event.target.value)" />
+    <input #yearInput
+      (change)="onYearSearch($event.target.value)" />
+    <input #actorInput
+      (change)="onActorSearch($event.target.value)" />
+    <input #genreInput
+      (change)="onGenreSearch($event.target.value)" />
+  </div>
+  <div #content class="movies-container__content">
+    <ng-content></ng-content>
+  </div>
+</div>

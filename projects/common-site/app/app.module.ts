@@ -12,13 +12,15 @@ import { MovieCardComponent } from './movie-card/movie-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MoviePlayerComponent } from './movie-player/movie-player.component';
 import { HLSPlayerComponent } from './movie-player-hls/hls-player.component';
+import { MatProgressSpinnerModule } from '@angular/material';
+import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
   { path: 'player/:file', component: MoviePlayerComponent },
-  { path: 'hls/:file', component: HLSPlayerComponent },
+  { path: 'hls/:id/:num', component: HLSPlayerComponent },
 ];
 
 @NgModule({
@@ -28,6 +30,7 @@ const routes: Routes = [
     MovieCardComponent,
     MoviePlayerComponent,
     HLSPlayerComponent,
+    MovieListOutletComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     BrowserAnimationsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     AppService,

@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "start-common": "ng serve --proxy-config proxy-common.conf.json --project common-site",
     "start-admin": "ng serve --proxy-config proxy.conf.json --project admin-site",
     "server": "node api/home-portal/dist-server",
     "clean_lock": "rimraf mongo-db/mongod.lock",
@@ -11,6 +12,7 @@
     "mongo": "npm run clean_lock && npm run mongo_server",
     "start1": "concurrently \"npm:mongo\" \"sleep 20\" \"npm:server\"",
     "build": "ng build",
+    "build:common": "ng build --prod --project common-site",
     "build:admin": "ng build --prod --project admin-site",
     "test": "ng test",
     "lint": "ng lint",

@@ -1,4 +1,5 @@
-<nc-movie-card *ngFor="let movie of data$ | async"
+<nc-movie-list-outlet>
+  <nc-movie-card *ngFor="let movie of data$ | async"
     [movieID]="movie._id"
     [title]="movie.title"
     [rating]="movie.rating"
@@ -8,4 +9,5 @@
     [quality]="movie.quality"
     [year]="movie.year"
     [description]="movie.description">
-</nc-movie-card>
+  </nc-movie-card>
+</nc-movie-list-outlet>
