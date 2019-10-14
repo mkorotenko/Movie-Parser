@@ -96,6 +96,7 @@ export class MovieCardComponent implements OnChanges {
     // this.service.getStream(this.movieID, index).subscribe(s => {
     //   console.info('app stream result', s);
     // })
-    this.router.navigate(['hls', this.movieID, index]);
+    // this.router.navigate(['hls', this.movieID, index]);
+    window.open(`./hls/${this.movieID}/${index}`);
   }
 }

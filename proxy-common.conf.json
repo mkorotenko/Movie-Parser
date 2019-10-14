@@ -1,11 +1,11 @@
 {
   "/api/*": {
-    "target": "http://localhost:3700",
+    "target": "http://localhost",
     "secure": false,
     "logLevel": "debug"
   },
   "/socket.io/*": {
-    "target": "http://localhost:3700",
+    "target": "http://localhost",
     "secure": false,
     "logLevel": "debug"
   }

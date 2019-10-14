@@ -36,13 +36,14 @@ export class HLSPlayerComponent implements OnInit, OnChanges {
       // }
       if (Hls.isSupported()) {
         var hls = new Hls();
-        // hls.loadSource(s);
+        hls.loadSource(s);
         hls.attachMedia(video);
         // hls.on(Hls.Events.BUFFER_CODECS,function() {
         //   video['play']();
         // });
         video.addEventListener('canplay', function () {
-          video['play']();
+          video['play']()
+          .catch(error => console.error(error));
         });
       }
     })

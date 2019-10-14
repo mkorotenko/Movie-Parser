@@ -33,4 +33,17 @@
       display: inline-block;
     }
   }
+  
+  .my-pagination /deep/ {
+    .ngx-pagination {
+      margin: 5px;
+      a {
+        color: white;
+      }
+      a:hover {
+        background: #666666;
+      }
+    }
+
+  }
 }

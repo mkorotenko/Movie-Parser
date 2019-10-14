@@ -1,7 +1,9 @@
 import { Component, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, distinctUntilChanged } from 'rxjs/operators';
+import { PaginationService } from 'ngx-pagination';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'nc-movie-list-outlet',
@@ -24,21 +26,18 @@ export class MovieListOutletComponent implements OnInit {
     shareReplay(1)
   );
 
-  public pages$ = this.service.movieCount$.pipe(
-    map((count) => {
-      const pageCount = Math.round(Number(count) / 20 + .5);
-      const res = new Array(pageCount);
-      for (let i = 0; i < pageCount; i++) {
-        res[i] = i + 1;
-      }
-      return res;
-    })
-  );
+  private paginationConfig = {
+    id: 'common',
+    itemsPerPage: 20,
+    currentPage: 1,
+    totalItems: 100
+  }
   
   constructor(
     private service: AppService,
     private aRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private paginationService: PaginationService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +86,20 @@ export class MovieListOutletComponent implements OnInit {
         this.service.reqParameters$.next(undefined);
       }
     });
+
+    combineLatest(
+      this.aRoute.params,
+      this.service.movieCount$
+    ).pipe(
+      distinctUntilChanged((prev, curr) => prev[0] === curr[0] && prev[1] === curr[1])
+    ).subscribe(([params, itemsCount]) => {
+      var instance = this.createInstance([], {
+        ...this.paginationConfig,
+        currentPage: Number(params.id),
+        totalItems: itemsCount
+      });
+      this.paginationService.register(instance);
+    });
   }
   public onSearch(text) {
     const query = {};
@@ -131,5 +144,29 @@ export class MovieListOutletComponent implements OnInit {
       relativeTo: this.aRoute
     });
   }
+
+  public onPageChange(page: number) {
+    this.router.navigate(['movies', page], {
+      queryParams: this.aRoute.snapshot.queryParams
+    });
+  }
+
+  private createInstance(collection, config) {
+    this.checkConfig(config);
+    return {
+        id: config.id != null ? config.id : this.paginationService.defaultId(),
+        itemsPerPage: +config.itemsPerPage || 0,
+        currentPage: +config.currentPage || 1,
+        totalItems: +config.totalItems || collection.length
+    };
+  }
+
+  private checkConfig(config) {
+    var required = ['itemsPerPage', 'currentPage'];
+    var missing = required.filter(function (prop) { return !(prop in config); });
+    if (0 < missing.length) {
+        throw new Error("PaginatePipe: Argument is missing the following required properties: " + missing.join(', '));
+    }
+};
 
 }
