@@ -1,0 +1,29 @@
+ /* @font-face {
+   font-family: Beware;
+   src: url(./assets/fonts/Beware.ttf);
+   font-weight: normal
+ } */
+
+ /* @font-face {
+   font-family: Desib;
+   src: url(./assets/fonts/desib.ttf);
+   font-weight: normal
+ } */
+
+ @font-face {
+   font-family: GoodTimes;
+   src: url(./good_times_rg.ttf);
+   font-weight: normal
+ }
+
+ /* @font-face {
+   font-family: Neutronium;
+   src: url(./assets/fonts/Neutronium.ttf);
+   font-weight: normal
+ } */
+
+ @font-face {
+   font-family: Oblivious;
+   src: url(./OBLIVIOUSFONT.TTF);
+   font-weight: normal
+ }

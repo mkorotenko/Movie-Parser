@@ -3,32 +3,14 @@
   margin: 10px auto;
   min-width: 540px;
   width: 80%;
-  height: 415px;
+  // height: 415px;
   background: transparent;
   border-radius: 8px;
 
   .nc-card {
     color: #fff;
-    overflow: hidden;
+    // overflow: hidden;
     height: 100%;
-
-    &__wrapper {
-      height: 100%;
-      overflow: hidden;
-      --aug-tr: 15px;
-      --aug-tl: 35px;
-      --aug-bl: 35px;
-      --aug-br: 15px;
-      --aug-l-origin-y: 120px;
-      --aug-l-height: 90px;
-      --aug-r-height: 65%;
-      --aug-b-origin-x: 35%;
-      --aug-b-width: 130px;
-      --aug-border: 2px;
-      --aug-border-bg: #c4f4ff;
-      --aug-border-fallback-color: #c4f4ff;
-      --aug-inset-bg: #00576a5e;
-    }
 
     &__title {
       display: flex;
