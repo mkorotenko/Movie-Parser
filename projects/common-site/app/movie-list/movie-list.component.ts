@@ -16,7 +16,11 @@ export class MovieListComponent {
   public data$ = this.route.params.pipe(
     tap(param => {
       this.service.pageParameters$.next((Number(param.id || 1)));
-      this.elRef.nativeElement.scrollTo(0, 0);
+      try{
+        this.elRef.nativeElement.scrollTo(0, 0);
+      } catch(error) {
+        console.error(error);
+      }
     }),
     switchMap(() => this.service.rootContent$),
     shareReplay(1)

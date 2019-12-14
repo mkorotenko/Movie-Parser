@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { DBEditorService } from './db-editor.service';
   templateUrl: './db-editor.component.html',
   styleUrls: ['./db-editor.component.scss']
 })
-export class DBEditorComponent implements OnInit {
+export class DBEditorComponent {
 
   @ViewChild('editor') editor: any;
 
@@ -47,9 +47,6 @@ export class DBEditorComponent implements OnInit {
   constructor(
     private service: DBEditorService
   ) { }
-
-  ngOnInit() {
-  }
 
   public onQuery(filter: string) {
     this.busy$.next(true);

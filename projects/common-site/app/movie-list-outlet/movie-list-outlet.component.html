@@ -57,6 +57,8 @@
       (change)="onGenreSearch($event.target.value)" />
   </div>
   <div #content class="movies-container__content">
-    <ng-content></ng-content>
+    <div class="movies-container__content--grid">
+        <ng-content></ng-content>
+    </div>
   </div>
 </div>

@@ -20,7 +20,14 @@
     }
 
     .movies-container__content {
-      overflow: auto;
+      overflow: hidden;
+      overflow-y: auto;
+      &--grid {
+        --g-color: #4f4f4f;
+        background-image:
+          repeating-linear-gradient(0deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px),
+          repeating-linear-gradient(-90deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px);
+      }
     }
   }
 

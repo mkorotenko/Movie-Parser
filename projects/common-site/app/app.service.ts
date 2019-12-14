@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { BehaviorSubject, empty, combineLatest, Observable } from 'rxjs';
-import { map, switchMap, shareReplay } from 'rxjs/operators';
+import { map, switchMap, shareReplay, tap } from 'rxjs/operators';
 
 export interface StreamPathResult{
   link: string;
@@ -81,7 +81,7 @@ export class AppService {
       return this._linksCache[movieID];
     } else {
       return this._linksCache[movieID] = this.client.get(`api/acc/moviePath/${movieID}`).pipe(
-        shareReplay(1)
+        // shareReplay(1)
       );
     }
   }
@@ -92,6 +92,16 @@ export class AppService {
     }).pipe(
       map(l => l.split('\n')[2])
     );
+  }
+
+  public setMovieSource(movieID: string, href: string) {
+    return this.client.patch(`api/acc/source/${movieID}`, {
+      href
+    }).pipe(
+      tap(() => {
+        this._linksCache[movieID] = undefined;
+      })
+    )
   }
 
 }

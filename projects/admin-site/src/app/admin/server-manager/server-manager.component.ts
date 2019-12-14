@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { BehaviorSubject, empty } from 'rxjs';
 import { tap, shareReplay, catchError } from 'rxjs/operators';
@@ -12,9 +12,9 @@ import { AdminService } from '../admin.service';
   templateUrl: './server-manager.component.html',
   styleUrls: ['./server-manager.component.scss']
 })
-export class ServerManagerComponent implements OnInit {
+export class ServerManagerComponent {
 
-  public parseResult = '';
+  public parseResult: any = '';
 
   public busy$ = new BehaviorSubject(false);
 
@@ -30,26 +30,34 @@ export class ServerManagerComponent implements OnInit {
     private admin: AdminService
   ) { }
 
-  ngOnInit() {
-
-  }
-
-  public onClick(page: string) {
+  public onClick(page: string, template?: string) {
     this.parseResult = 'parsing...';
     this.busy$.next(true);
 
-    this.service.parseContent({ url: this.dataSorce$.getValue(), page: page || '0' }).pipe(
-      catchError(error => {
-        this.busy$.next(false);
-        this.parseResult = JSON.stringify(error.error);
-        return empty();
-      })
-    ).subscribe(r => {
-        console.info('Parse result:', r);
-        this.parseResult = JSON.stringify(r);
-        this.busy$.next(false);
-      });
+    const param = {
+      url: this.dataSorce$.getValue()
+    };
+
+    if (template && !template.includes('${page}')) {
+      param['path'] = template;
+    } else {
+      if (template) {
+        param['path'] = template.replace('${page}', page || '0');
+      } else {
+        param['page'] = page || '0';
+      }
+    }
+
+    this.service.parseContent(param)
+      .subscribe(r => {
+          console.info('Parse result:', r);
+          this.parseResult = r; // JSON.stringify(r);
+          this.busy$.next(false);
+        },
+        error => {
+          this.busy$.next(false);
+          this.parseResult = error.error; // JSON.stringify(error.error);
+        });
   }
 
 }
-//0672565305

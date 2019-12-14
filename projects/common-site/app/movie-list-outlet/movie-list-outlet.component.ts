@@ -43,7 +43,11 @@ export class MovieListOutletComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.content.nativeElement.scrollTo(0,0);
+        try{
+          this.content.nativeElement.scrollTo(0,0);
+        } catch(error) {
+          console.error(error);
+        }
       }
     });
 

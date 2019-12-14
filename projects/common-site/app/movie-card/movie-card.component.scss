@@ -1,68 +1,102 @@
-:host { 
-    display: block;
-    margin: 10px auto;
-    min-width: 540px;
-    width: 80%;
-    height: 415px;
-    background: #2b2b2b;
-    border-radius: 8px;
-    
-    .nc-card {
+:host {
+  display: block;
+  margin: 10px auto;
+  min-width: 540px;
+  width: 80%;
+  height: 415px;
+  background: transparent;
+  border-radius: 8px;
+
+  .nc-card {
+    color: #fff;
+    overflow: hidden;
+    height: 100%;
+
+    &__wrapper {
+      height: 100%;
+      overflow: hidden;
+      --aug-tr: 15px;
+      --aug-tl: 35px;
+      --aug-bl: 35px;
+      --aug-br: 15px;
+      --aug-l-origin-y: 120px;
+      --aug-l-height: 90px;
+      --aug-r-height: 65%;
+      --aug-b-origin-x: 35%;
+      --aug-b-width: 130px;
+      --aug-border: 2px;
+      --aug-border-bg: #c4f4ff;
+      --aug-border-fallback-color: #c4f4ff;
+      --aug-inset-bg: #00576a5e;
+    }
+
+    &__title {
+      display: flex;
+
+      &--ref {
+        color: #fff;
+        font-family: Helvetica;
+      }
+
+      &--source {
+        width: 120px;
+        margin-left: auto;
+      }
+      &--rating {
+        margin-left: auto;
+      }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: row;
+
+      &--img {
+        padding: 10px 0;
+        width: 200px;
+        height: 300px;
+        overflow: hidden;
+
+        img {
+          width: 200px;
+        }
+      }
+
+      &--description {
+        flex: 1;
+        overflow: auto;
         padding: 10px;
-        color: #fff;
-
-        .nc-card__title {
-            .nc-card__title--ref {
-                color: #fff;
-                font-family: Helvetica;
-            }
-            .nc-card__title--rating {
-                float: right;
-            }
-        }
-
-        .nc-card__content {
-            display: flex;
-            flex-direction: row;
-
-            .nc-card__content--img {
-                padding: 10px 0;
-                width: 200px;
-                height: 300px;
-                overflow: hidden;
-
-                img {
-                    width: 200px;
-                }
-            }
-            .nc-card__content--description {
-                flex: 1;
-                overflow: hidden;
-                padding: 10px;
-                max-height: 300px;
-            }
-        }
-
-        .nc-card__links {
-            height: 23px;
-        }
+        max-height: 300px;
+      }
     }
 
-    .file-link {
-        text-align: center;
-        color: #fff;
+    &__links {
+      height: 23px;
+      overflow: hidden;
 
-        .file-link__text {
-            width: 40px;
-            display: inline-block;
-            background: #171717;
-            border-radius: 1px;
-            margin: 2px;
-
-            &:hover {
-                background: #000;
-            }
-        }
+      &--errors {
+        overflow: hidden;
+        white-space: nowrap;
+        color: #c60000;
+      }
     }
+  }
+
+  .file-link {
+    text-align: center;
+    color: #fff;
+
+    &__text {
+      width: 40px;
+      display: inline-block;
+      background: #171717;
+      border-radius: 1px;
+      margin: 2px;
+
+      &:hover {
+        background: #000;
+      }
+    }
+  }
 
 }

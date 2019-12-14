@@ -1,8 +1,11 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
-import { AppService, StreamPathResult } from '../app.service';
-import { map, startWith, catchError, switchMap, filter, tap, shareReplay } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { map, startWith, catchError, switchMap, filter, shareReplay, share } from 'rxjs/operators';
+import { AppService } from '../app.service';
+
+interface MovieSourceInterface {
+  [key:string]: string
+}
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -22,20 +25,38 @@ export class MovieCardComponent implements OnChanges {
   @Input() year: string;
   @Input() description: string;
   @Input() movieID: string;
+  @Input() sources: MovieSourceInterface[];
 
   public imgSrc = '';
 
   public hasLinks$ = new BehaviorSubject(false);
 
+  public sourceList: string[];
+  public currentSource: string;
+
   private links$ = this.hasLinks$.pipe(
     filter(start => start),
     switchMap(() => this.service.getLinks(this.movieID)),
-    shareReplay(1)
+    share()
   );
 
   public directLinks$: Observable<any> = this.links$.pipe(
     map(res => res.directLinks)
   );
+
+  public linksError$: Observable<string> = this.links$.pipe(
+    filter(e => e instanceof Error),
+    catchError(error => {
+      if (error.error) {
+        error = error.error;
+      }
+      if (error.message) {
+        return of(error.message.message || error.message);
+      } else {
+        return of(error);
+      }
+    })
+  )
 
   public streamLinks$: Observable<any> = this.links$.pipe(
     map(res => res.streams)
@@ -54,14 +75,24 @@ export class MovieCardComponent implements OnChanges {
   )
 
   constructor(
-    private service: AppService,
-    private router: Router
+    private service: AppService
   ) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.image) {
       this.imgSrc = `api/acc/image/${this.image}`;
+    }
+
+    if (changes.sources) {
+      this.sourceList = Object
+        .keys(this.sources || {});
+
+      this.sourceList.forEach(key => {
+        if (this.href === this.sources[key]) {
+          this.currentSource = key;
+        }
+      })
     }
   }
 
@@ -92,11 +123,15 @@ export class MovieCardComponent implements OnChanges {
   }
 
   public onStreamSelect(index: number) {
-    // console.info('app stream', stream);
-    // this.service.getStream(this.movieID, index).subscribe(s => {
-    //   console.info('app stream result', s);
-    // })
-    // this.router.navigate(['hls', this.movieID, index]);
     window.open(`./hls/${this.movieID}/${index}`);
   }
+
+  onSourceChange(sourceKey: string) {
+    this.service.setMovieSource(this.movieID, this.sources[sourceKey])
+      .subscribe(() => {
+        this.href = this.sources[sourceKey];
+        this.hasLinks$.next(false);
+      })
+  }
+
 }

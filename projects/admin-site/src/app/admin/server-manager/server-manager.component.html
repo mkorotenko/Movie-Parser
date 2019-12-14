@@ -13,12 +13,19 @@
     </div>
     <div>
       <mat-form-field class="example-full-width">
-        <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
+        <input type="text" #pathTemplate matInput placeholder="Path template" value="page/${page}/">
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="onClick(parsePage.value)">Parse</button>
     </div>
     <div>
-      <span>{{parseResult}}</span>
+      <mat-form-field class="example-full-width">
+        <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" (click)="onClick(parsePage.value, pathTemplate.value)">Parse</button>
+    </div>
+    <div>
+      <span>{{parseResult | json}}</span>
     </div>
   </div>
 </div>

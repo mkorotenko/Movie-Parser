@@ -12,7 +12,7 @@ import { MovieCardComponent } from './movie-card/movie-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MoviePlayerComponent } from './movie-player/movie-player.component';
 import { HLSPlayerComponent } from './movie-player-hls/hls-player.component';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule, MatSelectModule } from '@angular/material';
 import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 
@@ -40,6 +40,7 @@ const routes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     NgxPaginationModule
   ],
   providers: [
