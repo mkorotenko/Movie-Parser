@@ -41,7 +41,7 @@
     }
   }
   
-  .my-pagination /deep/ {
+  .my-pagination ::ng-deep {
     .ngx-pagination {
       margin: 5px;
       a {

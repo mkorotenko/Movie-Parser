@@ -2,6 +2,7 @@
   display: block;
   padding: 22px;
   position: relative;
+  font-family: GoodTimes;
   // --aug-tr: 15px;
   // --aug-tr-width: 65%;
   // --aug-tr-height: 12px;
@@ -18,10 +19,14 @@
   // --aug-b-height: 12px;
   // --aug-border: 2px;
   // --aug-border-fallback-color: #c4f4ff;
-  --aug-border-bg: #c4f4ff;
-  --aug-inset-bg: #03d2ff5e;
+  --aug-color: #c0dbffc4;
+  --aug-border-bg: #62a6eb;
+  --aug-inset-bg: #0244ab80;
+  // --aug-border-bg: #c4f4ff;
+  // --aug-inset-bg: #03d2ff5e;
 
   &.plain {
+    color: var(--aug-color);
     clip-path: polygon(0px 35px, 35px 0px, 35% 0px, calc(35% + 12px) 12px, calc(100% - 20px) 12px, 100% 32px, 100% calc(17.5% - 1.5px), calc(100% - 12px) calc(17.5% + 10.5px), calc(100% - 12px) calc(82.5% - 13.5px), 100% calc(82.5% - 1.5px), 100% calc(100% - 15px), calc(100% - 15px) 100%, 55% 100%, calc(55% - 12px) calc(100% - 12px), calc(15% + 12px) calc(100% - 12px), 15% 100%, 35px 100%, 0px calc(100% - 35px), 0px calc(15% + 140px), 12px calc(15% + 128px), 12px calc(-15% + 152px), 0px calc(-15% + 140px));
     &::before {
       content: "";
