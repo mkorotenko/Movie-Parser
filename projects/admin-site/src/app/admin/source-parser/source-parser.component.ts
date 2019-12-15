@@ -14,7 +14,7 @@ import { AdminService } from '../admin.service';
 })
 export class SourceParserComponent implements OnInit {
 
-  @ViewChild('listParser') listParser: any;
+  @ViewChild('listParser', {static: true}) listParser: any;
 
   public editorOptions = {
     theme: 'vs-dark',

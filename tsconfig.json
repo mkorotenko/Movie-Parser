@@ -17,14 +17,6 @@
     "lib": [
       "es2017",
       "dom"
-    ],
-    "paths": {
-      "ui-futuristic": [
-        "dist/ui-futuristic"
-      ],
-      "ui-futuristic/*": [
-        "dist/ui-futuristic/*"
-      ]
-    }
+    ]
   }
 }

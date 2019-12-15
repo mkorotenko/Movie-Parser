@@ -12,7 +12,7 @@ import { DBEditorService } from './db-editor.service';
 })
 export class DBEditorComponent {
 
-  @ViewChild('editor') editor: any;
+  @ViewChild('editor', {static: true}) editor: any;
 
   public editorOptions = {
     theme: 'vs-dark',
