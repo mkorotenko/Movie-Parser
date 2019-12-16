@@ -16,7 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.component';
 import {NgxPaginationModule} from 'ngx-pagination';
-import { UiCardModule } from 'ui-futuristic';
+import { UiCardModule, UiButtonModule } from 'ui-futuristic';
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
@@ -44,7 +44,8 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatSelectModule,
     NgxPaginationModule,
-    UiCardModule
+    UiCardModule,
+    UiButtonModule
   ],
   providers: [
     AppService,

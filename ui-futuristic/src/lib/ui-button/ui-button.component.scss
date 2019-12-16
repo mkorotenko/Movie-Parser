@@ -1,0 +1,16 @@
+:host {
+  --aug-color: #c0dbffc4;
+  --aug-border-bg: #62a6eb;
+  --aug-inset-bg: #0244ab80;
+  display: inline-block;
+  align-items: flex-start;
+  color: var(--aug-color);
+  background-color: var(--aug-inset-bg);
+  padding: 1px 6px;
+  cursor: default;
+  font-size: 0.8em;
+  box-sizing: border-box;
+  text-align: center;
+  letter-spacing: normal;
+  -webkit-appearance: button;
+}

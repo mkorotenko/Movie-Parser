@@ -27,10 +27,14 @@
       </div>
     </div>
     <div class="nc-card__links">
-      <button *ngIf="!(hasLinks$ | async)"
+      <!-- <button *ngIf="!(hasLinks$ | async)"
         (click)="onSearchFiles()">
         Search
-      </button>
+      </button> -->
+      <ui-button *ngIf="!(hasLinks$ | async)" 
+        (click)="onSearchFiles()">
+        Search
+      </ui-button>
       <ng-container *ngIf="hasLinks$ | async">
         <mat-spinner *ngIf="busy$ | async"
           color="warn"
@@ -45,10 +49,10 @@
             {{fileExt(link)}}
           </div>
         </a>
-        <button *ngFor="let stream of streamLinks$ | async; let num = index"
+        <ui-button *ngFor="let stream of streamLinks$ | async; let num = index"
           (click)="onStreamSelect(num)">
           {{fileExt(stream.link)}}
-        </button>
+        </ui-button>
       </ng-container>
     </div>
     <div>
