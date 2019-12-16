@@ -247,6 +247,41 @@
           }
         }
       }
+    },
+    "ui-futuristic": {
+      "projectType": "library",
+      "root": "ui-futuristic",
+      "sourceRoot": "ui-futuristic/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "ui-futuristic/tsconfig.lib.json",
+            "project": "ui-futuristic/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "ui-futuristic/src/test.ts",
+            "tsConfig": "ui-futuristic/tsconfig.spec.json",
+            "karmaConfig": "ui-futuristic/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "ui-futuristic/tsconfig.lib.json",
+              "ui-futuristic/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "common-site",
