@@ -9,19 +9,18 @@ const AUGMENT_LIST = [
   'r-clip-y',
   'b-clip-x',
   'tr-clip-x'
-]
+];
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'aug-div',
-  templateUrl: './aug-div.component.html',
-  styleUrls: ['./aug-div.component.scss'],
+  selector: 'ui-card',
+  templateUrl: './ui-card.component.html',
+  styleUrls: ['./ui-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AugDivComponent {
+export class UiCardComponent {
   @HostBinding('class.plain')
   plain = true;
-  
+
   @HostBinding('attr.augmented-ui')
   augmented = !this.plain && `${AUGMENT_LIST.join(' ')} exe`;
 }

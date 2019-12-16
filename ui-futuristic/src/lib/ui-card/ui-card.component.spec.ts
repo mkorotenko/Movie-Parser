@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UiFuturisticComponent } from './ui-futuristic.component';
+import { UiCardComponent } from './ui-card.component';
 
-describe('UiFuturisticComponent', () => {
-  let component: UiFuturisticComponent;
-  let fixture: ComponentFixture<UiFuturisticComponent>;
+describe('UiCardComponent', () => {
+  let component: UiCardComponent;
+  let fixture: ComponentFixture<UiCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UiFuturisticComponent ]
+      declarations: [ UiCardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UiFuturisticComponent);
+    fixture = TestBed.createComponent(UiCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
