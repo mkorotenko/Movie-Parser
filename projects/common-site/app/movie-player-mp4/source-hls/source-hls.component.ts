@@ -20,10 +20,12 @@ export class SourceHlsComponent implements OnInit {
       hls.loadSource(this.src);
       hls.attachMedia(playerNode);
 
-      playerNode.addEventListener('canplay', () => {
-        playerNode['play']()
-          .catch(error => console.error(error));
-      });
+      if (playerNode) {
+        playerNode.addEventListener('canplay', () => {
+          playerNode['play']()
+            .catch(error => console.error(error));
+        });  
+      }
     } else {
       console.error('HLS codec not supported', this);
     }
