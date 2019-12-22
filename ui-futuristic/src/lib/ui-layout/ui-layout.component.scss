@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  --g-color: #4f4f4f;
+  background: #3c3c3c;
+  background-image: repeating-linear-gradient(0deg,transparent,transparent 30px,var(--g-color) 30px,var(--g-color) 31px),repeating-linear-gradient(-90deg,transparent,transparent 30px,var(--g-color) 30px,var(--g-color) 31px);
+}

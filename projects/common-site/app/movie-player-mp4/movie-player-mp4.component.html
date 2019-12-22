@@ -1,0 +1,21 @@
+<ui-layout class="player-layout">
+  <div class="player-overlay">
+    <ui-card class="player-card">
+      <div class="player-card-align">
+        <video #player
+          class="player-node"
+          controls
+          autoplay
+          name="media"
+          [poster]="poster">
+          <!-- <source *ngIf="src"
+                    [src]="src"
+                    type="video/mp4"> -->
+          <source-hls *ngIf="srcHLS"
+            [player]="playerNode"
+            [src]="srcHLS"></source-hls>
+        </video>
+      </div>
+    </ui-card>
+  </div>
+</ui-layout>

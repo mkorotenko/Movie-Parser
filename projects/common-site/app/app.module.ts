@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
   { path: 'player/:file', loadChildren: () => import('./movie-player/movie-player.module').then(m => m.MoviePlayerModule) },
+  { path: 'player-mp4/:id/:num', loadChildren: () => import('./movie-player-mp4/movie-player-mp4.module').then(m => m.MoviePlayerMP4Module) },
   { path: 'hls/:id/:num', component: HLSPlayerComponent },
 ];
 
