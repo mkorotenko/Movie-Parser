@@ -27,10 +27,6 @@
       </ui-overlay>
     </div>
     <div class="nc-card__links">
-      <!-- <button *ngIf="!(hasLinks$ | async)"
-        (click)="onSearchFiles()">
-        Search
-      </button> -->
       <ui-button *ngIf="!(hasLinks$ | async)" 
         (click)="onSearchFiles()">
         Search
@@ -41,14 +37,10 @@
           diameter="23"
         ></mat-spinner>
         <span class="nc-card__links--errors" *ngIf="linksError$ | async as errors">{{errors}}</span>
-        <a *ngFor="let link of directLinks$ | async"
-          class="file-link"
-          target=”_blank”
-          href="{{getFileLink(link)}}">
-          <div class="file-link__text">
-            {{fileExt(link)}}
-          </div>
-        </a>
+        <ui-button *ngFor="let stream of directLinks$ | async; let num = index"
+          (click)="onDirectSelect(num)">
+          {{fileExt(stream)}}
+        </ui-button>
         <ui-button *ngFor="let stream of streamLinks$ | async; let num = index"
           (click)="onStreamSelect(num)">
           {{fileExt(stream.link)}}

@@ -123,7 +123,11 @@ export class MovieCardComponent implements OnChanges {
   }
 
   public onStreamSelect(index: number) {
-    window.open(`./hls/${this.movieID}/${index}`);
+    window.open(`./player/${this.movieID}/streams/${index}`);
+  }
+
+  public onDirectSelect(index: number) {
+    window.open(`./player/${this.movieID}/directLinks/${index}`);
   }
 
   onSourceChange(sourceKey: string) {

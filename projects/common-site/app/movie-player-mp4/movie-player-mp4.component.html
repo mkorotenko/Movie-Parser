@@ -8,11 +8,11 @@
           autoplay
           name="media"
           [poster]="poster">
-          <!-- <source *ngIf="src"
-                    [src]="src"
-                    type="video/mp4"> -->
+          <source *ngIf="src"
+            [src]="src"
+            type="video/mp4">
           <source-hls *ngIf="srcHLS"
-            [player]="playerNode"
+            [player]="player"
             [src]="srcHLS"></source-hls>
         </video>
       </div>

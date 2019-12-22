@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../app.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,11 +13,9 @@ import { AppService } from '../app.service';
 export class MoviePlayerMP4Component implements OnInit {
 
   @ViewChild('player', {static: true, read: ElementRef}) playerNode: ElementRef;
-
-  src = 'http://magic.wwww.kinogo.cc/95f1823eadad62d85c06ca4166e87f2d:2019122319/filmzzz/supersemeyka-2004_1524614440.mp4';
-  poster = 'api/acc/image/5c75043ef430cb4344b552fc';
-
-  srcHLS: any;
+  poster: string;
+  src:string;
+  srcHLS: string;
   constructor(
     private router: ActivatedRoute,
     private service: AppService,
@@ -24,15 +23,26 @@ export class MoviePlayerMP4Component implements OnInit {
   ) { }
 
   ngOnInit() {
-// this.router.snapshot.params.file
-    this.service.getStream(
-      this.router.snapshot.params['id'],
-      this.router.snapshot.params['num']
-    ).subscribe(src => {
-      console.info('app src:', src);
-      this.srcHLS = src;
-      this.cd.detectChanges();
-    });
+    this.poster = `api/acc/image/${this.router.snapshot.params['id'] || ''}`;
+    const sourceType = this.router.snapshot.params['source'];
+    if (sourceType === 'streams') {
+      this.service.getStream(
+        this.router.snapshot.params['id'],
+        this.router.snapshot.params['num']
+      ).pipe(take(1)).subscribe(src => {
+        this.srcHLS = src;
+        this.cd.detectChanges();
+      });
+    } else {
+      this.service.getLinks(this.router.snapshot.params['id']).pipe(
+        take(1)
+      ).subscribe(s => {
+        this.src = s[sourceType][this.router.snapshot.params['num']];
+        this.cd.detectChanges();
+      });
+    }
+
+    this.playerNode.nativeElement.focus();
   }
 
 }
