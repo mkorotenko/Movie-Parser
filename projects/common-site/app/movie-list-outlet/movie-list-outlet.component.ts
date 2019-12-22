@@ -13,11 +13,11 @@ import { combineLatest } from 'rxjs';
 })
 export class MovieListOutletComponent implements OnInit {
 
-  @ViewChild('titleInput', {static: true}) titleInput: ElementRef;
-  @ViewChild('actorInput', {static: true}) actorInput: ElementRef;
-  @ViewChild('genreInput', {static: true}) genreInput: ElementRef;
-  @ViewChild('yearInput', {static: true}) yearInput: ElementRef;
-  @ViewChild('content', {static: true}) content: ElementRef;
+  @ViewChild('titleInput', {static: true, read: ElementRef}) titleInput: ElementRef;
+  @ViewChild('actorInput', {static: true, read: ElementRef}) actorInput: ElementRef;
+  @ViewChild('genreInput', {static: true, read: ElementRef}) genreInput: ElementRef;
+  @ViewChild('yearInput', {static: true, read: ElementRef}) yearInput: ElementRef;
+  @ViewChild('content', {static: true, read: ElementRef}) content: ElementRef;
   
   public title = 'common-site';
 

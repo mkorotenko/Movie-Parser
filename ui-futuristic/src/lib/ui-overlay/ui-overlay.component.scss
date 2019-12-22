@@ -1,8 +1,9 @@
 :host {
   display: block;
+  --ovl-width: 7px;
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: var(--ovl-width);
   }
 
   &::-webkit-scrollbar-track {
@@ -10,11 +11,17 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #62a6eba1;
+    // background: #62a6eba1;
+    border-top: var(--ovl-width) solid transparent;
+    border-right: var(--ovl-width) solid #62a6eb;
+    border-bottom: var(--ovl-width) solid transparent;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #62a6eb54;
+    // background: #62a6eb54;
+    border-top: var(--ovl-width) solid transparent;
+    border-right: var(--ovl-width) solid #62a6eb54;
+    border-bottom: var(--ovl-width) solid transparent;
   }
 
   /* Buttons */
