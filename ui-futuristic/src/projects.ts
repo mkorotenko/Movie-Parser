@@ -4,3 +4,4 @@
 
 export * from './lib/ui-card/ui-card.module';
 export * from './lib/ui-button/ui-button.module';
+export * from './lib/ui-overlay/ui-overlay.module';
