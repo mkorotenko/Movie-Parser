@@ -14,19 +14,24 @@
 
     &__title {
       display: flex;
+      margin-bottom: 10px;
 
       &--ref {
         color: inherit;
-        // font-family: Helvetica;
+        max-width: 300px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       &--source {
         width: 120px;
         margin-left: auto;
+        font-family: inherit;
       }
       &--rating {
         margin-left: auto;
-        font-size: 0.8em;
+        text-transform: uppercase;
       }
     }
 
@@ -54,7 +59,7 @@
     }
 
     &__links {
-      height: 24px;
+      text-transform: uppercase;
       overflow: hidden;
 
       &--errors {

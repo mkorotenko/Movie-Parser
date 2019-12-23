@@ -6,15 +6,21 @@
 
  /* @font-face {
    font-family: Desib;
-   src: url(./assets/fonts/desib.ttf);
+   src: url(./desib.ttf);
    font-weight: normal
  } */
 
  @font-face {
+  font-family: Zekton;
+  src: url(./zekton_rg.ttf);
+  font-weight: normal
+}
+
+ /* @font-face {
    font-family: GoodTimes;
    src: url(./good_times_rg.ttf);
    font-weight: normal
- }
+ } */
 
  /* @font-face {
    font-family: Neutronium;
@@ -22,8 +28,8 @@
    font-weight: normal
  } */
 
- @font-face {
+ /* @font-face {
    font-family: Oblivious;
    src: url(./OBLIVIOUSFONT.TTF);
    font-weight: normal
- }
+ } */
