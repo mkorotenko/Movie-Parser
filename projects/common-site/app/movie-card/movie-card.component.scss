@@ -3,13 +3,11 @@
   margin: 10px auto;
   min-width: 540px;
   width: 80%;
-  // height: 415px;
   background: transparent;
   border-radius: 8px;
 
   .nc-card {
     color: inherit;
-    // overflow: hidden;
     height: 100%;
 
     &__title {
@@ -18,7 +16,7 @@
 
       &--ref {
         color: inherit;
-        max-width: 300px;
+        max-width: 50%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
