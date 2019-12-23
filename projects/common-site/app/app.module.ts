@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
   { path: 'movies/:id', component: MovieListComponent },
-  { path: 'player/:id/:source/:num', loadChildren: () => import('./movie-player-mp4/movie-player-mp4.module').then(m => m.MoviePlayerMP4Module) }
+  { path: 'player/:id/:source/:num', loadChildren: () => import('./movie-player/movie-player.module').then(m => m.MoviePlayerModule) }
 ];
 
 @NgModule({

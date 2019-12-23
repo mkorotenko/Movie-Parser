@@ -5,12 +5,12 @@ import { take } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'nc-movie-player-mp4',
-  templateUrl: './movie-player-mp4.component.html',
-  styleUrls: ['./movie-player-mp4.component.scss'],
+  selector: 'nc-movie-player',
+  templateUrl: './movie-player.component.html',
+  styleUrls: ['./movie-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MoviePlayerMP4Component implements OnInit {
+export class MoviePlayerComponent implements OnInit {
 
   @ViewChild('player', {static: true, read: ElementRef}) playerNode: ElementRef;
   poster: string;
