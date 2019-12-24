@@ -1,0 +1,13 @@
+<div mat-dialog-content>
+  <mat-form-field>
+    <input
+      #pipeNumber
+      matInput
+      placeholder="Pipe number"
+      value="2">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="pipeNumber.value" cdkFocusInitial>Ok</button>
+</div>

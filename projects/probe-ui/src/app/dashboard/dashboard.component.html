@@ -1,0 +1,31 @@
+<mat-toolbar>
+  <span>DHT sensors</span>
+  <span class="toolbar-spacer"></span>
+  <mat-slide-toggle 
+    [checked]="debug$ | async"
+    (change)="onDebugModeChange($event)"
+  >Debug</mat-slide-toggle>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="dashboard-content">
+  <div class="dashboard-wrapper">
+    <div fxLayout="column" fxLayoutGap="20px" fxHide.print style="height:100%; min-height:40px;">
+      <div *ngFor="let pipe of pipeList$ | async"
+        fxFlex="grow"
+        class="chart-contaner">
+        <app-pipe-card
+          [pipe]="pipe"
+          (delete)="onDeletePipe($event)">
+        </app-pipe-card>    
+      </div>
+    </div>
+  </div>
+</div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onOpenDialog()">
+    <mat-icon>add_circle_outline</mat-icon>
+    <span>Add pipe</span>
+  </button>
+</mat-menu>

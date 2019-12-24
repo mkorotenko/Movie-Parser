@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #fafafa;
+
+  mat-toolbar {
+    flex-grow: 0;
+  }
+
+  .dashboard-content {
+    flex: 1 1;
+    height: 100%;
+    overflow: hidden;
+    padding: 5px;
+
+    .dashboard-wrapper {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+
+  .chart-contaner {
+    max-height: 40%;
+  }
+
+}
