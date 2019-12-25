@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatCardModule, MatToolbarModule, MatMenuModule, MatDialogModule, MatInputModule,
@@ -17,7 +18,7 @@ import { LocalStorageService } from './services/local-storage.service';
 import { SocketService } from './pipe-card/socket.service';
 import { DashboardMenuComponent } from './dashboard-menu/dashboard-menu.component';
 import { EditPipeDialogComponent } from './edit-pipe-dialog/edit-pipe-dialog.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'ui-futuristic';
 
 @NgModule({
   imports: [
@@ -37,7 +38,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatDatepickerModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    UiOverlayModule,
+    UiButtonModule,
+    UiCardModule,
+    UiLayoutModule
   ],
   declarations: [
     AppComponent,

@@ -1,4 +1,5 @@
-<mat-card>
+<ui-card>
+<mat-card class="pipe-card">
   <mat-card-header>
     <mat-card-title>{{pipe}}</mat-card-title>
     <!-- <mat-form-field class="pipe-date-input">
@@ -24,6 +25,8 @@
   <!-- <mat-card-actions>
   </mat-card-actions> -->
 </mat-card>
+</ui-card>
+
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="delete.emit(pipe)">
     <mat-icon>highlight_off</mat-icon>

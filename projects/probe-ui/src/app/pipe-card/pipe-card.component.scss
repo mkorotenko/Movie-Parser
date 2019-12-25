@@ -1,4 +1,9 @@
 :host {
+  .pipe-card {
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+  }
   .pipe-date-input {
     width: 110px;
   }

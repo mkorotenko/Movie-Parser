@@ -6,7 +6,7 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "start-common": "ng serve --proxy-config proxy-common.conf.json --project common-site",
     "start-admin": "ng serve --proxy-config proxy.conf.json --project admin-site",
-    "start-probe": "ng serve --proxy-config proxy.conf.json --project probe-ui",
+    "start-probe": "ng serve --proxy-config proxy-probe.conf.js --project probe-ui",
     "start-lib": "ng build ui-futuristic --watch",
     "server": "node api/home-portal/dist-server",
     "clean_lock": "rimraf mongo-db/mongod.lock",

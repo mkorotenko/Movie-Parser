@@ -9,20 +9,23 @@
     <mat-icon>more_vert</mat-icon>
   </button>
 </mat-toolbar>
-<div class="dashboard-content">
-  <div class="dashboard-wrapper">
-    <div fxLayout="column" fxLayoutGap="20px" fxHide.print style="height:100%; min-height:40px;">
-      <div *ngFor="let pipe of pipeList$ | async"
-        fxFlex="grow"
-        class="chart-contaner">
-        <app-pipe-card
-          [pipe]="pipe"
-          (delete)="onDeletePipe($event)">
-        </app-pipe-card>    
+<ui-layout class="dashboard-layout">  
+  <div class="dashboard-content">
+    <div class="dashboard-wrapper">
+      <div fxLayout="column" fxLayoutGap="20px" fxHide.print style="height:100%; min-height:40px;">
+        <div *ngFor="let pipe of pipeList$ | async"
+          fxFlex="grow"
+          class="chart-contaner">
+          <app-pipe-card
+            [pipe]="pipe"
+            (delete)="onDeletePipe($event)">
+          </app-pipe-card>    
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ui-layout>
+
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="onOpenDialog()">
     <mat-icon>add_circle_outline</mat-icon>
