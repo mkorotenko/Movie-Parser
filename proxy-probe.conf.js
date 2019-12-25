@@ -1,7 +1,7 @@
 const PROXY_CONFIG = [
   {
     context: [
-      '/docs'
+      '/docs', '/socket'
     ],
     target: 'http://localhost:3500',
     secure: false,
