@@ -1,214 +1,164 @@
 import {
     Component, OnInit, ViewChild, ElementRef, Input, SimpleChanges,
-    OnChanges, ChangeDetectionStrategy, HostListener, EventEmitter
+    OnChanges, ChangeDetectionStrategy, HostListener, EventEmitter, ChangeDetectorRef
 } from '@angular/core';
 import * as d3 from 'd3';
-import { debounceTime } from 'rxjs/operators';
 
-const CURVES = [
-    'curveLinear',
-    'curveBasis',
-    'curveBundle',
-    'curveCardinal',
-    'curveCatmullRom',
-    'curveMonotoneX',
-    'curveMonotoneY',
-    'curveNatural',
-    'curveStep',
-    'curveStepAfter',
-    'curveStepBefore',
-    'curveBasisClosed'
-];
+import { merge } from 'rxjs';
+import { debounceTime, tap, shareReplay, delay, filter } from 'rxjs/operators';
+
+// const CURVES = [
+//     'curveLinear',
+//     'curveBasis',
+//     'curveBundle',
+//     'curveCardinal',
+//     'curveCatmullRom',
+//     'curveMonotoneX',
+//     'curveMonotoneY',
+//     'curveNatural',
+//     'curveStep',
+//     'curveStepAfter',
+//     'curveStepBefore',
+//     'curveBasisClosed'
+// ];
 
 const glowDeviation = '3.5';
 const MARGIN = { top: 20, right: 30, bottom: 30, left: 30 };
 
 @Component({
-    selector: 'app-chart',
+    selector: 'prb-chart',
     templateUrl: './chart.component.html',
     styleUrls: ['./chart.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartComponent implements OnInit, OnChanges {
 
-    private svg: d3.Selection<any, unknown, null, unknown>;
+    public chart: d3.Selection<SVGElement, unknown, null, unknown>;
 
     @ViewChild('chart', { static: true })
     set chartEl(value: ElementRef) {
-        this.svg = d3.select(value.nativeElement);
+        this.chart = d3.select(value.nativeElement);
     }
 
-    @Input() data: any[];
+    @Input() xScale: number = 1;
+
+    @Input() yScale: number = 1;
 
     private resize$ = new EventEmitter();
+    private updateScale$ = new EventEmitter();
 
-    private updateSize$ = this.resize$.pipe(
-        debounceTime(100)
+    public update$ = merge(
+        this.resize$.pipe(
+            debounceTime(100),
+            tap(() => {
+                const element = this.el.nativeElement;
+                this.svgWidth = element.clientWidth;
+                this.svgHeight = element.clientHeight;
+                this.width = this.svgWidth - MARGIN.left - MARGIN.right,
+                this.height = this.svgHeight - MARGIN.top - MARGIN.bottom;
+                this.cd.markForCheck();
+            })
+        ),
+        this.updateScale$.pipe(
+            delay(0)
+        )
+    ).pipe(
+        filter(() => !!this.chart),
+        tap(this.updateScale.bind(this)),
+        shareReplay(1)
     )
+
+    public svgWidth: number;
+
+    public svgHeight: number;
+
+    public width: number;
+
+    public height: number;
+
+    public xScaleD3: d3.ScaleLinear<number, number>;
+
+    public yScaleD3: d3.ScaleLinear<number, number>;
+
+    public chartTransform = `translate(${MARGIN.left},${MARGIN.top})`
+
+    constructor(
+        private el: ElementRef,
+        private cd: ChangeDetectorRef
+    ) {}
 
     ngOnInit() {
 
-        const cWidth = 690, cHeight = 300;
-        const width = cWidth - MARGIN.left - MARGIN.right,
-            height = cHeight - MARGIN.top - MARGIN.bottom;
+        const element = this.el.nativeElement;
+        this.svgWidth = element.clientWidth;
+        this.svgHeight = element.clientHeight;
+        this.width = this.svgWidth - MARGIN.left - MARGIN.right,
+        this.height = this.svgHeight - MARGIN.top - MARGIN.bottom;
 
-        const maxY = 100
-        let data = Array(11).fill(undefined).map(() => d3.randomUniform(maxY)())
+        this.updateScale();
 
-        const pathContainer = this.svg
-            .attr("viewBox", [0, 0, cWidth, cHeight] as any)
-            .append('g')
-            .attr('transform', `translate(${MARGIN.left},${MARGIN.top})`);
+    }
 
-        this.glowEffect(pathContainer, 'glow');
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.xScale || changes.yScale) {
+            this.updateScale$.next()
+        }
+    }
 
-        // const colorScale = d3.scale.linear()
-        // .range(["#2c7bb6", "#00a6ca","#00ccbc","#90eb9d","#ffff8c",
-        //         "#f9d057","#f29e2e","#e76818","#d7191c"]);
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+        this.resize$.next();
+    }
 
-        const linearGradient = pathContainer.append("defs")
-            .append("linearGradient")
-            .attr("id", "linear-gradient")
-            .attr("gradientTransform", "rotate(90)");
-               
-            var colorRange = ['#C0D9CC', '#F6F6F4', '#925D60', '#B74F55', '#969943']
-            var color = d3.scaleLinear().range(colorRange as any).domain([1, 2, 3, 4, 5]);
-        
-            linearGradient.append("stop")
-                .attr("offset", "0%")
-                .attr("stop-color", color(1));
-    
-            linearGradient.append("stop")
-                .attr("offset", "25%")
-                .attr("stop-color", color(2));
-    
-            linearGradient.append("stop")
-                .attr("offset", "50%")
-                .attr("stop-color", color(3));
-    
-            linearGradient.append("stop")
-                .attr("offset", "75%")
-                .attr("stop-color", color(4));
-    
-            linearGradient.append("stop")
-                .attr("offset", "100%")
-                .attr("stop-color", color(5));
-        /*
-         * X and Y scales.
-         */
-        const xScale = d3.scaleLinear()
-            .domain([0, data.length - 1])
-            .range([0, width])
+    private updateScale() {
+        this.xScaleD3 = d3.scaleLinear()
+            .domain([0, this.xScale])
+            .range([0, this.width]);
 
-        const yScale = d3.scaleLinear()
-            .domain([0, data.reduce((res, value) => Math.max(res, value), 0)])
-            .range([height, 0])
+        this.yScaleD3 = d3.scaleLinear()
+            .domain([0, this.yScale])
+            .range([this.height, 0]);
+    }
 
-        const line = d3.line()
-            .x((d, i) => xScale(i))
-            .y((d: any) => yScale(d))
-            .curve(d3[CURVES[3]])
+    // private pointChartUpdate() {
+    //     this.chart.selectAll('circle')
+    //         .data(this.data)
+    //         .enter()
+    //         .append('circle')
+    //         .attr('class', 'circle')
+    //         .attr('cx', (d, i) => this.xScaleD3(i))
+    //         .attr('cy', (d: any) => this.yScaleD3(d))
+    //         .attr('r', 5)
+    //         .style('fill', '#37ff5f')
+    //         .style('stroke', '#62a6eb')
+    //         .style('stroke-width', 1);
+    // }
 
-        /*
-         * X and Y axis
-         */
-        pathContainer.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(xScale));
+    private getData(probe: any) {
+        const Temp: any[] = [];
+        const Hum: any[] = [];
 
-        pathContainer.append('g')
-            .attr('class', 'y axis')
-            .call(d3.axisLeft(yScale));
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < probe.length; i++) {
+            const date = new Date(probe[i].date.replace('.000Z', '+0300'));
+            Temp.push({ x: date, y: probe[i].temp });
+            Hum.push({ x: date, y: probe[i].hum });
+        }
+        return [
+            {
+                values: Hum,
+                key: 'Hum %',
+                color: '#2ca02c'
+            },
+            {
+                values: Temp,
+                key: 'Temp C',
+                color: '#ff7f0e'
+            }
+        ];
+    }
 
-        /*
-         * Appending the line to the SVG.
-         */
-        pathContainer.append('path')
-            .datum(data)
-            .attr('class', 'data-line glowed')
-            .style('stroke-width', 2)
-            .style('fill', 'none')
-            .style('stroke', 'url(#linear-gradient)')
-            .attr('d', line as any)
-
-        /*
-         * Add little circles at data points.
-         */
-        // pathContainer.selectAll('circle')
-        //     .data(data)
-        //     .enter()
-        //     .append('circle')
-        //     .attr('class', 'circle')
-        //     .attr('cx', (d, i) => xScale(i))
-        //     .attr('cy', (d: any) => yScale(d))
-        //     .attr('r', 4)
-        //     .style('fill', '#D073BA')
-        //     .style('stroke', '#11141C')
-        //     .style('stroke-width', 2);
-
-        // Add the glow!!
-        this.addGlow();
-
-        //FORTH
-        // // The number of datapoints
-        // var n = 21;
-
-        // // 5. X scale will use the index of our data
-        // var xScale = d3.scaleLinear()
-        //     .domain([0, n-1]) // input
-        //     .range([0, width]); // output
-
-        // // 6. Y scale will use the randomly generate number 
-        // var yScale = d3.scaleLinear()
-        //     .domain([0, 1]) // input 
-        //     .range([height, 0]); // output 
-
-        // // 7. d3's line generator
-        // var line = d3.line()
-        //     .x(function(d, i) { return xScale(i); }) // set the x values for the line generator
-        //     .y(function(d) { return yScale(d.y); }) // set the y values for the line generator 
-        //     .curve(d3.curveMonotoneX) // apply smoothing to the line
-
-        // // 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
-        // var dataset = d3.range(n).map(function(d) { return {"y": d3.randomUniform(1)() } })
-
-        // // 1. Add the SVG to the page and employ #2
-        // svg
-        //     .attr("width", width + margin.left + margin.right)
-        //     .attr("height", height + margin.top + margin.bottom)
-        //   .append("g")
-        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        // // 3. Call the x axis in a group tag
-        // svg.append("g")
-        //     .attr("class", "x axis")
-        //     .attr("transform", "translate(0," + height + ")")
-        //     .call(d3.axisBottom(xScale)); // Create an axis component with d3.axisBottom
-
-        // // 4. Call the y axis in a group tag
-        // svg.append("g")
-        //     .attr("class", "y axis")
-        //     .call(d3.axisLeft(yScale)); // Create an axis component with d3.axisLeft
-
-        // // 9. Append the path, bind the data, and call the line generator 
-        // svg.append("path")
-        //     .datum(dataset) // 10. Binds data to the line 
-        //     .attr("class", "line") // Assign a class for styling 
-        //     .attr("d", line); // 11. Calls the line generator 
-
-        // // 12. Appends a circle for each datapoint 
-        // svg.selectAll(".dot")
-        //     .data(dataset)
-        //   .enter().append("circle") // Uses the enter().append() method
-        //     .attr("class", "dot") // Assign a class for styling
-        //     .attr("cx", function(d, i) { return xScale(i) })
-        //     .attr("cy", function(d) { return yScale(d.y) })
-        //     .attr("r", 5)
-        //       .on("mouseover", function(a, b, c) { 
-        //   			console.log(a) 
-        //         this.attr('class', 'focus')
-        //     })
+}
 
         //SECOND
         // svg
@@ -385,67 +335,3 @@ export class ChartComponent implements OnInit, OnChanges {
         //   .attr("d", line);
 
         // this.chart = svg.node().outerHTML;
-
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        // if (changes.data && this.chart) {
-        //   const chartEl = this.chartEl.nativeElement;
-        //   const chartData = d3.select(chartEl)
-        //     .datum(this.getData(this.data));
-        //   chartData.transition().duration(500)
-        //     .call(this.chart);
-        // }
-    }
-
-    @HostListener('window:resize', ['$event'])
-    onResize(event: Event): void {
-        this.resize$.next();
-    }
-
-    private glowEffect(pathContainer: any, id: string): void {
-        /*
-         * Glow effects (Optional)
-         */
-        const defs = pathContainer.append('defs');
-
-        // Filter for the outside glow
-        const filter = defs.append('filter').attr('id', id);
-        filter.append('feGaussianBlur')
-            .attr('stdDeviation', glowDeviation)
-            .attr('result', 'coloredBlur');
-
-        const feMerge = filter.append('feMerge');
-        feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-        feMerge.append('feMergeNode').attr('in', 'SourceGraphic'); 
-    }
-
-    private addGlow(): void {
-        d3.selectAll('.glowed').style('filter', 'url(#glow)');
-    }
-
-    private getData(probe: any) {
-        const Temp: any[] = [];
-        const Hum: any[] = [];
-
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < probe.length; i++) {
-            const date = new Date(probe[i].date.replace('.000Z', '+0300'));
-            Temp.push({ x: date, y: probe[i].temp });
-            Hum.push({ x: date, y: probe[i].hum });
-        }
-        return [
-            {
-                values: Hum,
-                key: 'Hum %',
-                color: '#2ca02c'
-            },
-            {
-                values: Temp,
-                key: 'Temp C',
-                color: '#ff7f0e'
-            }
-        ];
-    }
-
-}

@@ -12,13 +12,15 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ChartComponent } from './chart/chart.component';
 import { PipeCardComponent } from './pipe-card/pipe-card.component';
 import { LocalStorageService } from './services/local-storage.service';
 import { SocketService } from './pipe-card/socket.service';
 import { DashboardMenuComponent } from './dashboard-menu/dashboard-menu.component';
 import { EditPipeDialogComponent } from './edit-pipe-dialog/edit-pipe-dialog.component';
 import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'ui-futuristic';
+import {
+    ChartModule, ChartLineModule, ChartDefsGlowModule, ChartDefsGradientModule, ChartPointsModule
+} from './chart';
 
 @NgModule({
   imports: [
@@ -39,6 +41,11 @@ import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'u
     MatDatepickerModule,
     AppRoutingModule,
     HttpClientModule,
+    ChartModule,
+    ChartLineModule,
+    ChartPointsModule,
+    ChartDefsGlowModule,
+    ChartDefsGradientModule,
     UiOverlayModule,
     UiButtonModule,
     UiCardModule,
@@ -47,7 +54,6 @@ import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'u
   declarations: [
     AppComponent,
     DashboardComponent,
-    ChartComponent,
     PipeCardComponent,
     DashboardMenuComponent,
     EditPipeDialogComponent

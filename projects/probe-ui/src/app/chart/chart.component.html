@@ -1,3 +1,8 @@
 <div class="chart-container">
-  <svg #chart></svg>
+    <svg
+        [attr.width]="svgWidth"
+        [attr.height]="svgHeight">
+        <g #chart [attr.transform]="chartTransform"
+        ></g>
+    </svg>
 </div>

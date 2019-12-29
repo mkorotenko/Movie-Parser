@@ -13,6 +13,7 @@ import { SocketService, SocketMessageInterface } from './socket.service';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { EditPipeDialogComponent } from '../edit-pipe-dialog/edit-pipe-dialog.component';
+import * as d3 from 'd3';
 
 
 @Component({
@@ -48,6 +49,11 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     // map(data => data.filter(d => d.hum > 1)),
     shareReplay(1),
   );
+
+  testData = Array(11).fill(undefined).map(() => d3.randomUniform(100)());
+  testData1 = Array(11).fill(undefined).map(() => d3.randomUniform(100)());
+  xScale = this.testData.length - 1;
+  yScale = 100;  //this.testData.reduce((res, value) => Math.max(res, value), 0);
 
   rssiDB$: Observable<number> = this.data$.pipe(
     filter(data => data && data.length),
