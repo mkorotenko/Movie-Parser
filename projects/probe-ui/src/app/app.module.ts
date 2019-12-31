@@ -19,7 +19,7 @@ import { DashboardMenuComponent } from './dashboard-menu/dashboard-menu.componen
 import { EditPipeDialogComponent } from './edit-pipe-dialog/edit-pipe-dialog.component';
 import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'ui-futuristic';
 import {
-    ChartModule, ChartLineModule, ChartDefsGlowModule, ChartDefsGradientModule, ChartPointsModule
+    ChartModule, ChartLineModule, ChartDefsGlowModule, ChartDefsGradientModule, ChartPointsModule, ChartHintModule
 } from './chart';
 
 @NgModule({
@@ -46,6 +46,7 @@ import {
     ChartPointsModule,
     ChartDefsGlowModule,
     ChartDefsGradientModule,
+    ChartHintModule,
     UiOverlayModule,
     UiButtonModule,
     UiCardModule,

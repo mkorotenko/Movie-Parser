@@ -23,7 +23,6 @@ export class ChartPointsDirective extends BaseAxisDirective {
 
     ngOnInit() {
         super.ngOnInit();
-        console.info('app points:', this.data);
     }
 
     protected updateAxis() {

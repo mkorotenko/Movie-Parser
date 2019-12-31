@@ -23,21 +23,18 @@
             <prb-chart-glow
                 id="glow"
             ></prb-chart-glow>
-            <prb-left-axis></prb-left-axis>
-            <prb-bottom-axis></prb-bottom-axis>
             <prb-chart-line
                 [data]="testData"
                 stroke="url(#temp-gradient)"
                 filter="url(#glow)"
+                prbChartHint
             ></prb-chart-line>
             <prb-chart-points
                 [data]="testData"
             ></prb-chart-points>
-            <!-- <prb-chart-line
-                [data]="testData1"
-            ></prb-chart-line> -->
-        </prb-chart
-        >
+            <prb-left-axis></prb-left-axis>
+            <prb-bottom-axis></prb-bottom-axis>
+        </prb-chart>
     </mat-card>
 </ui-card>
 <mat-menu #menu="matMenu">

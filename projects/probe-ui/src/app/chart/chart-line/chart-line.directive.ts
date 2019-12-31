@@ -36,7 +36,7 @@ export class ChartLineDirective extends BaseAxisDirective {
     private uid: string;
 
     constructor(
-        @Host() parent: ChartComponent
+        @Host() public parent: ChartComponent
     ) {
         super(parent);
         this.uid = `line${uuid.v4()}`;

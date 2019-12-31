@@ -1,28 +1,12 @@
 import {
     Component, OnInit, ViewChild, ElementRef, Input, SimpleChanges,
-    OnChanges, ChangeDetectionStrategy, HostListener, EventEmitter, ChangeDetectorRef
+    OnChanges, ChangeDetectionStrategy, HostListener, EventEmitter, ChangeDetectorRef, Output
 } from '@angular/core';
 import * as d3 from 'd3';
 
 import { merge } from 'rxjs';
-import { debounceTime, tap, shareReplay, delay, filter } from 'rxjs/operators';
+import { debounceTime, tap, shareReplay, delay, filter, distinctUntilChanged } from 'rxjs/operators';
 
-// const CURVES = [
-//     'curveLinear',
-//     'curveBasis',
-//     'curveBundle',
-//     'curveCardinal',
-//     'curveCatmullRom',
-//     'curveMonotoneX',
-//     'curveMonotoneY',
-//     'curveNatural',
-//     'curveStep',
-//     'curveStepAfter',
-//     'curveStepBefore',
-//     'curveBasisClosed'
-// ];
-
-const glowDeviation = '3.5';
 const MARGIN = { top: 20, right: 30, bottom: 30, left: 30 };
 
 @Component({
@@ -44,6 +28,14 @@ export class ChartComponent implements OnInit, OnChanges {
 
     @Input() yScale: number = 1;
 
+    @Input() marginTop: number = MARGIN.top;
+
+    @Input() marginBottom: number = MARGIN.bottom;
+
+    @Input() marginLeft: number = MARGIN.left;
+
+    @Input() marginRight: number = MARGIN.right;
+
     private resize$ = new EventEmitter();
     private updateScale$ = new EventEmitter();
 
@@ -54,8 +46,8 @@ export class ChartComponent implements OnInit, OnChanges {
                 const element = this.el.nativeElement;
                 this.svgWidth = element.clientWidth;
                 this.svgHeight = element.clientHeight;
-                this.width = this.svgWidth - MARGIN.left - MARGIN.right,
-                this.height = this.svgHeight - MARGIN.top - MARGIN.bottom;
+                this.width = this.svgWidth - this.marginLeft - this.marginRight,
+                this.height = this.svgHeight - this.marginTop - this.marginBottom;
                 this.cd.markForCheck();
             })
         ),
@@ -82,6 +74,14 @@ export class ChartComponent implements OnInit, OnChanges {
 
     public chartTransform = `translate(${MARGIN.left},${MARGIN.top})`
 
+    private onMouseX$ = new EventEmitter<number>();
+
+    private onMouseY$ = new EventEmitter<number>();
+
+    @Output() mouseX = this.onMouseX$.pipe(distinctUntilChanged());
+
+    @Output() mouseY = this.onMouseY$.pipe(distinctUntilChanged());
+
     constructor(
         private el: ElementRef,
         private cd: ChangeDetectorRef
@@ -92,8 +92,8 @@ export class ChartComponent implements OnInit, OnChanges {
         const element = this.el.nativeElement;
         this.svgWidth = element.clientWidth;
         this.svgHeight = element.clientHeight;
-        this.width = this.svgWidth - MARGIN.left - MARGIN.right,
-        this.height = this.svgHeight - MARGIN.top - MARGIN.bottom;
+        this.width = this.svgWidth - this.marginLeft - this.marginRight,
+        this.height = this.svgHeight - this.marginTop - this.marginBottom;
 
         this.updateScale();
 
@@ -105,8 +105,8 @@ export class ChartComponent implements OnInit, OnChanges {
         }
     }
 
-    @HostListener('window:resize', ['$event'])
-    onResize(event: Event): void {
+    @HostListener('window:resize')
+    onResize(): void {
         this.resize$.next();
     }
 
@@ -120,19 +120,15 @@ export class ChartComponent implements OnInit, OnChanges {
             .range([this.height, 0]);
     }
 
-    // private pointChartUpdate() {
-    //     this.chart.selectAll('circle')
-    //         .data(this.data)
-    //         .enter()
-    //         .append('circle')
-    //         .attr('class', 'circle')
-    //         .attr('cx', (d, i) => this.xScaleD3(i))
-    //         .attr('cy', (d: any) => this.yScaleD3(d))
-    //         .attr('r', 5)
-    //         .style('fill', '#37ff5f')
-    //         .style('stroke', '#62a6eb')
-    //         .style('stroke-width', 1);
-    // }
+    onMouseMove(event: MouseEvent): void {
+        this.onMouseX$.next(event.offsetX);
+        this.onMouseY$.next(event.offsetY);
+    }
+
+    onMouseLeave(): void {
+        this.onMouseX$.next(null);
+        this.onMouseY$.next(null);
+    }
 
     private getData(probe: any) {
         const Temp: any[] = [];

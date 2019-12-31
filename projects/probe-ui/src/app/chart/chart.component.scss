@@ -36,6 +36,17 @@
     .data-line {
         stroke: #c0dbffc4;
     }
+
+    line.mouse-pos {
+        stroke: #62a6eb;
+        stroke-width: 1;
+    }
+
+    circle.hint {
+        fill: #d75c0a;
+        stroke: #ebcd62;
+        stroke-width: 1;
+    }
 }
 
 
