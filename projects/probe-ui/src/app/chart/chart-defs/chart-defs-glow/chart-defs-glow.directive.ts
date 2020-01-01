@@ -21,13 +21,35 @@ export class ChartDefsGlowDirective {
     ) { }
 
     ngOnInit(): void {
-        const filter = this.chart.append('filter').attr('id', this.id);
+        const defs = this.chart.append('defs');
+        const filter = defs.append('filter').attr('id', this.id);
         filter.append('feGaussianBlur')
             .attr('stdDeviation', this.deviation)
             .attr('result', 'coloredBlur');
 
         const feMerge = filter.append('feMerge');
         feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-        feMerge.append('feMergeNode').attr('in', 'SourceGraphic'); 
+        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+        // const filter = defs.append('filter')
+        //     .attr('id', this.id)
+        //     .attr('x', -5)
+        //     .attr('y', -4.5)
+        //     .attr('height', 10)
+        //     .attr('width', 150);
+
+        // filter.append('feOffset')
+        //     .attr('in', 'SourceGraphic')
+        //     .attr('dx', 0)
+        //     .attr('dy', 0)
+        //     .attr('result', 'offset2')
+
+        // filter.append('feGaussianBlur')
+        //     .attr('in', 'offset2')
+        //     .attr('stdDeviation', this.deviation)
+        //     .attr('result', 'coloredBlur');
+            
+        // const feMerge = filter.append('feMerge');
+        // feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+        // feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
     }
 }

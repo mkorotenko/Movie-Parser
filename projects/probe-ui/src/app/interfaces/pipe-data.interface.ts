@@ -1,9 +1,10 @@
 export interface PipeDataInterface {
-  bat_v: number;
-  date: string;
-  hum: number;
-  pipe: number;
-  serverDate: string;
-  temp: number;
-  tx_res: number;
+    _id: string;
+    temp: number;
+    hum: number;
+    date: string;
+    serverDate: string;
+    pipe: number;
+    tx_res: number;
+    bat_v: number;
 }

@@ -1,10 +1,10 @@
-import { Directive, Host, Input } from '@angular/core';
+import { Directive, Host, Input, SimpleChanges } from '@angular/core';
 
 import * as uuid from 'uuid';
 import * as d3 from 'd3';
 
 import { BaseAxisDirective } from '../chart-axis/base-axis.directive';
-import { ChartComponent } from '../chart.component';
+import { ChartComponent, ChartData } from '../chart.component';
 
 const CURVES = [
     'curveLinear',
@@ -21,13 +21,23 @@ const CURVES = [
     'curveBasisClosed'
 ];
 
+function isData(array: Array<ChartData>): boolean {
+    if (!array) {
+        return false;
+    }
+    if (!array.length) {
+        return false;
+    }
+    return true;
+}
+
 @Directive({
     selector: 'prb-chart-line'
 })
 
 export class ChartLineDirective extends BaseAxisDirective {
 
-    @Input() data: any[];
+    @Input() data: Array<ChartData>;
 
     @Input() stroke: string;
 
@@ -56,15 +66,34 @@ export class ChartLineDirective extends BaseAxisDirective {
         }
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.data) {
+            if (isData(this.data) && !isData(changes.data.previousValue)) {
+                const data = this.data;
+                this.data = data.map(d => ({
+                    x: d.x,
+                    y: 0
+                }))
+                this.updateAxis();
+                setTimeout(() => {
+                    this.data = data;
+                    this.updateAxis();
+                }, 0);
+            } else {
+                this.updateAxis();
+            }
+        }
+    }
+
     protected updateAxis() {
         super.updateAxis();
         const line: any = d3.line()
-            .x((d, i) => this.xScaleD3(i))
-            .y((d: any) => this.yScaleD3(d))
-            .curve(d3[CURVES[3]]);
+            .x((date: any) => this.xScaleD3(date.x))
+            .y((date: any) => this.yScaleD3(date.y))
+            .curve(d3[CURVES[5]]);
 
         const chart = this.chart.selectAll(`path.${this.uid}`)
-            .datum(this.data);
+            .datum((this.data || []) as any);
 
         chart.join(
             enter => enter

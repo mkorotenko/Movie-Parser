@@ -4,10 +4,15 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
-import { merge } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { debounceTime, tap, shareReplay, delay, filter, distinctUntilChanged } from 'rxjs/operators';
 
 const MARGIN = { top: 20, right: 30, bottom: 30, left: 30 };
+
+export interface ChartData {
+    x: number | Date;
+    y: number;
+}
 
 @Component({
     selector: 'prb-chart',
@@ -26,6 +31,10 @@ export class ChartComponent implements OnInit, OnChanges {
 
     @Input() xScale: number = 1;
 
+    @Input() xTimeStart: Date;
+
+    @Input() xTimeEnd: Date;
+
     @Input() yScale: number = 1;
 
     @Input() marginTop: number = MARGIN.top;
@@ -36,8 +45,8 @@ export class ChartComponent implements OnInit, OnChanges {
 
     @Input() marginRight: number = MARGIN.right;
 
-    private resize$ = new EventEmitter();
-    private updateScale$ = new EventEmitter();
+    private resize$ = new Subject();
+    private updateScale$ = new Subject();
 
     public update$ = merge(
         this.resize$.pipe(
@@ -60,6 +69,10 @@ export class ChartComponent implements OnInit, OnChanges {
         shareReplay(1)
     )
 
+    public updateXAxis$ = new Subject();
+
+    public updateYAxis$ = new Subject();
+
     public svgWidth: number;
 
     public svgHeight: number;
@@ -68,7 +81,7 @@ export class ChartComponent implements OnInit, OnChanges {
 
     public height: number;
 
-    public xScaleD3: d3.ScaleLinear<number, number>;
+    public xScaleD3: d3.ScaleLinear<number, number> | d3.ScaleTime<number, number>;
 
     public yScaleD3: d3.ScaleLinear<number, number>;
 
@@ -103,6 +116,14 @@ export class ChartComponent implements OnInit, OnChanges {
         if (changes.xScale || changes.yScale) {
             this.updateScale$.next()
         }
+        if (changes.xTimeStart && !changes.xTimeStart.firstChange) {
+            this.updateXScale()
+            this.updateXAxis$.next();
+        }
+        if (changes.yTimeStart && !changes.yTimeStart.firstChange) {
+            this.updateYScale()
+            this.updateYAxis$.next();
+        }
     }
 
     @HostListener('window:resize')
@@ -111,10 +132,17 @@ export class ChartComponent implements OnInit, OnChanges {
     }
 
     private updateScale() {
-        this.xScaleD3 = d3.scaleLinear()
-            .domain([0, this.xScale])
-            .range([0, this.width]);
+        this.updateXScale();
+        this.updateYScale();
+    }
 
+    private updateXScale() {
+        this.xScaleD3 = d3.scaleUtc()//d3.scaleLinear()
+            .domain([this.xTimeStart, this.xTimeEnd])
+            .range([0, this.width]);
+    }
+
+    private updateYScale() {
         this.yScaleD3 = d3.scaleLinear()
             .domain([0, this.yScale])
             .range([this.height, 0]);

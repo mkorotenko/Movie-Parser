@@ -19,7 +19,7 @@ export abstract class BaseAxisDirective implements OnInit, OnDestroy {
         return this.parent.height;
     }
 
-    protected get xScaleD3(): d3.ScaleLinear<number, number> {
+    protected get xScaleD3(): d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> {
         return this.parent.xScaleD3;
     }
 

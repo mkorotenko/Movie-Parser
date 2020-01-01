@@ -4,3 +4,4 @@ export * from './chart-points/chart-points.module';
 export * from './chart-defs/chart-defs-glow/chart-defs-glow.module';
 export * from './chart-defs/chart-defs-gradient/chart-defs-gradient.module';
 export * from './chart-hint/chart-hint.module';
+export * from './chart-loader/chart-loader.module';

@@ -1,11 +1,12 @@
 import { Directive, Host, SimpleChanges, Input, OnInit } from '@angular/core';
 
+import { Subject, combineLatest } from 'rxjs';
+import { takeUntil, map, tap, shareReplay } from 'rxjs/operators';
+
 import * as uuid from 'uuid';
 
 import { ChartLineDirective } from '../chart-line/chart-line.directive';
-import { ChartComponent } from '../chart.component';
-import { Subject, combineLatest } from 'rxjs';
-import { takeUntil, map, tap, shareReplay } from 'rxjs/operators';
+import { ChartComponent, ChartData } from '../chart.component';
 
 function findNearest(data: Array<number>, value: number) {
     const aLength: number = data.length;
@@ -53,7 +54,7 @@ function findNearest(data: Array<number>, value: number) {
 })
 export class ChartHintDirective implements OnInit {
 
-    @Input() data: Array<any>;
+    @Input() data: Array<ChartData>;
 
     @Input() minDist: number = 10;
 
@@ -65,7 +66,7 @@ export class ChartHintDirective implements OnInit {
         return this.chart.parent;
     }
 
-    get xScale(): d3.ScaleLinear<number, number> {
+    get xScale(): d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> {
         return this.parent.xScaleD3;
     }
     
@@ -111,7 +112,7 @@ export class ChartHintDirective implements OnInit {
 
     private calculateScale() {
         const xScale = this.xScale;
-        this.scaled = (this.data || []).map((d, i) => xScale(i));
+        this.scaled = (this.data || []).map((d, i) => xScale(d.x));
     }
 
     private drawMouseLine(mouseX: number) {
@@ -144,31 +145,63 @@ export class ChartHintDirective implements OnInit {
         const nIndex = findNearest(this.scaled, xPos);
         const dist = Math.abs(this.scaled[nIndex] - xPos);
         if (dist < this.minDist) {
-            this.drawPoint(nIndex, this.data[nIndex]);
+            this.drawPoint(this.data[nIndex].x, this.data[nIndex].y);
         } else {
             this.removePoint();
         }
     }
 
-    private drawPoint(xPos: number, yPos: number) {
+    private pointExists = false;
+
+    private drawPoint(xPos?: number | Date, yPos?: number) {
+
+        if (this.pointExists) {
+            return;
+        }
+
+        const data = [xPos];
+
         const points = this.pChart.selectAll(`circle.hint.${this.uid}`)
-            .data([xPos]);
-        
+            .data(data);
+
+        const t = this.pChart.transition()
+            .duration(300);
+
         points.join(
             enter => enter
                 .append('circle')
                 .attr('class', `hint ${this.uid}`)
                 .attr('r', 5)
                 .attr('cx', (d, i) => this.xScale(xPos))
-                .attr('cy', (d: any) => this.yScale(yPos)),
-            update => update
-                .attr('cx', (d, i) => this.xScale(xPos))
-                .attr('cy', (d: any) => this.yScale(yPos)) as any
+                .attr('cy', (d: any) => this.yScale(yPos))
+                .style('opacity', 0)
+                .call(enter => enter.transition(t).style('opacity', 1)),
         );
+        this.pointExists = true;
     }
 
     private removePoint() {
-        this.pChart.selectAll(`circle.hint.${this.uid}`).remove();
+        if (!this.pointExists) {
+            return;
+        }
+
+        const data = [];
+
+        const points = this.pChart.selectAll(`circle.hint.${this.uid}`)
+            .data(data);
+
+        const t = this.pChart.transition()
+            .delay(300)
+            .duration(300);
+
+        points.join(
+            exit => exit
+                .style('opacity', 1)
+                .call(exit => exit.transition(t).style('opacity', 0))
+                .remove()
+        );
+        this.pointExists = false;
+
     }
 
 }
