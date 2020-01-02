@@ -13,9 +13,10 @@ import { SocketService, SocketMessageInterface } from './socket.service';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { EditPipeDialogComponent } from '../edit-pipe-dialog/edit-pipe-dialog.component';
-import * as d3 from 'd3';
+
 import { PipeDataInterface } from '../interfaces';
 
+const TIME_RANGE = 6 * 60 * 60 * 1000;
 
 @Component({
     selector: 'app-pipe-card',
@@ -47,18 +48,10 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     ).pipe(
         filter(([pipe, date]) => !!pipe && !!date),
         switchMap(([pipe, date]) => this.serviceAPI.getPipeData(pipe, date)),
-        // map(data => data.filter(d => d.hum > 1)),
         shareReplay(1),
     );
 
-    yScale = 30;  //this.testData.reduce((res, value) => Math.max(res, value), 0);
-
-    testData = Array(14).fill(undefined)
-        .map(() =>
-            d3.randomUniform(this.yScale)()
-        );
-
-    xScale = this.testData.length - 1;
+    yScale = 30;
 
     tempData$ = this.data$.pipe(
         map(data => data.map(d => ({
@@ -123,7 +116,7 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
 
     onUpdate() {
         const cDate = new Date();
-        this.date$.next(new Date(cDate.getTime() - 6 * 60 * 60 * 1000));
+        this.date$.next(new Date(cDate.getTime() - TIME_RANGE));
     }
 
     onUpdateTime(pipe: number) {

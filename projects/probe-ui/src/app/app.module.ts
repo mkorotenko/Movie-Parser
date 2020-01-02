@@ -9,18 +9,17 @@ import {
   MatIconModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatDatepickerModule
 } from '@angular/material';
 
+import { UiLayoutModule } from 'ui-futuristic';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { PipeCardComponent } from './pipe-card/pipe-card.component';
 import { LocalStorageService } from './services/local-storage.service';
 import { SocketService } from './pipe-card/socket.service';
 import { DashboardMenuComponent } from './dashboard-menu/dashboard-menu.component';
 import { EditPipeDialogComponent } from './edit-pipe-dialog/edit-pipe-dialog.component';
-import { UiCardModule, UiButtonModule, UiOverlayModule, UiLayoutModule } from 'ui-futuristic';
-import {
-    ChartModule, ChartLineModule, ChartDefsGlowModule, ChartDefsGradientModule, ChartPointsModule, ChartHintModule, ChartLoaderModule
-} from './chart';
+
+import { PipeCardModule } from './pipe-card/pipe-card.module';
 
 @NgModule({
   imports: [
@@ -41,22 +40,12 @@ import {
     MatDatepickerModule,
     AppRoutingModule,
     HttpClientModule,
-    ChartModule,
-    ChartLineModule,
-    ChartPointsModule,
-    ChartDefsGlowModule,
-    ChartDefsGradientModule,
-    ChartHintModule,
-    ChartLoaderModule,
-    UiOverlayModule,
-    UiButtonModule,
-    UiCardModule,
+    PipeCardModule,
     UiLayoutModule
   ],
   declarations: [
     AppComponent,
     DashboardComponent,
-    PipeCardComponent,
     DashboardMenuComponent,
     EditPipeDialogComponent
   ],
