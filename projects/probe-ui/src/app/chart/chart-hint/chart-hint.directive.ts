@@ -1,9 +1,11 @@
 import { Directive, Host, SimpleChanges, Input, OnInit } from '@angular/core';
 
+import * as d3 from 'd3';
+import * as d3tip from 'd3-tip';
+import * as uuid from 'uuid';
+
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil, map, tap, shareReplay } from 'rxjs/operators';
-
-import * as uuid from 'uuid';
 
 import { ChartLineDirective } from '../chart-line/chart-line.directive';
 import { ChartComponent, ChartData } from '../chart.component';
@@ -78,6 +80,8 @@ export class ChartHintDirective implements OnInit {
         return this.parent.chart;
     }
 
+    private tip: any;
+
     private unsubscribe$ = new Subject<void>();
 
     constructor(
@@ -97,6 +101,15 @@ export class ChartHintDirective implements OnInit {
             map(([mouseX, update]) => mouseX),
             takeUntil(this.unsubscribe$)
         ).subscribe(this.drawMouseLine.bind(this));
+
+        this.tip = d3tip.default()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(data) {
+                return `<strong>Temp:</strong> ${data.y} &#8451`;
+            });
+
+        this.parent.chart.call(this.tip);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -143,6 +156,7 @@ export class ChartHintDirective implements OnInit {
 
         const xPos = mouseX - parent.marginLeft;
         const nIndex = findNearest(this.scaled, xPos);
+
         const dist = Math.abs(this.scaled[nIndex] - xPos);
         if (dist < this.minDist) {
             this.drawPoint(this.data[nIndex].x, this.data[nIndex].y);
@@ -153,13 +167,22 @@ export class ChartHintDirective implements OnInit {
 
     private pointExists = false;
 
+    private currentPos: string;
+
     private drawPoint(xPos?: number | Date, yPos?: number) {
 
         if (this.pointExists) {
-            return;
+            const sPos = `${this.xScale(xPos || 0)}:${this.yScale(yPos || 0)}`;
+            if (this.currentPos === sPos) {
+                return;
+            }
+            this.currentPos = sPos;
         }
 
-        const data = [xPos];
+        const data = [{
+            x: xPos,
+            y: yPos
+        }];
 
         const points = this.pChart.selectAll(`circle.hint.${this.uid}`)
             .data(data);
@@ -172,12 +195,26 @@ export class ChartHintDirective implements OnInit {
                 .append('circle')
                 .attr('class', `hint ${this.uid}`)
                 .attr('r', 5)
-                .attr('cx', (d, i) => this.xScale(xPos))
-                .attr('cy', (d: any) => this.yScale(yPos))
+                .attr('cx', (d, i) => this.xScale(d.x))
+                .attr('cy', (d: any) => this.yScale(d.y))
                 .style('opacity', 0)
                 .call(enter => enter.transition(t).style('opacity', 1)),
+            update => update
+                .attr('cx', (d, i) => this.xScale(d.x))
+                .attr('cy', (d: any) => this.yScale(d.y))
         );
         this.pointExists = true;
+
+        this.drawTooltip(data[0]);
+    }
+
+    private drawTooltip(data: any): void {
+        const s = this.pChart.select(`circle.hint.${this.uid}`);
+        this.tip.show(data, s.node());
+    }
+
+    private removeTooltip(): void {
+        // this.tip.hide();
     }
 
     private removePoint() {
@@ -202,6 +239,7 @@ export class ChartHintDirective implements OnInit {
         );
         this.pointExists = false;
 
+        this.removeTooltip();
     }
 
 }

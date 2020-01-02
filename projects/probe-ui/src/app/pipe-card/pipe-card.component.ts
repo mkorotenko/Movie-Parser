@@ -61,9 +61,6 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     xScale = this.testData.length - 1;
 
     tempData$ = this.data$.pipe(
-        map(d => d.slice(0, 14)),
-        // map(d => d.map(i => i.temp)),
-        // startWith(Array(11).fill(0))
         map(data => data.map(d => ({
             x: new Date(d.date),
             y: d.temp
