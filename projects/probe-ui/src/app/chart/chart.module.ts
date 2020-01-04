@@ -4,11 +4,13 @@ import { ChartComponent } from './chart.component';
 import { LeftAxisDirective } from './chart-axis/left-axis.directive';
 import { BottomAxisDirective } from './chart-axis/bottom-axis.directive';
 import { BottomTimeAxisDirective } from './chart-axis/bottom-time-axis.directive';
+import { RightAxisDirective } from './chart-axis/right-axis.directive';
 
 @NgModule({
   declarations: [
     ChartComponent,
     LeftAxisDirective,
+    RightAxisDirective,
     BottomAxisDirective,
     BottomTimeAxisDirective
   ],
@@ -18,6 +20,7 @@ import { BottomTimeAxisDirective } from './chart-axis/bottom-time-axis.directive
   exports: [
     ChartComponent,
     LeftAxisDirective,
+    RightAxisDirective,
     BottomAxisDirective,
     BottomTimeAxisDirective
   ]

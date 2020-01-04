@@ -35,9 +35,9 @@ export class ChartComponent implements OnInit, OnChanges {
         this.chart = d3.select(value.nativeElement);
     }
 
-    @Input() xScale: number = 1;
+    xScale: number = 1;
 
-    @Input() yScale: number = 1;
+    yScale: number = 1;
 
     @Input() marginTop: number = MARGIN.top;
 

@@ -8,9 +8,9 @@ import { ChartScaleXServiceService } from '../chart-scale-x-service.service';
 import { ChartScaleYServiceService } from '../chart-scale-y-service.service';
 
 @Directive({
-    selector: 'prb-left-axis'
+    selector: 'prb-right-axis'
 })
-export class LeftAxisDirective extends BaseAxisDirective {
+export class RightAxisDirective extends BaseAxisDirective {
 
     constructor(
         @Host() parent: ChartComponent,
@@ -22,13 +22,14 @@ export class LeftAxisDirective extends BaseAxisDirective {
 
     ngOnInit() {
         super.ngOnInit();
-        this.chart.append('g').attr('class', 'ly axis');
+        this.chart.append('g').attr('class', 'ry axis');
     }
 
     protected updateAxis() {
         super.updateAxis();
-        this.chart.selectAll('g.ly.axis')
-            .call(d3.axisLeft(this.yScaleD3));
+        this.chart.selectAll('g.ry.axis')
+            .attr('transform', `translate(${this.width}, 0)`)
+            .call(d3.axisRight(this.yScaleD3));
     }
 
 }

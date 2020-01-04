@@ -23,10 +23,7 @@ export class BottomAxisDirective extends BaseAxisDirective {
 
     ngOnInit() {
         super.ngOnInit();
-        this.chart.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', `translate(0,${this.height})`)
-            .call(d3.axisBottom(this.xScaleD3));
+        this.chart.append('g').attr('class', 'x axis');
     }
 
     protected updateAxis() {

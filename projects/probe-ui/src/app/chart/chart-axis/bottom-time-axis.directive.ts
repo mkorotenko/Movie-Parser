@@ -26,10 +26,7 @@ export class BottomTimeAxisDirective extends BaseAxisDirective {
 
     ngOnInit() {
         super.ngOnInit();
-        this.chart.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', `translate(0,${this.height})`)
-            .call(d3.axisBottom(this.xScaleD3).ticks(this.getTicks(this.width)).tickFormat(d3.timeFormat(timeFormat)));
+        this.chart.append('g').attr('class', 'x axis')
 
         this.parent.updateXAxis$.pipe(
             takeUntil(this.unsubscribe$)
@@ -40,7 +37,11 @@ export class BottomTimeAxisDirective extends BaseAxisDirective {
         super.updateAxis();
         this.chart.selectAll('g.x.axis')
             .attr('transform', `translate(0,${this.height})`)
-            .call(d3.axisBottom(this.xScaleD3).ticks(this.getTicks(this.width)).tickFormat(d3.timeFormat(timeFormat)));
+            .call(
+                d3.axisBottom(this.xScaleD3)
+                    .ticks(this.getTicks(this.width))
+                    .tickFormat(d3.timeFormat(timeFormat))
+            );
     }
 
     private getTicks(width: number): d3.TimeInterval | number {

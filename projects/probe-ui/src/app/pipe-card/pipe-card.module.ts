@@ -21,7 +21,8 @@ import {
     ChartDefsGradientModule,
     ChartHintModule,
     ChartLoaderModule,
-    ScaleXTimeModule
+    ScaleXTimeModule,
+    ScaleYLinearModule
 } from '../chart';
 import { PipeCardComponent } from './pipe-card.component';
 
@@ -49,7 +50,8 @@ import { PipeCardComponent } from './pipe-card.component';
         ChartDefsGradientModule,
         ChartHintModule,
         ChartLoaderModule,
-        ScaleXTimeModule
+        ScaleXTimeModule,
+        ScaleYLinearModule
     ],
     exports: [
         PipeCardComponent

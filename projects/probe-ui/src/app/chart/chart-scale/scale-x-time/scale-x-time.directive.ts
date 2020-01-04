@@ -51,6 +51,7 @@ export class ScaleXTimeDirective implements OnInit, OnDestroy {
     }
 
     private updateXScale() {
+        console.info('app scale X update:');
         this.scaleXService.xScaleD3 = d3.scaleUtc()
             .domain([this.xTimeStart, this.xTimeEnd])
             .range([0, this.width]);

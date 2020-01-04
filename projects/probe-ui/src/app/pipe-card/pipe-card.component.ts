@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, BehaviorSubject, combineLatest, Subject, of } from 'rxjs';
-import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, catchError } from 'rxjs/operators';
+import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, catchError, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { SocketService, SocketMessageInterface } from './socket.service';
@@ -51,29 +51,73 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
         shareReplay(1),
     );
 
-    yScale = 30;
-
     tempData$ = this.data$.pipe(
         map(data => data.map(d => ({
                 x: new Date(d.date),
-                y: d.temp
+                y: Math.max(d.temp, 15)
             }))
         )
-    )
+    );
+
+    tempGradient = [
+        {
+            color: '#ce6c44',
+            value: 0
+        },
+        {
+            color: '#c29b3f',
+            value: 30
+        },
+        {
+            color: '#4bc260',
+            value: 50
+        },
+        {
+            color: '#65d1b4',
+            value: 65
+        },
+        {
+            color: '#074bed',
+            value: 100
+        },
+    ];
+
+    humData$ = this.data$.pipe(
+        map(data => data.map(d => ({
+                x: new Date(d.date),
+                y: Math.max(d.hum, 20)
+            }))
+        )
+    );
+
+    humGradient = [
+        {
+            color: '#67a5f6',
+            value: 20
+        },
+        {
+            color: '#b5ffbb',
+            value: 50
+        },
+        {
+            color: '#f1f642',
+            value: 80
+        },
+    ];
 
     loadError$ = this.tempData$.pipe(
         catchError(error => {
             return of(error);
         })
-    )
+    );
 
     timeStart$ = this.tempData$.pipe(
         map(d => d[0].x)
-    )
+    );
 
     timeEnd$ = this.tempData$.pipe(
         map(d => d[d.length - 1].x)
-    )
+    );
 
     rssiDB$: Observable<number> = this.data$.pipe(
         filter(data => !!(data && data.length)),

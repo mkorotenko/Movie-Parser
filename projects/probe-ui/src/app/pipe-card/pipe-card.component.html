@@ -13,13 +13,8 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
         </mat-card-header>
-        <prb-chart
-            [yScale]="yScale"
-        >
+        <prb-chart>
             <!-- <ng-container *ngIf="tempData$ | async as tempData else loader"> -->
-                <prb-chart-gradient
-                    id="temp-gradient"
-                ></prb-chart-gradient>
                 <prb-chart-glow
                     id="glow"
                 ></prb-chart-glow>
@@ -27,22 +22,41 @@
                     [xTimeStart]="timeStart$ | async"
                     [xTimeEnd]="timeEnd$ | async"
                 >
-                    <prb-chart-line
-                        [data]="tempData$ | async"
-                        [loadError]="loadError$ | async"
-                        stroke="url(#temp-gradient)"
-                        filter="url(#glow)"
-                        prbChartHint
-                        prbChartLoader
-                    ></prb-chart-line>
-                    <!-- <prb-chart-points
-                        [data]="tempData$ | async"
-                    ></prb-chart-points> -->
-                    <prb-left-axis></prb-left-axis>
-                    <prb-bottom-time-axis></prb-bottom-time-axis>                
-
-                </prb-scale-x-time
-                >
+                    <prb-bottom-time-axis></prb-bottom-time-axis>
+                    <prb-scale-y-linear
+                        [yScaleStart]="15"
+                        [yScaleEnd]="30"
+                    >
+                        <prb-chart-gradient
+                            id="temp-gradient"
+                            [colorRange]="tempGradient"
+                        ></prb-chart-gradient>
+                        <prb-chart-line
+                            [data]="tempData$ | async"
+                            [loadError]="loadError$ | async"
+                            stroke="url(#temp-gradient)"
+                            filter="url(#glow)"
+                            prbChartHint
+                            prbChartLoader
+                        ></prb-chart-line>
+                        <prb-left-axis></prb-left-axis>
+                    </prb-scale-y-linear>
+                    <prb-scale-y-linear
+                        [yScaleStart]="20"
+                        [yScaleEnd]="100"
+                    >
+                        <prb-chart-gradient
+                            id="hum-gradient"
+                            [colorRange]="humGradient"
+                        ></prb-chart-gradient>
+                        <prb-chart-line
+                            [data]="humData$ | async"
+                            stroke="url(#hum-gradient)"
+                            filter="url(#glow)"
+                        ></prb-chart-line>
+                        <prb-right-axis></prb-right-axis>
+                    </prb-scale-y-linear>
+                </prb-scale-x-time>
             <!-- </ng-container> -->
             <!-- <ng-template #loader>
                 <prb-chart-loader

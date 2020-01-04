@@ -18,7 +18,7 @@ export class ScaleYLinearDirective implements OnInit, OnDestroy {
 
     @Input() yScaleStart: number = 0;
 
-    @Input() yScaleEnd: number;
+    @Input() yScaleEnd: number = 1;
 
     get height(): number {
         return this.parent.height;
@@ -51,8 +51,9 @@ export class ScaleYLinearDirective implements OnInit, OnDestroy {
     }
 
     private updateYScale() {
+        console.info('app scale Y update:');
         this.scaleYService.yScaleD3 = d3.scaleLinear()
-            .domain([this.yScaleStart, this.yScaleEnd])
+            .domain([this.yScaleEnd, this.yScaleStart])
             .range([0, this.height]);
     }
 
