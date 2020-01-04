@@ -62,6 +62,8 @@ export class ChartHintDirective implements OnInit {
 
     @Input() minDist: number = 10;
 
+    @Input() prbChartHint: string;
+
     private scaled: Array<any>;
 
     private uid: string;
@@ -106,11 +108,12 @@ export class ChartHintDirective implements OnInit {
             takeUntil(this.unsubscribe$)
         ).subscribe(this.drawMouseLine.bind(this));
 
+        const hintText = this.prbChartHint;
         this.tip = d3tip.default()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function(data) {
-                return `<strong>Temp:</strong> ${data.y} &#8451`;
+                return `<strong>${hintText}</strong> ${data.y}`;//&#8451
             });
 
         this.parent.chart.call(this.tip);

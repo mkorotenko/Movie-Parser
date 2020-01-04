@@ -36,7 +36,7 @@
                             [loadError]="loadError$ | async"
                             stroke="url(#temp-gradient)"
                             filter="url(#glow)"
-                            prbChartHint
+                            prbChartHint="Temp:"
                             prbChartLoader
                         ></prb-chart-line>
                         <prb-left-axis></prb-left-axis>
@@ -53,6 +53,7 @@
                             [data]="humData$ | async"
                             stroke="url(#hum-gradient)"
                             filter="url(#glow)"
+                            prbChartHint="Hum:"
                         ></prb-chart-line>
                         <prb-right-axis></prb-right-axis>
                     </prb-scale-y-linear>
