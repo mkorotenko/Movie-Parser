@@ -23,6 +23,10 @@ export class DBEditorService {
     return this.http.put('api/acc/documents/' + query.collection, query.data);
   }
 
+  public patchDocuments(query: { collection: string, data: any }) {
+    return this.http.patch('api/acc/documents/' + query.collection, query.data);
+  }
+
   public deleteDocuments(query: { collection: string, data: any }) {
     const par = { params: query.data };
     return this.http.delete('api/acc/documents/' + query.collection, par);

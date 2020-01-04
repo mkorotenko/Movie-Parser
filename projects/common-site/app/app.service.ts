@@ -14,14 +14,19 @@ interface MoviePathResult{
   streams?: StreamPathResult[];
 }
 
+function getLastMonthDate(): string {
+    const currentDate = new Date();
+    return JSON.stringify(new Date(currentDate.setMonth(currentDate.getMonth() - 1))).replace('"', '').replace('"', '');
+}
+
 @Injectable({ providedIn: 'root' })
 export class AppService {
 
   public reqParameters$ = new BehaviorSubject<any>(undefined);
   private req$ = this.reqParameters$.asObservable().pipe(
     map((param) => (param || {
-      rating_gt: 4.8,
-      'details.Genre_or': ['Фэнтези', 'Боевик']
+        "rating_gt": 4,
+        "lastUpdate_gt": getLastMonthDate()
     }))
   );
 

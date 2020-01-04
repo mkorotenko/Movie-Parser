@@ -68,13 +68,23 @@ export class DBEditorComponent {
       });
   }
 
-  public onUpdate() {
+  public onPut() {
     this.busy$.next(true);
     const data = JSON.parse(this.code);
     this.service.putDocuments({ collection: this.collectionName, data })
       .subscribe((code: { count: Number, docs: any[], filter: any }) => {
         this.busy$.next(false);
-        console.info('on update', code);
+        console.info('on put', code);
+      });
+  }
+
+  public onPatch() {
+    this.busy$.next(true);
+    const data = JSON.parse(this.code);
+    this.service.patchDocuments({ collection: this.collectionName, data })
+      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
+        this.busy$.next(false);
+        console.info('on patch', code);
       });
   }
 
