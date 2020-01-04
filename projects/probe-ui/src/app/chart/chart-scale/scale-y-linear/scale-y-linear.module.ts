@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScaleXTimeDirective } from './scale-x-time.directive';
+import { ScaleYLinearDirective } from './scale-y-linear.directive';
 
 @NgModule({
     declarations: [
-        ScaleXTimeDirective
+        ScaleYLinearDirective
     ],
     imports: [
         CommonModule
     ],
     exports: [
-        ScaleXTimeDirective
+        ScaleYLinearDirective
     ]
 })
-export class ScaleXTimeModule { }
+export class ScaleYLinearModule { }

@@ -9,6 +9,31 @@ export class ChartDefsGradientDirective implements OnInit {
 
     @Input() id: string;
 
+    maxValue = 30;
+
+    colorRange = [
+        {
+            color: '#ce6c44',
+            value: 30
+        },
+        {
+            color: '#c29b3f',
+            value: 21
+        },
+        {
+            color: '#4bc260',
+            value: 10.5
+        },
+        {
+            color: '#65d1b4',
+            value: 4.5
+        },
+        {
+            color: '#074bed',
+            value: 0
+        },
+    ]
+
     private get chart(): d3.Selection<SVGElement, unknown, null, unknown> {
         return this.parent.chart;
     }
@@ -22,29 +47,17 @@ export class ChartDefsGradientDirective implements OnInit {
         const linearGradient = this.chart.append("defs")
             .append("linearGradient")
             .attr("id", this.id)
-            .attr("gradientTransform", "rotate(90)");
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', 100);
 
-        const colorRange = ['#ce6c44', '#c29b3f', '#4bc260', '#65d1b4', '#074bed']
-        const color = d3.scaleLinear().range(colorRange as any).domain([1, 2, 3, 4, 5]);
+        this.colorRange.forEach(cr => {
+            linearGradient.append('stop')
+                .attr('offset', `${((this.maxValue - cr.value)/this.maxValue)*100}%`)
+                .attr('stop-color', cr.color);
+        })
 
-        linearGradient.append("stop")
-            .attr("offset", "0%")
-            .attr("stop-color", color(1));
-
-        linearGradient.append("stop")
-            .attr("offset", "15%")
-            .attr("stop-color", color(2));
-
-        linearGradient.append("stop")
-            .attr("offset", "20%")
-            .attr("stop-color", color(3));
-
-        linearGradient.append("stop")
-            .attr("offset", "25%")
-            .attr("stop-color", color(4));
-
-        linearGradient.append("stop")
-            .attr("offset", "100%")
-            .attr("stop-color", color(5));
     }
 }

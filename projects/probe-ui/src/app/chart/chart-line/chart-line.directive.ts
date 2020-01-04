@@ -5,6 +5,8 @@ import * as d3 from 'd3';
 
 import { BaseAxisDirective } from '../chart-axis/base-axis.directive';
 import { ChartComponent, ChartData } from '../chart.component';
+import { ChartScaleXServiceService } from '../chart-scale-x-service.service';
+import { ChartScaleYServiceService } from '../chart-scale-y-service.service';
 
 const CURVES = [
     'curveLinear',
@@ -46,9 +48,11 @@ export class ChartLineDirective extends BaseAxisDirective {
     private uid: string;
 
     constructor(
-        @Host() public parent: ChartComponent
+        @Host() parent: ChartComponent,
+        scaleXService: ChartScaleXServiceService,
+        scaleYService: ChartScaleYServiceService
     ) {
-        super(parent);
+        super(parent, scaleXService, scaleYService);
         this.uid = `line${uuid.v4()}`;
     }
 

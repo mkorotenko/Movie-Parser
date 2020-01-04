@@ -9,6 +9,8 @@ import { takeUntil, map, tap, shareReplay } from 'rxjs/operators';
 
 import { ChartLineDirective } from '../chart-line/chart-line.directive';
 import { ChartComponent, ChartData } from '../chart.component';
+import { ChartScaleXServiceService } from '../chart-scale-x-service.service';
+import { ChartScaleYServiceService } from '../chart-scale-y-service.service';
 
 function findNearest(data: Array<number>, value: number) {
     const aLength: number = data.length;
@@ -69,11 +71,11 @@ export class ChartHintDirective implements OnInit {
     }
 
     get xScale(): d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> {
-        return this.parent.xScaleD3;
+        return this.scaleXService.xScaleD3;
     }
     
-    get yScale(): d3.ScaleLinear<number, number> {
-        return this.parent.yScaleD3;
+    get yScale(): d3.ScaleLinear<number, number> | d3.ScaleTime<number, number> {
+        return this.scaleYService.yScaleD3;
     }
 
     get pChart(): d3.Selection<SVGElement, unknown, null, unknown> {
@@ -85,7 +87,9 @@ export class ChartHintDirective implements OnInit {
     private unsubscribe$ = new Subject<void>();
 
     constructor(
-        @Host() private chart: ChartLineDirective
+        @Host() private chart: ChartLineDirective,
+        private scaleXService: ChartScaleXServiceService,
+        private scaleYService: ChartScaleYServiceService
     ) {
         this.uid = `hint${uuid.v4()}`;
     }
@@ -214,7 +218,7 @@ export class ChartHintDirective implements OnInit {
     }
 
     private removeTooltip(): void {
-        // this.tip.hide();
+        this.tip.hide();
     }
 
     private removePoint() {

@@ -2,8 +2,11 @@ import { Host, Directive } from '@angular/core';
 
 import * as d3 from 'd3';
 
-import { ChartComponent } from '../chart.component';
 import { BaseAxisDirective } from './base-axis.directive';
+
+import { ChartComponent } from '../chart.component';
+import { ChartScaleXServiceService } from '../chart-scale-x-service.service';
+import { ChartScaleYServiceService } from '../chart-scale-y-service.service';
 
 @Directive({
     selector: 'prb-bottom-axis'
@@ -11,9 +14,11 @@ import { BaseAxisDirective } from './base-axis.directive';
 export class BottomAxisDirective extends BaseAxisDirective {
 
     constructor(
-        @Host() parent: ChartComponent
+        @Host() parent: ChartComponent,
+        scaleXService: ChartScaleXServiceService,
+        scaleYService: ChartScaleYServiceService
     ) {
-        super(parent);
+        super(parent, scaleXService, scaleYService);
     }
 
     ngOnInit() {

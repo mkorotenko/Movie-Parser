@@ -13,7 +13,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { UiCardModule } from 'ui-futuristic';
-import { ChartModule, ChartLineModule, ChartPointsModule, ChartDefsGlowModule, ChartDefsGradientModule, ChartHintModule, ChartLoaderModule } from '../chart';
+import {
+    ChartModule,
+    ChartLineModule,
+    ChartPointsModule,
+    ChartDefsGlowModule,
+    ChartDefsGradientModule,
+    ChartHintModule,
+    ChartLoaderModule,
+    ScaleXTimeModule
+} from '../chart';
 import { PipeCardComponent } from './pipe-card.component';
 
 @NgModule({
@@ -32,6 +41,7 @@ import { PipeCardComponent } from './pipe-card.component';
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
+        UiCardModule,
         ChartModule,
         ChartLineModule,
         ChartPointsModule,
@@ -39,7 +49,7 @@ import { PipeCardComponent } from './pipe-card.component';
         ChartDefsGradientModule,
         ChartHintModule,
         ChartLoaderModule,
-        UiCardModule
+        ScaleXTimeModule
     ],
     exports: [
         PipeCardComponent

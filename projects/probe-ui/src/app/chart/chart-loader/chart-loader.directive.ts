@@ -1,12 +1,24 @@
 import { Directive, Input, Host, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
 import { ChartData, ChartComponent } from '../chart.component';
 
+interface LoadingError {
+    status: number;
+    statusText: string;
+    url: string;
+    ok: boolean;
+    name: string;
+    message: string;
+    error: string;
+}
+
 @Directive({
     selector: 'prb-chart-loader, [prbChartLoader]'
 })
 export class ChartLoaderDirective implements OnChanges, OnDestroy {
 
     @Input() data: Array<ChartData>;
+
+    @Input() loadError: LoadingError;
 
     private loaderExists = false;
 
@@ -15,14 +27,18 @@ export class ChartLoaderDirective implements OnChanges, OnDestroy {
     ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (!changes.data) {
-            return;
+        if (changes.data) {
+            if (changes.data.firstChange && !changes.data.currentValue) {
+                this.drawLoader();
+            }
+            if (this.loaderExists && changes.data.currentValue) {
+                this.removeLoader();
+            }
+    
         }
-        if (changes.data.firstChange && !changes.data.currentValue) {
-            this.drawLoader();
-        }
-        if (this.loaderExists && changes.data.currentValue) {
+        if (changes.loadError && this.loadError) {
             this.removeLoader();
+            this.drawError(this.loadError.statusText);
         }
     }
 
@@ -41,6 +57,20 @@ export class ChartLoaderDirective implements OnChanges, OnDestroy {
             .attr('text-anchor', 'middle')
             .attr('fill', 'currentColor')
             .text('Data loading...');
+        this.loaderExists = true;
+    }
+
+    private drawError(message: string): void {
+        const parent = this.parent;
+        parent.chart.append('text')
+            .attr('class', 'data-loader error')
+            .attr('x', parent.width / 2)
+            .attr('y', parent.height / 2)
+            .attr('font-family', 'inherit')
+            .attr('font-size', '20px')
+            .attr('text-anchor', 'middle')
+            .attr('fill', 'red')
+            .text(message);
         this.loaderExists = true;
     }
 

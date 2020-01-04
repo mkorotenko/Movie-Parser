@@ -3,17 +3,17 @@ import {
     OnDestroy, EventEmitter, Output, ChangeDetectionStrategy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, tap, startWith } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 
-import { ChartAPIService } from '../services/chart-api.service';
+import { Observable, BehaviorSubject, combineLatest, Subject, of } from 'rxjs';
+import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, catchError } from 'rxjs/operators';
+import * as moment from 'moment';
+
 import { SocketService, SocketMessageInterface } from './socket.service';
 // import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 // import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
+import { ChartAPIService } from '../services/chart-api.service';
 import { EditPipeDialogComponent } from '../edit-pipe-dialog/edit-pipe-dialog.component';
-
 import { PipeDataInterface } from '../interfaces';
 
 const TIME_RANGE = 6 * 60 * 60 * 1000;
@@ -55,9 +55,16 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
 
     tempData$ = this.data$.pipe(
         map(data => data.map(d => ({
-            x: new Date(d.date),
-            y: d.temp
-        })))
+                x: new Date(d.date),
+                y: d.temp
+            }))
+        )
+    )
+
+    loadError$ = this.tempData$.pipe(
+        catchError(error => {
+            return of(error);
+        })
     )
 
     timeStart$ = this.tempData$.pipe(

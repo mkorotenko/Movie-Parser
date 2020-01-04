@@ -14,8 +14,6 @@
             </button>
         </mat-card-header>
         <prb-chart
-            [xTimeStart]="timeStart$ | async"
-            [xTimeEnd]="timeEnd$ | async"
             [yScale]="yScale"
         >
             <!-- <ng-container *ngIf="tempData$ | async as tempData else loader"> -->
@@ -25,18 +23,26 @@
                 <prb-chart-glow
                     id="glow"
                 ></prb-chart-glow>
-                <prb-chart-line
-                    [data]="tempData$ | async"
-                    stroke="url(#temp-gradient)"
-                    filter="url(#glow)"
-                    prbChartHint
-                    prbChartLoader
-                ></prb-chart-line>
-                <!-- <prb-chart-points
-                    [data]="tempData$ | async"
-                ></prb-chart-points> -->
-                <prb-left-axis></prb-left-axis>
-                <prb-bottom-time-axis></prb-bottom-time-axis>                
+                <prb-scale-x-time
+                    [xTimeStart]="timeStart$ | async"
+                    [xTimeEnd]="timeEnd$ | async"
+                >
+                    <prb-chart-line
+                        [data]="tempData$ | async"
+                        [loadError]="loadError$ | async"
+                        stroke="url(#temp-gradient)"
+                        filter="url(#glow)"
+                        prbChartHint
+                        prbChartLoader
+                    ></prb-chart-line>
+                    <!-- <prb-chart-points
+                        [data]="tempData$ | async"
+                    ></prb-chart-points> -->
+                    <prb-left-axis></prb-left-axis>
+                    <prb-bottom-time-axis></prb-bottom-time-axis>                
+
+                </prb-scale-x-time
+                >
             <!-- </ng-container> -->
             <!-- <ng-template #loader>
                 <prb-chart-loader
