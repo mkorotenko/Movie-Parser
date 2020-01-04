@@ -51,7 +51,6 @@ export class ScaleYLinearDirective implements OnInit, OnDestroy {
     }
 
     private updateYScale() {
-        console.info('app scale Y update:');
         this.scaleYService.yScaleD3 = d3.scaleLinear()
             .domain([this.yScaleEnd, this.yScaleStart])
             .range([0, this.height]);
