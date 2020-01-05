@@ -1,0 +1,12 @@
+<mat-select
+    class="nc-card__title--source"
+    [(value)]="searchType"
+    (valueChange)="onTypeChange()"
+>
+    <mat-option *ngFor="let item of searchTypes"
+        [value]="item.type"
+    >{{item.title}}</mat-option>
+</mat-select>
+<input 
+    [value]="searchValue"
+    (change)="onSearch($event.target.value)" />

@@ -1,0 +1,17 @@
+input {
+    font-family: Zekton;
+}
+
+.nc-card__title--source {
+    width: 120px;
+    margin-left: auto;
+    font-family: inherit;
+    color: white;
+}
+
+::ng-deep {
+  .mat-select-trigger .mat-select-value {
+    text-align: center;
+    font-family: Zekton;
+  }
+}

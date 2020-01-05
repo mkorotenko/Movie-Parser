@@ -9,6 +9,7 @@
   .nc-card {
     color: inherit;
     height: 100%;
+    filter: drop-shadow(2px 4px 6px #0000005e);
 
     &__title {
       display: flex;

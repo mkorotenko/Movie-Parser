@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { MovieListComponent } from './movie-list/movie-list.component';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.component';
+import { MovieSearchComponent } from './movie-search/movie-search.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
@@ -29,7 +30,8 @@ const routes: Routes = [
     AppComponent,
     MovieListComponent,
     MovieCardComponent,
-    MovieListOutletComponent
+    MovieListOutletComponent,
+    MovieSearchComponent
   ],
   imports: [
     BrowserModule,

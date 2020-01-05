@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { BehaviorSubject, empty, combineLatest, Observable } from 'rxjs';
-import { map, switchMap, shareReplay, tap } from 'rxjs/operators';
+import { map, switchMap, shareReplay, tap, startWith, debounceTime } from 'rxjs/operators';
 
 export interface StreamPathResult{
   link: string;
@@ -35,7 +35,8 @@ export class AppService {
     map(page => ({
       from: (page - 1) * 20,
       till: 20
-    }))
+    })),
+    debounceTime(50)
   );
 
   private movies$ = combineLatest(this.req$, this.page$).pipe(

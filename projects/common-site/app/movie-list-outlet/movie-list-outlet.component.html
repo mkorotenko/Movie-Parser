@@ -1,24 +1,24 @@
 <div class="movies-container">
-  <div class="movies-container__pages">
-    <pagination-controls
-      class="my-pagination"
-      id="common"
-      (pageChange)="onPageChange($event)"
-    ></pagination-controls>
-  </div>
-  <div class="movies-container__search">
-    <input #titleInput
-      (change)="onSearch($event.target.value)" />
-    <input #yearInput
-      (change)="onYearSearch($event.target.value)" />
-    <input #actorInput
-      (change)="onActorSearch($event.target.value)" />
-    <input #genreInput
-      (change)="onGenreSearch($event.target.value)" />
-  </div>
-  <ui-overlay #content class="movies-container__content">
-    <div class="movies-container__content--grid">
-        <ng-content></ng-content>
+    <div class="movies-container__header">
+        <div class="movies-container__pages">
+            <pagination-controls class="list-pagination"
+                id="common"
+                [maxSize]="10"
+                (pageChange)="onPageChange($event)"
+            ></pagination-controls>
+        </div>
+        <div class="movies-container__search">
+            <nc-movie-search
+                [searchType]="searchType"
+                [searchValue]="searchValue"
+                (search)="onSearch($event)"
+            ></nc-movie-search>
+        </div>    
     </div>
-  </ui-overlay>
+    <ui-overlay #content
+        class="movies-container__content">
+        <div class="movies-container__content--grid">
+            <ng-content></ng-content>
+        </div>
+    </ui-overlay>
 </div>
