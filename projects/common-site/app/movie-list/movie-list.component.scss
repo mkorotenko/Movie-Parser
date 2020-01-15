@@ -5,4 +5,18 @@
     overflow: auto;
     flex: 1;
     background: #3c3c3c;
+
+    .error-message {
+        display: flex;
+        width: 50%;
+        height: 100%;
+        margin: auto;
+    
+        &-text {
+            margin: auto;
+            text-align: center;
+            color: red;
+            font-family: Zekton;
+        }
+    }
 }

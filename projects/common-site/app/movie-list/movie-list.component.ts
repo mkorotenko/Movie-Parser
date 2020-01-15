@@ -1,7 +1,8 @@
 import { Component, ChangeDetectionStrategy, ElementRef } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, shareReplay, tap } from 'rxjs/operators';
+import { switchMap, shareReplay, tap, catchError, pluck } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -26,10 +27,17 @@ export class MovieListComponent {
     shareReplay(1)
   );
 
+  public dataLoadError$ = this.data$.pipe(
+      catchError(error => of(error.error)),
+      pluck('message')
+  )
+
   constructor(
     private service: AppService,
     private route: ActivatedRoute,
     private elRef: ElementRef
-  ) { }
+  ) { 
+      this.dataLoadError$.subscribe();
+  }
 
 }

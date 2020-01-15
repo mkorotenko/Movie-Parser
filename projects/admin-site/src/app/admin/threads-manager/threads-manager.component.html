@@ -1,9 +1,17 @@
-<mat-progress-bar class="adml-progress-bar" mode="indeterminate">
-  </mat-progress-bar>
-  <div class="adml-content-layout">
+<!-- <mat-progress-bar class="adml-progress-bar"
+    mode="indeterminate">
+</mat-progress-bar> -->
+<div class="adml-content-layout">
     <div class="adml-content-wrapper">
-      <div>
-        {{threadList$ | async | json}}
-      </div>
+        <div>
+            <div *ngFor="let thread of threadList$ | async">
+                {{thread.name}}: {{thread.running}}
+            </div>
+        </div>
+        <button mat-raised-button
+            color="primary"
+            (click)="onStart()">Start</button>
+        <button mat-raised-button
+            (click)="onStop()">Stop</button>
     </div>
-  </div>
+</div>

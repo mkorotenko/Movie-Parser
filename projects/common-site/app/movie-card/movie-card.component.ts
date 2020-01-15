@@ -7,6 +7,44 @@ interface MovieSourceInterface {
   [key:string]: string
 }
 
+interface MovieStreamItem {
+    title: string;
+    source: string;
+}
+
+function getFileExt(path: string) {
+    let fileExt: string;
+    if (typeof path === 'string') {
+        const fPart = path.split('?');
+        if (fPart.length) {
+            fileExt = fPart.shift();
+        }
+        fileExt = fileExt.split('.').pop();
+        if (fileExt.length > 4) {
+            fileExt = fileExt.substring(0, 4);
+        }
+    } else {
+        fileExt = 'stream';
+    }
+
+    return fileExt;
+}
+
+function mapToStreamItem(item: any): MovieStreamItem {
+    let source = item;
+    if (source.link && typeof source.link !== 'function') {
+        source = source.link;
+    }
+    if (typeof source === 'string') {
+        return {
+            title: getFileExt(source),
+            source
+        }
+    }
+
+    return source
+}
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'nc-movie-card',
@@ -41,7 +79,8 @@ export class MovieCardComponent implements OnChanges {
   );
 
   public directLinks$: Observable<any> = this.links$.pipe(
-    map(res => res.directLinks)
+    map(res => res.directLinks.map(mapToStreamItem)),
+    shareReplay(1)
   );
 
   public linksError$: Observable<string> = this.links$.pipe(
@@ -58,8 +97,9 @@ export class MovieCardComponent implements OnChanges {
     })
   )
 
-  public streamLinks$: Observable<any> = this.links$.pipe(
-    map(res => res.streams)
+  public streamLinks$: Observable<Array<MovieStreamItem>> = this.links$.pipe(
+    map(res => res.streams.map(mapToStreamItem)),
+    shareReplay(1)
   );
 
   public busy$: Observable<boolean> = combineLatest(
@@ -94,24 +134,6 @@ export class MovieCardComponent implements OnChanges {
         }
       })
     }
-  }
-
-  public fileExt(path: string) {
-    let fileExt: string;
-    if (typeof path === 'string') {
-      const fPart = path.split('?');
-      if (fPart.length) {
-        fileExt = fPart.shift();
-      }
-      fileExt = fileExt.split('.').pop();
-      if (fileExt.length > 4) {
-        fileExt = fileExt.substring(0, 4);
-      }
-    } else {
-      fileExt = 'stream';
-    }
-    
-    return fileExt;
   }
 
   public onSearchFiles() {

@@ -1,71 +1,75 @@
 :host {
-  display: block;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  overflow: auto;
-
-  .movies-container {
-    height: 100%;
+    display: block;
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    position: absolute;
+    overflow: auto;
 
-    &__header {
-        flex: 0;
-        padding: 5px;
-        box-shadow: 0px 5px 5px #0000005e;
+    .movies-container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        &__header {
+            flex: 0;
+            padding: 5px;
+            box-shadow: 0px 5px 5px #0000005e;
+        }
+
+        &__pages {
+            flex: 0;
+        }
+
+        &__search {
+            flex: 0;
+
+            input {
+                font-family: Zekton;
+            }
+        }
+
+        &__content {
+            height: 100%;
+            overflow: hidden;
+            overflow-y: auto;
+
+            &--grid {
+                min-height: 100%;
+                --g-color: #4f4f4f;
+                background-image:
+                    repeating-linear-gradient(0deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px),
+                    repeating-linear-gradient(-90deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px);
+            }
+        }
     }
 
-    &__pages {
-      flex: 0;
+    .page-link {
+        text-align: center;
+        color: white;
+
+        .page-link__text {
+            width: 30px;
+            display: inline-block;
+        }
     }
 
-    &__search {
-      flex: 0;
-      input {
+    .list-pagination {
         font-family: Zekton;
-      }
-    }
 
-    &__content {
-      overflow: hidden;
-      overflow-y: auto;
-      &--grid {
-        --g-color: #4f4f4f;
-        background-image:
-          repeating-linear-gradient(0deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px),
-          repeating-linear-gradient(-90deg, transparent, transparent 30px, var(--g-color) 30px, var(--g-color) 31px);
-      }
-    }
-  }
+        ::ng-deep {
+            .ngx-pagination {
+                margin: 5px;
+                padding: 0;
 
-  .page-link {
-    text-align: center;
-    color: white;
+                a {
+                    color: white;
+                }
 
-    .page-link__text {
-      width: 30px;
-      display: inline-block;
-    }
-  }
-  
-  .list-pagination {
-    font-family: Zekton;
-
-    ::ng-deep {
-      .ngx-pagination {
-        margin: 5px;
-        padding: 0;
-
-        a {
-          color: white;
+                a:hover {
+                    background: #666666;
+                }
+            }
         }
-
-        a:hover {
-          background: #666666;
-        }
-      }
     }
-  }
 }

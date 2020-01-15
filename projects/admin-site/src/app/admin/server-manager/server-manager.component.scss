@@ -2,3 +2,73 @@
     flex: 1;
     flex-direction: column;
 }
+
+/* Tables
+================================== */
+.rtable {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0 3em 0;
+    padding: 0;
+}
+
+.rtable-cell {
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: 100%; // Default to full width
+    padding: 0.8em 1.2em;
+    overflow: hidden; // Or flex might break
+    list-style: none;
+    border: solid 3px white;
+    background: fade(slategrey, 20%);
+
+    >h1,
+    >h2,
+    >h3,
+    >h4,
+    >h5,
+    >h6 {
+        margin: 0;
+    }
+}
+
+.rtable .rtable-cell {
+    &.cell-1 {
+        width: 200px;
+    }
+    &.cell-2 {
+        width: 70px;
+    }
+    &.cell-3 {
+        width: 70px;
+    }
+    &.cell-4 {
+        width: 70px;
+    }
+}
+
+/* Table column sizing
+  ================================== */
+.rtable--2cols>.rtable-cell {
+    width: 50%;
+}
+
+.rtable--3cols>.rtable-cell {
+    width: 33.33%;
+}
+
+.rtable--4cols>.rtable-cell {
+    width: 25%;
+}
+
+.rtable--5cols>.rtable-cell {
+    width: 20%;
+}
+
+.rtable--6cols>.rtable-cell {
+    width: 16.6%;
+}
+
+.error-message {
+    color: red;
+}

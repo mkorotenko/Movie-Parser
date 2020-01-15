@@ -1,31 +1,83 @@
-<mat-progress-bar [hidden]="!(busy$ | async)" class="adml-progress-bar" mode="indeterminate">
+<mat-progress-bar [hidden]="!(busy$ | async)"
+    class="adml-progress-bar"
+    mode="indeterminate">
 </mat-progress-bar>
 <div class="adml-content-layout">
-  <div class="adml-content-wrapper">
-    <div>
-      <mat-form-field>
-        <mat-select placeholder="Site" [value]="dataSorce$ | async" (valueChange)="dataSorce$.next($event)">
-          <mat-option *ngFor="let sorce of dataSorces$ | async" [value]="sorce.value">
-            {{sorce.description}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="adml-content-wrapper">
+        <div>
+            <mat-form-field class="mr-2">
+                <mat-select placeholder="Site"
+                    [value]="dataSource$ | async"
+                    (valueChange)="dataSource$.next($event)">
+                    <mat-option *ngFor="let source of dataSources$ | async"
+                        [value]="source.value">
+                        {{source.description}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text"
+                    #pathTemplate
+                    matInput
+                    placeholder="Path template"
+                    value="page/${page}/">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="mr-2">
+                <input type="number"
+                    #parsePageStart
+                    matInput
+                    placeholder="Page number start"
+                    value="1"
+                    min="1">
+            </mat-form-field>
+            <mat-form-field>
+                <input type="number"
+                    #parsePageEnd
+                    matInput
+                    placeholder="Page number end"
+                    value="10"
+                    min="1">
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-raised-button
+                color="primary"
+                (click)="onClick(parsePageStart.value, parsePageEnd.value, pathTemplate.value)">Parse</button>
+        </div>
+        <div class="mt-1">
+            <div>
+                <span>Path:</span><strong class="mr-1">{{pathProcessed$ | async}}</strong>
+                <span>Count:</span><strong>{{recordsProcessed$ | async}}</strong>
+            </div>
+            <div>
+                <h4>New records</h4>
+                <div *ngFor="let row of newRecords$ | async"
+                    class="rtable rtable--4cols">
+                    <div class="rtable-cell cell-1">
+                        <h3>{{row.title}}</h3>
+                    </div>
+                    <div class="rtable-cell cell-2">{{row.rating}}</div>
+                    <div class="rtable-cell cell-3">{{row.year}}</div>
+                    <div class="rtable-cell cell-4"><strong>{{row.quality}}</strong></div>
+                </div>
+            </div>
+            <div>
+                <h4>Updated records</h4>
+                <div *ngFor="let row of updatedRecords$ | async"
+                    class="rtable rtable--4cols">
+                    <div class="rtable-cell cell-1">
+                        <h3>{{row.title}}</h3>
+                    </div>
+                    <div class="rtable-cell cell-2">{{row.rating}}</div>
+                    <div class="rtable-cell cell-3">{{row.year}}</div>
+                    <div class="rtable-cell cell-4"><strong>{{row.quality}}</strong></div>
+                </div>
+            </div>
+            <!-- <div class="error-message">
+                <h4>{{parseError$ | async}}</h4>
+            </div> -->
+        </div>
     </div>
-    <div>
-      <mat-form-field class="example-full-width">
-        <input type="text" #pathTemplate matInput placeholder="Path template" value="page/${page}/">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="example-full-width">
-        <input type="number" #parsePage matInput placeholder="Page number" value="1" min="1">
-      </mat-form-field>
-    </div>
-    <div>
-      <button mat-raised-button color="primary" (click)="onClick(parsePage.value, pathTemplate.value)">Parse</button>
-    </div>
-    <div>
-      <span>{{parseResult | json}}</span>
-    </div>
-  </div>
 </div>

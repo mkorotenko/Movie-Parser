@@ -9,6 +9,6 @@
     <adm-source-parser *ngIf="isSourceParser$ | async"></adm-source-parser>
   </mat-tab>
   <mat-tab label="Applications">
-    <adm-threads-manager></adm-threads-manager>
+    <adm-threads-manager *ngIf="isApplications$ | async"></adm-threads-manager>
   </mat-tab>
 </mat-tab-group>

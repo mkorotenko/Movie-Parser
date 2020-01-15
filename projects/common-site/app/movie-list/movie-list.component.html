@@ -1,14 +1,19 @@
 <nc-movie-list-outlet>
-  <nc-movie-card *ngFor="let movie of data$ | async"
-    [movieID]="movie._id"
-    [title]="movie.title"
-    [rating]="movie.rating"
-    [href]="movie.href"
-    [image]="movie._id"
-    [genre]="movie.genre"
-    [quality]="movie.quality"
-    [year]="movie.year"
-    [description]="movie.description"
-    [sources]="movie.sources"
-  ></nc-movie-card>
+    <nc-movie-card *ngFor="let movie of data$ | async"
+        [movieID]="movie._id"
+        [title]="movie.title"
+        [rating]="movie.rating"
+        [href]="movie.href"
+        [image]="movie._id"
+        [genre]="movie.genre"
+        [quality]="movie.quality"
+        [year]="movie.year"
+        [description]="movie.description"
+        [sources]="movie.sources"
+    ></nc-movie-card>
+    <div *ngIf="dataLoadError$ | async as error "
+        class="error-message"
+    >
+        <span class="error-message-text">{{error}}</span>    
+    </div>
 </nc-movie-list-outlet>

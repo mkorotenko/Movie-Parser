@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 
+export interface RequestParams {
+    url: string;
+    page?: string;
+    path?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,8 +17,8 @@ export class ServerManagerService {
     private http: HttpClient
   ) {}
 
-  public parseContent(data: { url: string; page?: string }) {
-    return this.http.get('api/acc/content', { params: data });
+  public parseContent(data: RequestParams) {
+    return this.http.get('api/acc/content', { params: data as any});
   }
 
 }
