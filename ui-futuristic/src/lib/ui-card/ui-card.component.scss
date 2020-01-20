@@ -1,43 +1,51 @@
+@import  "../../colors.scss";
 
 :host {
-  --aug-color: #c0dbffc4;
-  --aug-border-bg: #62a6eb;
-  --aug-inset-bg: #0244ab80;
-  --aug-inset-bg-grad: #037cffad;
-  display: block;
-  min-height: 290px;
-  min-width: 290px;
-  padding: 22px;
-  position: relative;
-  font-family: Zekton;
+    display: block;
+    --ui-color: #c0dbffc4;
+    --ui-border-bg: #62a6eb;
+    --ui-inset-bg: #0244ab80;
+    --ui-inset-bg-grad: #037cffad;
 
-  &.plain {
-    color: var(--aug-color);
-    clip-path: polygon(0 35px,35px 0,35% 0,calc(35% + 12px) 12px,calc(100% - 20px) 12px,100% 32px,100% calc(17.5% - 1.5px),calc(100% - 12px) calc(17.5% + 10.5px),calc(100% - 12px) calc(82.5% - 13.5px),100% calc(82.5% - 1.5px),100% calc(100% - 15px),calc(100% - 15px) 100%,55% 100%,calc(55% - 12px) calc(100% - 12px),calc(15% + 12px) calc(100% - 12px),15% 100%,35px 100%,0 calc(100% - 35px),0 calc(15% + 140px),12px calc(15% + 128px),12px 92px,0 80px);
-    &::before {
-      content: "";
-      display: var(--aug-inset-bg, none);
-      background: linear-gradient(0deg, var(--aug-inset-bg-grad,none) 0%, var(--aug-inset-bg,none) 20%, var(--aug-inset-bg,none) 80%, var(--aug-inset-bg-grad,none) 100%);
-      opacity: var(--aug-inset-opacity, 1);
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      z-index: -1;
+    .ui-card-overlay {
+        display: block;
+        min-height: 290px;
+        min-width: 290px;
+        padding: 22px;
+        position: relative;
+        box-sizing: border-box;
+        font-family: Zekton;
+
+        &.plain {
+            color: var(--ui-color);
+            clip-path: polygon(0 35px, 35px 0, 35% 0, calc(35% + 12px) 12px, calc(100% - 20px) 12px, 100% 32px, 100% calc(17.5% - 1.5px), calc(100% - 12px) calc(17.5% + 10.5px), calc(100% - 12px) calc(82.5% - 13.5px), 100% calc(82.5% - 1.5px), 100% calc(100% - 15px), calc(100% - 15px) 100%, 55% 100%, calc(55% - 12px) calc(100% - 12px), calc(15% + 12px) calc(100% - 12px), 15% 100%, 35px 100%, 0 calc(100% - 35px), 0 calc(15% + 140px), 12px calc(15% + 128px), 12px 92px, 0 80px);
+
+            &::before {
+                content: "";
+                display: var(--ui-inset-bg, none);
+                background: linear-gradient(0deg, var(--ui-inset-bg-grad, none) 0%, var(--ui-inset-bg, none) 20%, var(--ui-inset-bg, none) 80%, var(--ui-inset-bg-grad, none) 100%);
+                opacity: var(--ui-inset-opacity, 1);
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                z-index: -1;
+            }
+
+            &::after {
+                content: "";
+                display: var(--ui-border-bg, none);
+                background: var(--ui-border-bg, none);
+                opacity: var(--ui-border-opacity, 1);
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                pointer-events: none;
+                clip-path: polygon(2px 48px, 6px 44px, 6px 38px, 38px 6px, calc(35% - 2px) 6px, calc(35% + 10px) 18px, calc(35% + 55px) 18px, calc(35% + 59px) 14px, calc(100% - 46px) 14px, calc(100% - 42px) 18px, calc(100% - 22px) 18px, calc(100% - 6px) 34px, calc(100% - 6px) 48px, calc(100% - 2px) 52px, calc(100% - 2px) calc(17.5% - 2.5px), calc(100% - 14px) calc(17.5% + 9.5px), calc(100% - 14px) calc(82.5% - 12.5px), calc(100% - 2px) calc(82.5% - .5px), calc(100% - 2px) calc(100% - 46px), calc(100% - 6px) calc(100% - 42px), calc(100% - 6px) calc(100% - 18px), calc(100% - 18px) calc(100% - 6px), calc(100% - 78px) calc(100% - 6px), calc(100% - 82px) calc(100% - 2px), calc(55% + 6px) calc(100% - 2px), calc(55% - 10px) calc(100% - 18px), calc(15% + 10px) calc(100% - 18px), calc(15% - 6px) calc(100% - 2px), 36px calc(100% - 2px), 16px calc(100% - 22px), 16px calc(100% - 28px), 6px calc(100% - 38px), 6px calc(100% - 58px), 2px calc(100% - 62px), 2px calc(15% + 141px), 14px calc(15% + 129px), 14px 91px, 2px 79px, 2px 36px, 0 36px, 0 100%, 100% 100%, 100% 0, 0 0, 0 36px, 2px 36px);
+            }
+        }
     }
-    &::after {
-      content: "";
-      display: var(--aug-border-bg, none);
-      background: var(--aug-border-bg, none);
-      opacity: var(--aug-border-opacity, 1);
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      pointer-events: none;
-      clip-path: polygon(2px 48px,6px 44px,6px 38px,38px 6px,calc(35% - 2px) 6px,calc(35% + 10px) 18px,calc(35% + 55px) 18px,calc(35% + 59px) 14px,calc(100% - 46px) 14px,calc(100% - 42px) 18px,calc(100% - 22px) 18px,calc(100% - 6px) 34px,calc(100% - 6px) 48px,calc(100% - 2px) 52px,calc(100% - 2px) calc(17.5% - 2.5px),calc(100% - 14px) calc(17.5% + 9.5px),calc(100% - 14px) calc(82.5% - 12.5px),calc(100% - 2px) calc(82.5% - .5px),calc(100% - 2px) calc(100% - 46px),calc(100% - 6px) calc(100% - 42px),calc(100% - 6px) calc(100% - 18px),calc(100% - 18px) calc(100% - 6px),calc(100% - 78px) calc(100% - 6px),calc(100% - 82px) calc(100% - 2px),calc(55% + 6px) calc(100% - 2px),calc(55% - 10px) calc(100% - 18px),calc(15% + 10px) calc(100% - 18px),calc(15% - 6px) calc(100% - 2px),36px calc(100% - 2px),16px calc(100% - 22px),16px calc(100% - 28px),6px calc(100% - 38px),6px calc(100% - 58px),2px calc(100% - 62px),2px calc(15% + 141px),14px calc(15% + 129px),14px 91px,2px 79px,2px 36px,0 36px,0 100%,100% 100%,100% 0,0 0,0 36px,2px 36px);
-    }
-  }
 }

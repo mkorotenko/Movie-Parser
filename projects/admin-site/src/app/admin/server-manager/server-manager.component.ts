@@ -53,11 +53,11 @@ export class ServerManagerComponent {
     );
 
     public newRecords$ = this.parseContentData$.pipe(
-        map(data => data && data.new || [])
+        map(data => (data && data.new || []).sort((a, b) => ((b.rating || 0) - (a.rating || 0))))
     );
 
     public updatedRecords$ = this.parseContentData$.pipe(
-        map(data => data && data.update || [])
+        map(data => (data && data.update || []).sort((a, b) => ((b.rating || 0) - (a.rating || 0))))
     );
 
     public recordsProcessed$ = this.parseContentData$.pipe(

@@ -1,57 +1,53 @@
-<div class="nc-card">
-  <ui-card>
+<ui-card class="nc-card">
     <div class="nc-card__title">
-      <a class="nc-card__title--ref"
-        href="{{href}}">
-        {{title}}
-      </a>
-      <mat-select *ngIf="sourceList?.length"
-        class="nc-card__title--source"
-        [value]="currentSource"
-        (valueChange)="onSourceChange($event)"
-      >
-        <mat-option *ngFor="let source of sourceList"
-          [value]="source"
-        >{{source}}</mat-option>
-      </mat-select>
-      <span class="nc-card__title--rating">
-        rating {{rating}}
-      </span>
+        <a class="nc-card__title--ref"
+            href="{{href}}">
+            {{title}}
+        </a>
+        <mat-select *ngIf="sourceList?.length"
+            class="nc-card__title--source"
+            [value]="currentSource"
+            (valueChange)="onSourceChange($event)">
+            <mat-option *ngFor="let source of sourceList"
+                [value]="source">{{source}}</mat-option>
+        </mat-select>
+        <span class="nc-card__title--rating">
+            rating {{rating}}
+        </span>
     </div>
     <div class="nc-card__content">
-      <div class="nc-card__content--img">
-        <img src="{{imgSrc}}">
-      </div>
-      <ui-overlay class="nc-card__content--description">
-        {{description}}
-      </ui-overlay>
+        <div class="nc-card__content--img">
+            <img src="{{imgSrc}}">
+        </div>
+        <ui-overlay class="nc-card__content--description">
+            {{description}}
+        </ui-overlay>
     </div>
     <div class="nc-card__links">
-      <ui-button *ngIf="!(hasLinks$ | async)" 
-        (click)="onSearchFiles()">
-        Search
-      </ui-button>
-      <ng-container *ngIf="hasLinks$ | async">
-        <mat-spinner *ngIf="busy$ | async"
-          color="warn"
-          diameter="27"
-        ></mat-spinner>
-        <span class="nc-card__links--errors" *ngIf="linksError$ | async as errors">{{errors}}</span>
-        <ui-button *ngFor="let stream of directLinks$ | async; let num = index"
-          (click)="onDirectSelect(num)">
-          {{stream.title}}
+        <ui-button *ngIf="!(hasLinks$ | async)"
+            (click)="onSearchFiles()">
+            Search
         </ui-button>
-        <ui-button *ngFor="let stream of streamLinks$ | async; let num = index"
-          (click)="onStreamSelect(num)">
-          {{stream.title}}
-        </ui-button>
-      </ng-container>
+        <ng-container *ngIf="hasLinks$ | async">
+            <mat-spinner *ngIf="busy$ | async"
+                color="warn"
+                diameter="27"></mat-spinner>
+            <span class="nc-card__links--errors"
+                *ngIf="linksError$ | async as errors">{{errors}}</span>
+            <ui-button *ngFor="let stream of directLinks$ | async; let num = index"
+                (click)="onDirectSelect(num)">
+                {{stream.title}}
+            </ui-button>
+            <ui-button *ngFor="let stream of streamLinks$ | async; let num = index"
+                (click)="onStreamSelect(num)">
+                {{stream.title}}
+            </ui-button>
+        </ng-container>
     </div>
     <div>
-      {{genre}}
+        {{genre}}
     </div>
     <div>
-      {{quality}}
+        {{quality}}
     </div>
-  </ui-card>
-</div>
+</ui-card>

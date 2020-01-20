@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 const AUGMENT_LIST = [
   'tl-clip',
@@ -18,9 +18,7 @@ const AUGMENT_LIST = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UiCardComponent {
-  @HostBinding('class.plain')
   plain = true;
 
-  @HostBinding('attr.augmented-ui')
   augmented = !this.plain && `${AUGMENT_LIST.join(' ')} exe`;
 }

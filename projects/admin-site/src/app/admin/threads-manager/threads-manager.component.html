@@ -4,8 +4,19 @@
 <div class="adml-content-layout">
     <div class="adml-content-wrapper">
         <div>
-            <div *ngFor="let thread of threadList$ | async">
-                {{thread.name}}: {{thread.running}}
+            <h4>Threads</h4>
+            <div class="rtable rtable--4cols">
+                <div class="rtable-cell cell-1"><h3>Name</h3></div>
+                <div class="rtable-cell cell-2"><h3>Running</h3></div>
+                <div class="rtable-cell cell-3"><h3>PID</h3></div>
+                <div class="rtable-cell cell-4"><h3>Killed</h3></div>
+            </div>
+            <div *ngFor="let thread of threadList$ | async"
+                class="rtable rtable--4cols">
+                <div class="rtable-cell cell-1">{{thread.name}}</div>
+                <div class="rtable-cell cell-2">{{thread.running}}</div>
+                <div class="rtable-cell cell-3">{{thread.thread.pid}}</div>
+                <div class="rtable-cell cell-4">{{thread.thread.killed}}</div>
             </div>
         </div>
         <button mat-raised-button

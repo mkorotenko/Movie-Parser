@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, Subject } from 'rxjs';
 
 import { AdminService } from '../admin.service';
-import { filter } from 'rxjs/operators';
+import { filter, switchMap, map, shareReplay, debounceTime } from 'rxjs/operators';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -13,11 +13,17 @@ import { filter } from 'rxjs/operators';
 })
 export class ThreadsManagerComponent implements OnInit {
 
-    threadList$: Observable<any[]> = this.admin.threadList$;
+    private getData$ = new Subject();
+
+    threadList$: Observable<any[]> = this.getData$.pipe(
+        switchMap(() => this.admin.getThreadList()),
+        map(result => result || []),
+        shareReplay(1)
+    );
 
     appMessages$ = this.admin.io$.pipe(
         filter((thread: any) => thread._id),
-    )
+    );
 
     constructor(
         private admin: AdminService
@@ -31,6 +37,14 @@ export class ThreadsManagerComponent implements OnInit {
                 console.info(message.message);
             }
         });
+
+        setTimeout(() => {
+            this.getData$.next();
+        }, 500);
+
+        this.appMessages$.pipe(
+            debounceTime(300)
+        ).subscribe(() => this.getData$.next());
     }
     onStart() {
         this.admin.socket.emit('message', JSON.stringify({

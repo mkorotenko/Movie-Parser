@@ -1,27 +1,28 @@
 <ui-layout class="player-layout">
     <div class="player-overlay">
-        <ui-card class="player-card">
-            <div class="player-card-align">
-                <video #player
-                    class="player-node"
-                    controls
-                    autoplay
-                    name="media"
-                    [poster]="poster">
-                    <source *ngIf="src"
-                        [src]="src"
-                        type="video/mp4">
-                    <source-hls *ngIf="srcHLS"
-                        [player]="playerNode"
-                        [src]="srcHLS"
-                    ></source-hls>
-                    <source-flv *ngIf="srcFLV"
-                        [player]="playerNode"
-                        [type]="sourceType"
-                        [src]="srcFLV"
-                    ></source-flv>
-                </video>
-            </div>
-        </ui-card>
+        <div class="player-overlay-title"></div>
+        <div class="player-overlay-content">
+            <ui-card class="player-card">
+                <div class="player-card-align">
+                    <video #player
+                        class="player-node"
+                        controls
+                        autoplay
+                        name="media"
+                        [poster]="poster">
+                        <source *ngIf="src"
+                            [src]="src"
+                            type="video/mp4">
+                        <source-hls *ngIf="srcHLS"
+                            [player]="playerNode"
+                            [src]="srcHLS"></source-hls>
+                        <source-flv *ngIf="srcFLV"
+                            [player]="playerNode"
+                            [type]="sourceType"
+                            [src]="srcFLV"></source-flv>
+                    </video>
+                </div>
+            </ui-card>
+        </div>
     </div>
 </ui-layout>
