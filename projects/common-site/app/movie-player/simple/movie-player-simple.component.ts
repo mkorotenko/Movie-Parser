@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { AppService } from '../app.service';
-import { SourceType, MovieStreamItem } from './models/types';
+import { AppService } from '../../app.service';
+import { SourceType, MovieStreamItem } from '../models/types';
 
 @Component({
     // tslint:disable-next-line:component-selector
-    selector: 'nc-movie-player',
-    templateUrl: './movie-player.component.html',
-    styleUrls: ['./movie-player.component.scss'],
+    selector: 'nc-movie-player-simple',
+    templateUrl: './movie-player-simple.component.html',
+    styleUrls: ['./movie-player-simple.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MoviePlayerComponent implements OnInit {
+export class MoviePlayerSimpleComponent implements OnInit {
 
     @ViewChild('player', { static: true, read: ElementRef }) playerNode: ElementRef;
     poster: string;

@@ -1,37 +1,37 @@
 :host {
-  --ui-color: #c0dbffc4;
-  --ui-border-bg: #62a6eb;
-  --ui-inset-bg: #0244ab80;
-  --ui-tr: 9px;
-  --ui-tl: 9px;
-  --ui-bl: 9px;
-  --ui-br: 9px;
-  --ui-border: 1px;
-  display: inline-block;
-  position: relative;
-  min-height: 1.7rem;
-  align-items: flex-start;
-  color: var(--ui-color);
-  background-color: var(--ui-inset-bg);
-  padding: 4px 12px;
-  cursor: default;
-  box-sizing: border-box;
-  text-align: center;
-  letter-spacing: normal;
-  -webkit-appearance: button;
-  clip-path: polygon(0px 9px, 9px 0px, calc(100% - 9px) 0px, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0px calc(100% - 9px));
+    --ui-color: #c0dbffc4;
+    --ui-border-bg: #62a6eb;
+    --ui-inset-bg: #0244ab80;
+    --ui-tr: 9px;
+    --ui-tl: 9px;
+    --ui-bl: 9px;
+    --ui-br: 9px;
+    --ui-border: 1px;
+    display: inline-block;
+    position: relative;
+    min-height: 1.7rem;
+    align-items: flex-start;
+    color: var(--ui-color);
+    background-color: var(--ui-inset-bg);
+    padding: 4px 12px;
+    cursor: default;
+    box-sizing: border-box;
+    text-align: center;
+    letter-spacing: normal;
+    -webkit-appearance: button;
+    clip-path: polygon(0px 9px, 9px 0px, calc(100% - 9px) 0px, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0px calc(100% - 9px));
 
-  &::after {
-    content: "";
-    display: var(--ui-border-bg, none);
-    background: var(--ui-border-bg, none);
-    opacity: var(--ui-border-opacity, 1);
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    pointer-events: none;
-    clip-path: polygon(1px 9.5px,9.5px 1px,calc(100% - 9.5px) 1px,calc(100% - 1px) 9.5px,calc(100% - 1px) calc(100% - 9.5px),calc(100% - 4px) calc(100% - 6.5px),calc(100% - 5px) calc(100% - 6.5px),calc(100% - 9.5px) calc(100% - 2px),31.5px calc(100% - 2px),30.5px calc(100% - 1px),9.5px calc(100% - 1px),1px calc(100% - 9.5px),1px 9.5px,0 9.5px,0 100%,100% 100%,100% 0,0 0,0 9.5px,1px 9.5px);
-  }
+    &::after {
+        content: "";
+        display: var(--ui-border-bg, none);
+        background: var(--ui-border-bg, none);
+        opacity: var(--ui-border-opacity, 1);
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        pointer-events: none;
+        clip-path: polygon(1px 9.5px, 9.5px 1px, calc(100% - 9.5px) 1px, calc(100% - 1px) 9.5px, calc(100% - 1px) calc(100% - 9.5px), calc(100% - 4px) calc(100% - 6.5px), calc(100% - 5px) calc(100% - 6.5px), calc(100% - 9.5px) calc(100% - 2px), 31.5px calc(100% - 2px), 30.5px calc(100% - 1px), 9.5px calc(100% - 1px), 1px calc(100% - 9.5px), 1px 9.5px, 0 9.5px, 0 100%, 100% 100%, 100% 0, 0 0, 0 9.5px, 1px 9.5px);
+    }
 }

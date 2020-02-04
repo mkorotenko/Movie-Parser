@@ -47,6 +47,10 @@ export class MovieSearchComponent {
 
     onTypeChange() {
         this.searchValue = '';
+        this.search.emit({
+            type: this.searchType,
+            value: ''
+        })
     }
 
     onSearch(value: any) {

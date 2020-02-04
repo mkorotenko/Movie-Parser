@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 
-import {NgxPaginationModule} from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { UiCardModule, UiButtonModule, UiOverlayModule } from 'ui-futuristic';
 
 import { AppService } from './app.service';
@@ -19,37 +19,37 @@ import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.
 import { MovieSearchComponent } from './movie-search/movie-search.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
-  { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
-  { path: 'movies/:id', component: MovieListComponent },
-  { path: 'player/:id/:source/:num', loadChildren: () => import('./movie-player/movie-player.module').then(m => m.MoviePlayerModule) }
+    { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
+    { path: 'movies', redirectTo: '/movies/1', pathMatch: 'full' },
+    { path: 'movies/:id', component: MovieListComponent },
+    { path: 'player', loadChildren: () => import('./movie-player/movie-player.module').then(m => m.MoviePlayerModule) }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MovieListComponent,
-    MovieCardComponent,
-    MovieListOutletComponent,
-    MovieSearchComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    RouterModule.forRoot(routes),
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    NgxPaginationModule,
-    UiCardModule,
-    UiButtonModule,
-    UiOverlayModule
-  ],
-  providers: [
-    AppService,
-  ],
-  exports: [ RouterModule ],
-  bootstrap: [ AppComponent ]
+    declarations: [
+        AppComponent,
+        MovieListComponent,
+        MovieCardComponent,
+        MovieListOutletComponent,
+        MovieSearchComponent
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        RouterModule.forRoot(routes),
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatProgressSpinnerModule,
+        MatSelectModule,
+        NgxPaginationModule,
+        UiCardModule,
+        UiButtonModule,
+        UiOverlayModule
+    ],
+    providers: [
+        AppService,
+    ],
+    exports: [RouterModule],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,56 @@
+<ui-layout class="player-layout">
+    <div class="player-overlay">
+        <div class="player-overlay-wrapper">
+            <div class="player-overlay-title">{{title$ | async}}</div>
+            <ui-tab-group *ngIf="streamList$ | async as streamList"
+                [activeTab]="movieNum$ | async"
+                (activeTabChange)="onPlaySelect($event)"
+            >
+                <ui-tab *ngFor="let item of streamList"
+                    [title]="item.title"
+                ></ui-tab>    
+            </ui-tab-group>
+            <ui-tab-group *ngIf="directList$ | async as directList"
+                [activeTab]="movieNum$ | async"
+                (activeTabChange)="onPlaySelect($event)"
+            >
+                <ui-tab *ngFor="let item of directList"
+                    [title]="item.title"
+                ></ui-tab>    
+            </ui-tab-group>
+            <div class="player-overlay-content">
+                <ui-card class="player-card">
+                    <div class="player-card-align">
+                        <video #player
+                            class="player-node"
+                            controls
+                            autoplay
+                            name="media"
+                            [poster]="poster">
+                            <ng-container *ngIf="playerSettings$ | async as settings">
+                                <ng-container [ngSwitch]="settings.player">
+                                    <source *ngSwitchCase="'native-player'"
+                                        [src]="settings.src"
+                                        type="video/mp4">
+                                    <source-hls *ngSwitchCase="'hls-player'"
+                                        [player]="playerNode"
+                                        [src]="settings.src"
+                                        (error)="errorMessage$.next($event)"
+                                    ></source-hls>
+                                    <source-flv *ngSwitchCase="'flv-player'"
+                                        [player]="playerNode"
+                                        [type]="settings.type"
+                                        [src]="settings.src"
+                                    ></source-flv>
+                                </ng-container>
+                            </ng-container>
+                        </video>
+                        <div class="overlay-desc-error" *ngIf="errorMessage$ | async as errorMessage">
+                            <h1>{{errorMessage}}</h1>
+                         </div>
+                    </div>
+                </ui-card>
+            </div>
+        </div>
+    </div>
+</ui-layout>

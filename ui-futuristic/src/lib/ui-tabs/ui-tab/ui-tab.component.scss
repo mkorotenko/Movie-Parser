@@ -1,0 +1,44 @@
+:host {
+    &:not(.active) {
+        --ui-border-bg: #9fcfff4d;
+        --ui-inset-bg: #0244ab45;
+    }
+    &:hover {
+        --ui-border-bg: #62a6ebb3;
+    }
+    --ui-color: #c0dbffc4;
+    --ui-border-bg: #62a6eb;
+    --ui-inset-bg: #0244ab80;
+    display: inline-block;
+    position: relative;
+    min-height: 1.7rem;
+    align-items: flex-start;
+    color: var(--ui-color);
+    background-color: var(--ui-inset-bg);
+    padding: 4px 4px;
+    cursor: default;
+    box-sizing: border-box;
+    text-align: center;
+    letter-spacing: normal;
+    -webkit-appearance: button;
+    clip-path: polygon(0 4px,4px 0,calc(100% - 4px) 0,100% 4px,100% calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,0 calc(100% - 4px));
+
+    &::after {
+        content: "";
+        display: var(--ui-border-bg, none);
+        background: var(--ui-border-bg, none);
+        opacity: var(--ui-border-opacity, 1);
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        pointer-events: none;
+        clip-path: polygon(1px 4.5px,4.5px 1px,calc(100% - 4.5px) 1px,calc(100% - 1px) 4.5px,calc(100% - 1px) calc(100% - 4.5px),calc(100% - 4px) calc(100% - 3px),calc(100% - 2px) calc(100% - 6.5px),calc(100% - 4.5px) calc(100% - 2px),31.5px calc(100% - 2px),30.5px calc(100% - 1px),4.5px calc(100% - 1px),1px calc(100% - 4.5px),1px 4.5px,0 4.5px,0 100%,100% 100%,100% 0,0 0,0 4.5px,1px 4.5px);
+    }
+
+    a {
+        padding: 5px;
+        cursor: pointer;
+    }
+}

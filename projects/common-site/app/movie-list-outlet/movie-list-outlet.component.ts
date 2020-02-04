@@ -42,6 +42,8 @@ export class MovieListOutletComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.searchType = Object.keys(this.aRoute.snapshot.queryParams || {})[0] as SearchTypes || 'searchText';
+
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 try {
@@ -53,7 +55,6 @@ export class MovieListOutletComponent implements OnInit {
         });
 
         this.aRoute.queryParams.subscribe(params => {
-
             if (params.genre) {
                 this.searchType = 'genre';
                 this.searchValue = params.genre
@@ -99,12 +100,8 @@ export class MovieListOutletComponent implements OnInit {
     }
 
     public onSearch(request: SearchRequest) {
-        const query = {};
-        if (request.value) {
-            query[request.type] = request.value;
-        }
         this.router.navigate(['/movies/1'], {
-            queryParams: query,
+            queryParams: {[request.type]: request.value},
             relativeTo: this.aRoute
         });
     }

@@ -1,0 +1,11 @@
+:host {
+    display: block;
+
+    .tab-content {
+        width: 100%;
+        flex: 0;
+        flex-direction: row;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+}

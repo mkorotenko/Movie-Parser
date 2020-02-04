@@ -1,0 +1,89 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.player-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font-family: Zekton;
+
+    .player-overlay {
+        flex-grow: 1;
+        padding: 15px;
+
+        &-title {
+            width: 100%;
+            flex: 0;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        &-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-navbar {
+            width: 100%;
+            flex: 0;
+            flex-direction: row;
+            padding: 10px;
+            box-sizing: border-box;
+            color: white;
+
+            a {
+                padding: 5px;
+            }
+        }
+
+        &-content {
+            overflow: hidden;
+            flex-grow: 1;
+            height: 100%;
+        }
+    }
+
+    .player-card {
+        width: 100%;
+        height: 100%;
+        --ui-inset-bg: black;
+        --ui-inset-bg-grad: black;
+        filter: drop-shadow(2px 4px 6px #0000005e);
+
+        &-align {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+        }
+    }
+
+    .player-node {
+        width: 100%;
+        max-height: 70vw;
+        outline-color: black;
+    }
+}
+
+.overlay-desc-error {
+    background: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        color: red;
+        background: #00000075;
+    }
+}
