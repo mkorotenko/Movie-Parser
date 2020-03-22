@@ -55,11 +55,11 @@ export class SourceHlsComponent implements OnChanges {
             let hls = this.hls = new Hls();
             hls.attachMedia(playerNode);
             hls.on('hlsError', (error: string, response: HLSResponse)=>{
-                this.error.emit((response.response && response.response.text) || 'Load error');
                 console.info('app resp:', response);
                 if (!response.fatal) {
                     return;
                 }
+                this.error.emit((response.response && response.response.text) || 'Load error');
                 let event = null;
                 try {
                     const loader = (response.loader && response.loader.loader) || { status:0, statusText: response.type }

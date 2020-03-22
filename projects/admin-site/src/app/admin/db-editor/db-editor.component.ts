@@ -48,14 +48,24 @@ export class DBEditorComponent {
     private service: DBEditorService
   ) { }
 
-  public onQuery(filter: string) {
+  public onQuery(reqfilter: string) {
     this.busy$.next(true);
-    this.service.queryDocuments({ collection: this.collectionName, filter: JSON.parse(filter || '{}') })
-      .subscribe((code: { count: Number, docs: any[], filter: any }) => {
-        this.busy$.next(false);
-        this.code = JSON.stringify(code.docs);
-        console.info('query:', code.docs, this.editor);
-      });
+    const parsedFilter = JSON.parse(reqfilter || '{}');
+    const filter = Object.keys(parsedFilter).reduce((result, key) => {
+      const value = parsedFilter[key];
+      // if (typeof value === 'string') {
+      //   value = value.replace('+', '\+');
+      // }
+      result[key] = value;
+      return result;
+    }, {});
+    this.service.queryDocuments({
+      collection: this.collectionName,
+      filter
+    }).subscribe((code: { count: Number, docs: any[], filter: any }) => {
+      this.busy$.next(false);
+      this.code = JSON.stringify(code.docs);
+    });
   }
 
   public onCreate() {
