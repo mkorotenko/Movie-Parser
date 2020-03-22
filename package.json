@@ -9,6 +9,7 @@
     "start-admin": "ng serve --proxy-config proxy-admin.conf.json --project admin-site",
     "start-admin-local": "ng serve --proxy-config proxy-admin-local.conf.json --project admin-site",
     "start-probe": "ng serve --proxy-config proxy-probe.conf.js --project probe-ui",
+    "start-rpi": "ng serve --proxy-config proxy-rpi.conf.js --project rpi-control",
     "start-lib": "ng build ui-futuristic --watch",
     "server": "node api/home-portal/dist-server",
     "clean_lock": "rimraf mongo-db/mongod.lock",
@@ -19,6 +20,7 @@
     "build:common": "ng build --prod --project common-site",
     "build:admin": "ng build --prod --project admin-site",
     "build:probe": "ng build --prod --project probe-ui",
+    "build:rpi": "ng build --prod --project rpi-control",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

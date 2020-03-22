@@ -404,6 +404,128 @@
           }
         }
       }
+    },
+    "rpi-control": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/rpi-control",
+      "sourceRoot": "projects/rpi-control/src",
+      "prefix": "rpi",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/rpi-control",
+            "index": "projects/rpi-control/src/index.html",
+            "main": "projects/rpi-control/src/main.ts",
+            "polyfills": "projects/rpi-control/src/polyfills.ts",
+            "tsConfig": "projects/rpi-control/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/rpi-control/src/favicon.ico",
+              "projects/rpi-control/src/assets"
+            ],
+            "styles": [
+              "projects/rpi-control/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/rpi-control/src/environments/environment.ts",
+                  "with": "projects/rpi-control/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "rpi-control:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "rpi-control:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "rpi-control:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/rpi-control/src/test.ts",
+            "polyfills": "projects/rpi-control/src/polyfills.ts",
+            "tsConfig": "projects/rpi-control/tsconfig.spec.json",
+            "karmaConfig": "projects/rpi-control/karma.conf.js",
+            "assets": [
+              "projects/rpi-control/src/favicon.ico",
+              "projects/rpi-control/src/assets"
+            ],
+            "styles": [
+              "projects/rpi-control/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/rpi-control/tsconfig.app.json",
+              "projects/rpi-control/tsconfig.spec.json",
+              "projects/rpi-control/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/rpi-control/e2e/protractor.conf.js",
+            "devServerTarget": "rpi-control:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "rpi-control:serve:production"
+            }
+          }
+        }
+      }
     }
   },
   "defaultProject": "common-site",
