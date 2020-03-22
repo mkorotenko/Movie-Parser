@@ -1,0 +1,23 @@
+<ui-layout class="control-layout">
+  <div class="layout-wrapper">
+    <ui-card>
+      <div class="control-input">
+        <input placeholder="Speed"
+          type="number"
+          required=""
+          min="0"
+          max="250"
+          [value]="currentSpped$ | async"
+          (change)="onSpeedChange($event.target.value)" />
+      </div>
+      <div class="slideTwo">
+        <input
+          type="checkbox"
+          id="slideOne"
+          [checked]="manualMode$ | async"
+          (change)="onModeChange($event.target.checked)" />
+        <label for="slideOne"></label>
+      </div>
+    </ui-card>
+  </div>
+</ui-layout>

@@ -1,7 +1,7 @@
 const PROXY_CONFIG = [
   {
     context: [
-      '/docs', '/socket'
+      '/api'
     ],
     target: 'http://192.168.1.101:3000',
     secure: false,
