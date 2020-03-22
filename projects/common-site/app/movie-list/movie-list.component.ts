@@ -36,8 +36,6 @@ export class MovieListComponent {
     private service: AppService,
     private route: ActivatedRoute,
     private elRef: ElementRef
-  ) { 
-      this.dataLoadError$.subscribe();
-  }
+  ) {}
 
 }

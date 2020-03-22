@@ -1,15 +1,15 @@
-<ui-card class="nc-card">
+<ui-card class="nc-card ui-glow">
     <div class="nc-card__title">
         <a class="nc-card__title--ref"
-            href="{{href}}">
-            {{title}}
-        </a>
+            href="{{href}}"
+        >{{title}}</a>
         <mat-select *ngIf="sourceList?.length"
             class="nc-card__title--source"
             [value]="currentSource"
             (valueChange)="onSourceChange($event)">
             <mat-option *ngFor="let source of sourceList"
-                [value]="source">{{source}}</mat-option>
+                [value]="source"
+            >{{source}}</mat-option>
         </mat-select>
         <span class="nc-card__title--rating">
             rating {{rating}}
@@ -17,22 +17,32 @@
     </div>
     <div class="nc-card__content">
         <div class="nc-card__content--img">
-            <img src="{{imgSrc}}">
+            <img src="{{imgSrc}}" (click)="onWatch()">
         </div>
-        <ui-overlay class="nc-card__content--description">
-            {{description}}
-        </ui-overlay>
+        <div class="nc-card__content--details">
+            <ui-overlay class="nc-card__details--description">
+                {{description}}
+            </ui-overlay>
+            <div class="nc-card__details--actors">
+                <a *ngFor="let genre of genreList"
+                    [href]="'movies/1?genre='+genre"
+                >{{genre}}</a>
+            </div>
+            <div class="nc-card__details--actors">
+                <span>{{upperCase(quality)}}</span>
+                <span *ngFor="let country of countries"
+                >{{country}}</span>
+            </div>
+            <div class="nc-card__details--actors">
+                <a *ngFor="let actor of actors"
+                    [href]="'movies/1?actor='+actor"
+                >{{actor}}</a>
+            </div>
+        </div>
     </div>
     <div class="nc-card__links">
-        <ui-button
-            (click)="onWatch()">
-            Watch
-        </ui-button>
-    </div>
-    <div>
-        {{genre}}
-    </div>
-    <div>
-        {{quality}}
+        <ui-button class="nc-card__links--watch ui-glow"
+            (click)="onWatch()"
+        >Watch</ui-button>
     </div>
 </ui-card>

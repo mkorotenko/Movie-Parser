@@ -1,0 +1,10 @@
+<mat-select
+    class="nc-card__title--source"
+    [(value)]="sort"
+    (valueChange)="onTypeChange()"
+>
+    <mat-option *ngFor="let item of sortTypes"
+        [value]="item.type"
+    >{{item.title}}</mat-option>
+</mat-select>
+

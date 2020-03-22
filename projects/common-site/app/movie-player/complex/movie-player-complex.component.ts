@@ -3,9 +3,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subject, of, combineLatest, throwError } from 'rxjs';
-import { switchMap, shareReplay, map, tap, debounceTime, distinctUntilChanged, filter, catchError, takeUntil } from 'rxjs/operators';
+import { switchMap, shareReplay, map, tap, debounceTime, distinctUntilChanged, filter, catchError, takeUntil, take } from 'rxjs/operators';
 
-import { AppService, StreamPathResult, SourceDescription } from '../../app.service';
+import { AppService, StreamPathResult, SourceDescription, MovieData } from '../../app.service';
 import { routerAnimation } from '../models/animations';
 
 type PlayerTypes = 'native-player' | 'hls-player' | 'flv-player';
@@ -18,14 +18,6 @@ interface PlayerSettings {
     type?: SourceTypes;
 }
 
-interface MovieData {
-    id: string;
-    title: string;
-    url: string;
-    directLinks: Array<string | SourceDescription>;
-    streams: Array<string | StreamPathResult>;
-}
-
 const getLinkSource = (link: string | SourceDescription): string => {
     let source: string;
     if (typeof link === 'object') {
@@ -34,6 +26,47 @@ const getLinkSource = (link: string | SourceDescription): string => {
         source = link;
     }
     return source;
+}
+
+function isDirectLinksEqual(dl1: Array<string | SourceDescription>, dl2: Array<string | SourceDescription>): boolean {
+    if (dl1 === dl2) {
+        return true;
+    }
+    if (dl1 && dl2) {
+        if (dl1.length === dl2.length) {
+            const differs = dl1.some(link => !dl2.find(dLink => {
+                const type = typeof link;
+                if (type === typeof dLink) {
+                    if (type === 'string') {
+                        return dLink === link
+                    } else {
+                        return (link as SourceDescription).source === (dLink as SourceDescription).source
+                    }
+                }
+            }));
+            if (!differs) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function isStreamsEqual(str1: Array<StreamPathResult>, str2: Array<StreamPathResult>): boolean {
+    if (str1 === str2) {
+        return true;
+    }
+    if (str1 && str2) {
+        if (str1.length === str2.length) {
+            const differs = str1.some(str => {
+                return !str2.find(st2 => st2.link === str.link && st2.token === str.token)
+            })
+            if (!differs) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 @Component({
@@ -61,8 +94,12 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
         shareReplay(1)
     );
 
-    movie$: Observable<MovieData> = this.movieId$.pipe(
+    private currentMovie$: Observable<MovieData> = this.movieId$.pipe(
         switchMap(id => this.service.getMovie(id)),
+        shareReplay(1)
+    );
+
+    movie$: Observable<MovieData> = this.currentMovie$.pipe(
         switchMap((movie: MovieData) => {
             const directLinks = movie.directLinks;
             const streams = movie.streams;
@@ -92,7 +129,7 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
                     const fileExt = parts.pop();
                     if (fileExt) {
                         return {
-                            title: fileExt.toUpperCase()
+                            title: fileExt.substr(0,4).toUpperCase()
                         }
                     }
                     return {
@@ -116,7 +153,7 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
                     const fileExt = parts.pop();
                     if (fileExt) {
                         return {
-                            title: fileExt.toUpperCase()
+                            title: fileExt.substr(0,4).toUpperCase()
                         }
                     } 
                     return {
@@ -230,7 +267,7 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
         this.playerNode.nativeElement.focus();
         this.playerNode.nativeElement.addEventListener('error', function (error) {
             console.error('Video error:', arguments);
-            const message = error && error.message;
+            const message = (error && error.message) || 'Unknown error';
             const code = error && error.error && error.error.responseCode;
             if (code) {
                 switch (code) {
@@ -249,7 +286,23 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
         this.updateLinks$.pipe(
             debounceTime(500)
         ).subscribe(() => {
-            this.service.getLinks(docId).subscribe(() => location.reload());
+            this.service.getLinks(docId).subscribe(links => {
+                this.currentMovie$.pipe(
+                    take(1)
+                ).subscribe(movie => {
+                    console.info('Movie links', movie, links);
+                    isDirectLinksEqual(movie.directLinks, links.directLinks);
+                    if (!isDirectLinksEqual(movie.directLinks, links.directLinks)) {
+                        location.reload();
+                        return;
+                    }
+                    if (!isStreamsEqual(movie.streams, links.streams)) {
+                        location.reload();
+                        return;
+                    }
+                    this.errorMessage$.next('Movie source not found.');
+                })
+            });
         })
 
         this.movie$.pipe(

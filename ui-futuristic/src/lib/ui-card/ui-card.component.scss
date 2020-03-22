@@ -6,6 +6,21 @@
     --ui-border-bg: #62a6eb;
     --ui-inset-bg: #0244ab80;
     --ui-inset-bg-grad: #037cffad;
+    &.ui-glow {
+        --ui-border-bg: #cbe5ff;
+        .ui-card-overlay.plain {
+            &::before {
+                background: var(--ui-inset-bg,none);
+                box-shadow: inset 0 0 25px 5px white;
+                transition: box-shadow 500ms;
+            }
+            &:hover {
+                &::before {
+                    box-shadow: inset 0 0 30px 5px white;
+                }
+            }
+        }
+    }
 
     .ui-card-overlay {
         display: block;

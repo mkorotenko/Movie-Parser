@@ -13,12 +13,31 @@
                 [searchValue]="searchValue"
                 (search)="onSearch($event)"
             ></nc-movie-search>
+            <nc-movie-sort
+                [sort]="sortType"
+                (sortChange)="onSortChange($event)"
+            ></nc-movie-sort>
         </div>    
     </div>
-    <ui-overlay #content
-        class="movies-container__content">
-        <div class="movies-container__content--grid">
-            <ng-content></ng-content>
+    <div class="movies-container__overlay">
+        <div class="movies-container__filters">
+            <a *ngFor="let filter of filterList"
+                class="filters--ref"
+                [href]="filter.link">
+                {{filter.title}}
+            </a>
+            <div class="filters-title">Жанры</div>
+            <a *ngFor="let genre of genreList"
+                class="filters--ref"
+                [href]="genre.link">
+                {{genre.title}}
+            </a>
         </div>
-    </ui-overlay>
+        <ui-overlay #content
+            class="movies-container__content">
+            <div class="movies-container__content--grid">
+                <ng-content></ng-content>
+            </div>
+        </ui-overlay>
+    </div>
 </div>

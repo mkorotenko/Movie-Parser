@@ -57,6 +57,9 @@ export class SourceHlsComponent implements OnChanges {
             hls.on('hlsError', (error: string, response: HLSResponse)=>{
                 this.error.emit((response.response && response.response.text) || 'Load error');
                 console.info('app resp:', response);
+                if (!response.fatal) {
+                    return;
+                }
                 let event = null;
                 try {
                     const loader = (response.loader && response.loader.loader) || { status:0, statusText: response.type }

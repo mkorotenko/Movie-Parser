@@ -19,6 +19,12 @@ interface MoviePathResult {
     streams?: Array<StreamPathResult>;
 }
 
+export interface MovieData extends MoviePathResult {
+    id: string;
+    title: string;
+    url: string;
+}
+
 function getLastMonthDate(): string {
     const currentDate = new Date();
     return JSON.stringify(new Date(currentDate.setMonth(currentDate.getMonth() - 1))).replace('"', '').replace('"', '');
@@ -67,16 +73,17 @@ export class AppService {
 
     public rootContent$ = this.movies$.pipe(
         map((res: { docs: any[] }) => {
-            const result = res.docs;
-            result.sort((a, b) => b.rating - a.rating);
-            return result;
+            return res.docs;
         }),
         map((res: any[]) => res.map((e: { details: any, imgSrc: string }) => {
             const { details, imgSrc, ...props } = e;
             return {
                 ...props,
-                genre: details.Genre && details.Genre.join(','),
-                img: imgSrc && imgSrc.split('/').pop()
+                genre: details.Genre,
+                img: imgSrc && imgSrc.split('/').pop(),
+                actors: details.Actors || [],
+                countries: details.Country || [],
+                duration: (details.Duration || [])[0] || ''
             };
         })),
         shareReplay(1)

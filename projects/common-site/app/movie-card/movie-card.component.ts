@@ -58,11 +58,14 @@ export class MovieCardComponent implements OnChanges {
     @Input() rating: string;
     @Input() href: string;
     @Input() image: string;
-    @Input() genre: string;
+    @Input() genreList: Array<string>;
     @Input() quality: string;
     @Input() year: string;
     @Input() description: string;
     @Input() movieID: string;
+    @Input() duration: string;
+    @Input() actors: Array<string>;
+    @Input() countries: Array<string>;
     @Input() sources: MovieSourceInterface[];
 
     public imgSrc = '';
@@ -162,6 +165,10 @@ export class MovieCardComponent implements OnChanges {
 
     onWatch() {
         window.open(`./player/${this.movieID}/watch`);
+    }
+
+    upperCase(quality: string): string {
+        return (quality || '').toUpperCase();
     }
 
 }

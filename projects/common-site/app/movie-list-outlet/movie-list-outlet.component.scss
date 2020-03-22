@@ -5,6 +5,25 @@
     position: absolute;
     overflow: auto;
 
+    .filters-title {
+        max-width: 120px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: #62a6eb;
+        font-family: Zekton;
+        font-size: 20px;
+        margin: 10px 5px;
+    }
+    .filters--ref {
+        display: block;
+        max-width: 120px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: white;
+        font-family: Zekton;
+        margin: 10px 5px;
+    }
+
     .movies-container {
         height: 100%;
         width: 100%;
@@ -15,6 +34,18 @@
             flex: 0;
             padding: 5px;
             box-shadow: 0px 5px 5px #0000005e;
+        }
+
+        &__overlay {
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        &__filters {
+            @media (max-width: 600px) {
+                display: none;
+            }
         }
 
         &__pages {

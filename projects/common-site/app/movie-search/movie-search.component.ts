@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 
-export type SearchTypes = 'searchText' | 'year' | 'actor' | 'genre';
+export type SearchTypes = 'searchText' | 'year' | 'actor' | 'genre' | 'country';
 
 export interface SearchRequest {
     type: SearchTypes;
@@ -43,6 +43,10 @@ export class MovieSearchComponent {
             type: 'genre',
             title: 'Genre'
         },
+        {
+            type: 'country',
+            title: 'Country'
+        }
     ]
 
     onTypeChange() {

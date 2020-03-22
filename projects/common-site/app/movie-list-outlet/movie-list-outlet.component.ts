@@ -5,6 +5,7 @@ import { map, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 import { PaginationService } from 'ngx-pagination';
 import { combineLatest } from 'rxjs';
 import { SearchRequest, SearchTypes } from '../movie-search/movie-search.component';
+import { SortTypes } from '../movie-sort/movie-sort.component';
 
 @Component({
     selector: 'nc-movie-list-outlet',
@@ -23,6 +24,62 @@ export class MovieListOutletComponent implements OnInit {
         shareReplay(1)
     );
 
+    public filterList = [
+        {
+            title: '2020 год',
+            link: '/movies/1?year=2020'
+        },
+        {
+            title: '2019 год',
+            link: '/movies/1?year=2019'
+        },
+        {
+            title: '2018 год',
+            link: '/movies/1?year=2018'
+        },
+    ]
+    public genreList = [
+        {
+            title: 'Мультфильмы',
+            link: '/movies/1?genre=мультф'
+        },
+        {
+            title: 'Драмы',
+            link: '/movies/1?genre=драм'
+        },
+        {
+            title: 'Детективы',
+            link: '/movies/1?genre=детект'
+        },
+        {
+            title: 'Боевики',
+            link: '/movies/1?genre=боевик'
+        },
+        {
+            title: 'Комедии',
+            link: '/movies/1?genre=комед'
+        },
+        {
+            title: 'Триллеры',
+            link: '/movies/1?genre=триллер'
+        },
+        {
+            title: 'Приключения',
+            link: '/movies/1?genre=приключ'
+        },
+        {
+            title: 'Фантастика',
+            link: '/movies/1?genre=фантас'
+        },
+        {
+            title: 'Фэнтези',
+            link: '/movies/1?genre=фэнтез'
+        },
+        {
+            title: 'Семейный',
+            link: '/movies/1?genre=семейн'
+        },
+    ]
     private paginationConfig = {
         id: 'common',
         itemsPerPage: 20,
@@ -34,6 +91,8 @@ export class MovieListOutletComponent implements OnInit {
 
     public searchValue: any = '';
 
+    public sortType: SortTypes = 'rating';
+
     constructor(
         private service: AppService,
         private aRoute: ActivatedRoute,
@@ -42,7 +101,21 @@ export class MovieListOutletComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.searchType = Object.keys(this.aRoute.snapshot.queryParams || {})[0] as SearchTypes || 'searchText';
+        const currentQuery = this.aRoute.snapshot.queryParams || {};
+        this.searchType = Object.keys(currentQuery)[0] as SearchTypes || 'searchText';
+
+        //auto routing to first filter
+        if (this.router.url === '/movies/1') {
+            const request = this.filterList[0].link;
+            const qParams = request.split('?')[1];
+            if (qParams) {
+                const paramsParts = qParams.split('=');
+                this.onSearch({
+                    type: paramsParts[0] as SearchTypes,
+                    value: paramsParts[1]
+                });
+            }
+        }
 
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
@@ -55,33 +128,12 @@ export class MovieListOutletComponent implements OnInit {
         });
 
         this.aRoute.queryParams.subscribe(params => {
-            if (params.genre) {
-                this.searchType = 'genre';
-                this.searchValue = params.genre
-                this.service.reqParameters$.next({
-                    'details.Genre_ex': params.genre
-                });
-            } else if (params.actor) {
-                this.searchType = 'actor';
-                this.searchValue = params.actor
-                this.service.reqParameters$.next({
-                    'details.Actors_ex': params.actor
-                });
-            } else if (params.year) {
-                this.searchType = 'year';
-                this.searchValue = params.year
-                this.service.reqParameters$.next({
-                    'year': params.year
-                });
-            } else if (params.searchText) {
-                this.searchType = 'searchText';
-                this.searchValue = params.searchText
-                this.service.reqParameters$.next({
-                    'title_ex': params.searchText
-                });
-            } else {
-                this.service.reqParameters$.next(undefined);
+            let reqParams = this.getRequesrParameters(params);
+
+            if (!Object.keys(reqParams).length) {
+                reqParams = undefined;
             }
+            this.service.reqParameters$.next(reqParams);
         });
 
         combineLatest(
@@ -90,7 +142,7 @@ export class MovieListOutletComponent implements OnInit {
         ).pipe(
             distinctUntilChanged((prev, curr) => prev[0] === curr[0] && prev[1] === curr[1])
         ).subscribe(([params, itemsCount]) => {
-            var instance = this.createInstance([], {
+            var instance = this.createPaginationInstance([], {
                 ...this.paginationConfig,
                 currentPage: Number(params.id),
                 totalItems: itemsCount
@@ -101,7 +153,7 @@ export class MovieListOutletComponent implements OnInit {
 
     public onSearch(request: SearchRequest) {
         this.router.navigate(['/movies/1'], {
-            queryParams: {[request.type]: request.value},
+            queryParams: { [request.type]: request.value },
             relativeTo: this.aRoute
         });
     }
@@ -112,8 +164,57 @@ export class MovieListOutletComponent implements OnInit {
         });
     }
 
-    private createInstance(collection, config) {
-        this.checkConfig(config);
+    public onSortChange(sortType: SortTypes) {
+        const queryParams = this.aRoute.snapshot.queryParams;
+        this.router.navigate(['/movies/1'], {
+            queryParams: { 
+                ...queryParams,
+                sort: sortType
+            },
+            relativeTo: this.aRoute
+        });
+    }
+
+    private getRequesrParameters(params) {
+        return Object.keys(params)
+        .reduce((result: any, keyName: SearchTypes | string) => {
+            const paramValue = params[keyName];
+            if (!paramValue) {
+                return result;
+            }
+            if (keyName === 'sort') {
+                result[keyName]=paramValue;
+                this.sortType = paramValue;
+            } else {
+                switch (keyName) {
+                    case 'genre':
+                        result['details.Genre_ex']=paramValue;
+                        break;
+                    case 'actor':
+                        result['details.Actors_ex']=paramValue;
+                        break;
+                    case 'country':
+                        result['details.Country_ex']=paramValue;
+                        break;
+                    case 'searchText':
+                        result['title_ex']=paramValue;
+                        break;
+                    default:
+                        result[keyName]=paramValue;
+                }
+                this.searchType = keyName as SearchTypes;
+                this.searchValue = paramValue;
+            }
+            return result;
+        }, {});
+    }
+
+    private createPaginationInstance(collection, config) {
+        var required = ['itemsPerPage', 'currentPage'];
+        var missing = required.filter(function (prop) { return !(prop in config); });
+        if (0 < missing.length) {
+            throw new Error("PaginatePipe: Argument is missing the following required properties: " + missing.join(', '));
+        }
         return {
             id: config.id != null ? config.id : this.paginationService.defaultId(),
             itemsPerPage: +config.itemsPerPage || 0,
@@ -121,13 +222,5 @@ export class MovieListOutletComponent implements OnInit {
             totalItems: +config.totalItems || collection.length
         };
     }
-
-    private checkConfig(config) {
-        var required = ['itemsPerPage', 'currentPage'];
-        var missing = required.filter(function (prop) { return !(prop in config); });
-        if (0 < missing.length) {
-            throw new Error("PaginatePipe: Argument is missing the following required properties: " + missing.join(', '));
-        }
-    };
 
 }
