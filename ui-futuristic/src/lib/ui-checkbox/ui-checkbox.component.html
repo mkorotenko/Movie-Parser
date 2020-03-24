@@ -1,0 +1,7 @@
+<div class="checkbox-wrapper">
+    <input type="checkbox"
+        [id]="entityId"
+        [checked]="checked"
+        (change)="checkedChange.emit($event.target.checked)" />
+    <label [for]="entityId"></label>
+</div>

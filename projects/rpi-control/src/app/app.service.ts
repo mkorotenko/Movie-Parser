@@ -7,6 +7,14 @@ interface SpeedResponse {
   speed: number;
 }
 
+interface TemperatureResponse {
+  temp: number;
+}
+
+interface FrequencyResponse {
+  frequency: number;
+}
+
 interface ModeResponse {
   manual: boolean;
 }
@@ -34,6 +42,14 @@ export class AppService {
 
   public setMode(manual: boolean) {
     return this.client.post(`api/fan/mode`, { manual }).subscribe();
+  }
+
+  public getTemperature(): Observable<TemperatureResponse> {
+    return this.client.get<TemperatureResponse>(`api/core/temperature`);
+  }
+
+  public getFrequency(): Observable<FrequencyResponse> {
+    return this.client.get<FrequencyResponse>(`api/core/frequency`);
   }
 
 }

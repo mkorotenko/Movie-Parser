@@ -1,0 +1,226 @@
+$activeColor: #27ae60;
+$darkenColor: #1e884a;
+
+:host {
+    display: inline-block;
+
+    .checkbox-wrapper {
+        background: #333;
+        position: relative;
+        border-radius: 50px;
+        box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+        label {
+            display: block;
+            position: absolute;
+            cursor: pointer;
+            background: #fcfff4;
+            background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+            border-radius: 50px;
+            box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+        input[type=checkbox] {
+            visibility: hidden;
+        }
+    }
+
+    &.square {
+        .checkbox-wrapper {
+            width: 28px;
+            height: 28px;
+            border-radius: 0;
+            background: #fcfff4;
+            background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+            box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+        
+            label {
+                width: 20px;
+                height: 20px;
+                top: 4px;
+                left: 4px;
+                border-radius: 0;
+                background: linear-gradient(to bottom, #222 0%, #45484d 100%);
+                box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 1);
+        
+                &:after {
+                    content: '';
+                    width: 16px;
+                    height: 16px;
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    background: $activeColor;
+                    background: linear-gradient(to bottom, $activeColor 0%, $darkenColor 100%);
+                    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+                    opacity: 0;
+                }
+        
+                &:hover::after {
+                    opacity: 0.3;
+                }
+            }
+        
+            input[type=checkbox] {
+                &:checked+label:after {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.round {
+        .checkbox-wrapper {
+            width: 28px;
+            height: 28px;
+            background: #fcfff4;
+            background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+            box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+        
+            label {
+                width: 20px;
+                height: 20px;
+                left: 4px;
+                top: 4px;
+                background: linear-gradient(to bottom, #222 0%, #45484d 100%);
+                box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 1);
+        
+                &:after {
+                    content: '';
+                    width: 16px;
+                    height: 16px;
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    background: $activeColor;
+                    background: linear-gradient(to bottom, $activeColor 0%, $darkenColor 100%);
+                    opacity: 0;
+                    border-radius: 50px;
+                    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+                }
+        
+                &:hover::after {
+                    opacity: 0.3;
+                }
+            }
+        
+            input[type=checkbox] {
+                &:checked+label:after {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.slide {
+        .checkbox-wrapper {
+            width: 50px;
+            height: 10px;
+        
+            label {
+                width: 16px;
+                height: 16px;
+                top: -3px;
+                left: -3px;
+            }
+        
+            input[type=checkbox] {
+                &:checked+label {
+                    left: 37px;
+                }
+            }
+        }
+    }
+
+    &.switch {
+        .checkbox-wrapper {
+            width: 80px;
+            height: 30px;
+        
+            &:after {
+                content: '';
+                position: absolute;
+                top: 14px;
+                left: 14px;
+                height: 2px;
+                width: 52px;
+                background: #111;
+                border-radius: 50px;
+                box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+            }
+        
+            label {
+                width: 22px;
+                height: 22px;
+                top: 4px;
+                z-index: 1;
+                left: 4px;
+        
+                &:after {
+                    content: '';
+                    width: 10px;
+                    height: 10px;
+                    position: absolute;
+                    top: 6px;
+                    left: 6px;
+                    background: #333;
+                    border-radius: 50px;
+                    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 1), 0px 1px 0px rgba(255, 255, 255, 0.9);
+                }
+            }
+        
+            input[type=checkbox] {
+        
+                &:checked+label {
+                    left: 54px;
+        
+                    &:after {
+                        background: $activeColor;
+                    }
+                }
+            }
+        }
+    }
+
+    &.switch-two {
+        .checkbox-wrapper {
+            width: 80px;
+            height: 26px;
+
+            &:after {
+                content: 'OFF';
+                color: #000;
+                position: absolute;
+                right: 10px;
+                z-index: 0;
+                font: 12px/26px Arial, sans-serif;
+                font-weight: bold;
+                text-shadow: 1px 1px 0px rgba(255, 255, 255, .15);
+            }
+
+            &:before {
+                content: 'ON';
+                color: $activeColor;
+                position: absolute;
+                left: 10px;
+                z-index: 0;
+                font: 12px/26px Arial, sans-serif;
+                font-weight: bold;
+            }
+
+            label {
+                width: 34px;
+                height: 20px;
+                top: 3px;
+                left: 3px;
+                z-index: 1;
+            }
+
+            input[type=checkbox] {
+                &:checked+label {
+                    left: 43px;
+                }
+            }
+        }
+    }
+
+}

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
-import { UiCardModule, UiLayoutModule } from 'ui-futuristic';
+import { UiCardModule, UiLayoutModule, UiCheckboxModule, UiButtonModule } from 'ui-futuristic';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,8 +17,10 @@ import { AppService } from './app.service';
     AppRoutingModule,
     HttpClientModule,
 
+    UiCardModule,
+    UiButtonModule,
     UiLayoutModule,
-    UiCardModule
+    UiCheckboxModule
   ],
   providers: [AppService],
   bootstrap: [AppComponent]

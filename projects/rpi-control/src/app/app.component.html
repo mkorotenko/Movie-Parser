@@ -4,19 +4,28 @@
       <div class="control-input">
         <input placeholder="Speed"
           type="number"
-          required=""
           min="0"
           max="250"
           [value]="currentSpped$ | async"
           (change)="onSpeedChange($event.target.value)" />
-      </div>
-      <div class="slideTwo">
-        <input
-          type="checkbox"
-          id="slideOne"
+        <ui-checkbox type="switch-two"
           [checked]="manualMode$ | async"
-          (change)="onModeChange($event.target.checked)" />
-        <label for="slideOne"></label>
+          (checkedChange)="onModeChange($event)"
+        ></ui-checkbox>
+      </div>
+      <div class="control-input">
+        <input placeholder="Temperature"
+          type="number"
+          [value]="currentTemp$ | async" />
+          <ui-button (click)="onCheckTemp()"
+          >Check</ui-button>
+      </div>
+      <div class="control-input">
+        <input placeholder="Frequency"
+          type="number"
+          [value]="currentFreq$ | async" />
+          <ui-button (click)="onCheckFreq()"
+          >Check</ui-button>
       </div>
     </ui-card>
   </div>
