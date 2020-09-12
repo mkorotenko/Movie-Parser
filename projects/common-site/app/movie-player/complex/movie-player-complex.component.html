@@ -27,14 +27,20 @@
                             autoplay
                             name="media"
                             [poster]="poster">
-                            <ng-container *ngIf="playerSettings$ | async as settings">
+                            <source-flv
+                                [player]="playerNode"
+                                [type]="'FLV'"
+                                [src]="'http://91.210.251.166:4577/udp/239.0.1.24:4000'"
+                            ></source-flv>
+
+                            <!-- <ng-container *ngIf="playerSettings$ | async as settings">
                                 <ng-container [ngSwitch]="settings.player">
                                     <source *ngSwitchCase="'native-player'"
                                         [src]="settings.src"
                                         type="video/mp4">
                                     <source-hls *ngSwitchCase="'hls-player'"
                                         [player]="playerNode"
-                                        [src]="settings.src"
+                                        [src]="'http://91.210.251.166:4577/udp/239.0.1.24:4000'"
                                         (error)="errorMessage$.next($event)"
                                     ></source-hls>
                                     <source-flv *ngSwitchCase="'flv-player'"
@@ -43,7 +49,7 @@
                                         [src]="settings.src"
                                     ></source-flv>
                                 </ng-container>
-                            </ng-container>
+                            </ng-container> -->
                         </video>
                         <div class="overlay-desc-error" *ngIf="errorMessage$ | async as errorMessage">
                             <h1>{{errorMessage}}</h1>

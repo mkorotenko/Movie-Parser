@@ -21,6 +21,7 @@
     "build:admin": "ng build --prod --project admin-site",
     "build:probe": "ng build --prod --project probe-ui",
     "build:rpi": "ng build --prod --project rpi-control",
+    "build:lib": "ng build ui-futuristic",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

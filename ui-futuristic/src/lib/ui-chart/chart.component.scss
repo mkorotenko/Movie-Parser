@@ -1,0 +1,79 @@
+:host {
+    display: block;
+
+    svg {
+        display: block;
+        min-height: 300px;
+    }
+
+    svg {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        overflow: hidden;
+    }
+}
+
+::ng-deep {
+    .axis line {
+        stroke: #c0dbffc4;
+    }
+
+    .axis path {
+        stroke: #c0dbffc4;
+    }
+
+    .axis text {
+        stroke: #c0dbffc4;
+        font-family: verdana;
+    }
+
+    .data-line {
+        stroke: #c0dbffc4;
+    }
+
+    line.mouse-pos {
+        stroke: #62a6eb;
+        stroke-width: 1;
+    }
+
+    circle.hint {
+        fill: #d75c0a;
+        stroke: #ebcd62;
+        stroke-width: 1;
+    }
+
+    .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: #62a6eb78;
+        color: #c0dbffc4;
+        border-radius: 2px;
+      }
+      
+      /* Creates a small triangle extender for the tooltip */
+      .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: #62a6eb78;
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+      }
+      
+      /* Style northward tooltips differently */
+      .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+      }
+}

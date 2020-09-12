@@ -27,6 +27,42 @@
           <ui-button (click)="onCheckFreq()"
           >Check</ui-button>
       </div>
+      <div>
+        <ui-chart>
+          <ui-chart-glow id="glow"></ui-chart-glow>
+          <ui-scale-x-time
+            [xTimeStart]="timeStart$ | async"
+            [xTimeEnd]="timeEnd$ | async">
+            <ui-bottom-time-axis></ui-bottom-time-axis>
+            <ui-scale-y-linear
+              [yScaleStart]="35"
+              [yScaleEnd]="70">
+              <ui-chart-gradient id="temp-gradient"
+                [colorRange]="tempGradient"
+              ></ui-chart-gradient>
+              <ui-chart-line
+                [data]="tempData$ | async"
+                [loadError]="loadError$ | async"
+                stroke="url(#temp-gradient)"
+                filter="url(#glow)"
+                uiChartHint="Temp:"
+                uiChartLoader
+              ></ui-chart-line>
+              <ui-left-axis></ui-left-axis>
+            </ui-scale-y-linear>
+            <ui-scale-y-linear [yScaleStart]="650"
+              [yScaleEnd]="1450">
+              <ui-chart-gradient id="hum-gradient"
+                [colorRange]="freqGradient"></ui-chart-gradient>
+              <ui-chart-line [data]="freqData$ | async"
+                stroke="url(#hum-gradient)"
+                filter="url(#glow)"
+                uiChartHint="Freq:"></ui-chart-line>
+              <ui-right-axis></ui-right-axis>
+            </ui-scale-y-linear>
+          </ui-scale-x-time>
+        </ui-chart>
+      </div>
     </ui-card>
   </div>
 </ui-layout>

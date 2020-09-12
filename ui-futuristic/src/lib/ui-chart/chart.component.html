@@ -1,0 +1,10 @@
+<div class="chart-container">
+    <svg
+        [attr.width]="svgWidth"
+        [attr.height]="svgHeight"
+        (mousemove)="onMouseMove($event)"
+        (mouseleave)="onMouseLeave()"
+    >
+        <g #chart [attr.transform]="chartTransform"></g>
+    </svg>
+</div>

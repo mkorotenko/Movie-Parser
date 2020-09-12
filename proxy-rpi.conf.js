@@ -1,9 +1,10 @@
 const PROXY_CONFIG = [
   {
     context: [
-      '/api'
+      '/api',
+      '/socket.io'
     ],
-    target: 'http://192.168.1.101:3001',
+    target: 'http://192.168.1.101:80',
     secure: false,
     changeOrigin: true
   },

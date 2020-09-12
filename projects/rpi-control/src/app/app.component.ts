@@ -1,9 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { shareReplay, map, switchMap } from 'rxjs/operators';
 
 import { AppService } from './app.service';
+
+const MAX_LIST_LENGTH = 25;
 
 @Component({
   selector: 'rpi-root',
@@ -11,7 +13,7 @@ import { AppService } from './app.service';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   private checkTemp$ = new BehaviorSubject({});
 
@@ -42,23 +44,130 @@ export class AppComponent {
     shareReplay(1)
   );
 
+  private tempList: Array<{ x: Date, y: Number }> = [];
+
+  tempData$ = this.currentTemp$.pipe(
+    switchMap(temp => {
+      if (this.tempList.length >= MAX_LIST_LENGTH) {
+        this.tempList.shift();
+      }
+      this.tempList.push({
+        x: new Date(),
+        y: temp
+      });
+      return of(this.tempList);
+    }),
+    shareReplay(1)
+  );
+
+  private freqList: Array<{ x: Date, y: Number }> = [];
+
+  freqData$ = this.currentFreq$.pipe(
+    switchMap(freq => {
+      if (this.freqList.length >= MAX_LIST_LENGTH) {
+        this.freqList.shift();
+      }
+      this.freqList.push({
+        x: new Date(),
+        y: freq
+      });
+      return of(this.freqList);
+    }),
+    shareReplay(1)
+  );
+
+  timeStart$ = this.tempData$.pipe(
+    map(() => {
+      if (!this.tempList.length) {
+        return new Date();
+      }
+      return this.tempList[0].x;
+    }),
+    shareReplay(1)
+  );
+
+  timeEnd$ = this.tempData$.pipe(
+    map(() => {
+      if (!this.tempList.length) {
+        return new Date();
+      }
+      return this.tempList[this.tempList.length - 1].x;
+    }),
+    shareReplay(1)
+  );
+
+  loadError$ = of(undefined);
+
+  tempGradient = [
+    {
+        color: '#ce6c44',
+        value: 0
+    },
+    {
+        color: '#c29b3f',
+        value: 30
+    },
+    {
+        color: '#4bc260',
+        value: 50
+    },
+    {
+        color: '#65d1b4',
+        value: 65
+    },
+    {
+        color: '#074bed',
+        value: 100
+    },
+  ];
+
+  freqGradient = [
+    {
+        color: '#ce6c44',
+        value: 700
+    },
+    {
+        color: '#c29b3f',
+        value: 850
+    },
+    {
+        color: '#4bc260',
+        value: 1000
+    },
+    {
+        color: '#65d1b4',
+        value: 1200
+    },
+    {
+        color: '#074bed',
+        value: 1400
+    },
+  ];
+
   constructor(
     private service: AppService
   ) {}
 
-  onSpeedChange(speed: string) {
+  ngOnInit(): void {
+    setInterval(() => {
+      this.checkTemp$.next({});
+      this.checkFreq$.next({});
+    }, 5000);
+  }
+
+  onSpeedChange(speed: string): void {
     this.service.setSpeed(Number(speed));
   }
 
-  onModeChange(manual: boolean) {
+  onModeChange(manual: boolean): void {
     this.service.setMode(manual);
   }
 
-  onCheckTemp() {
+  onCheckTemp(): void {
     this.checkTemp$.next({});
   }
 
-  onCheckFreq() {
+  onCheckFreq(): void {
     this.checkFreq$.next({});
   }
 
