@@ -24,7 +24,9 @@
     "build:lib": "ng build ui-futuristic",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "node ./scripts/deploy",
+    "deploy:common": "npm run deploy -p DIST=\"f:/dev/nice-kinogo/dist/common-site\" TARG=\"d:/movie-store/dist\""
   },
   "private": true,
   "dependencies": {
@@ -54,8 +56,10 @@
     "iconv-lite": "^0.4.24",
     "jsdom": "^13.0.0",
     "mongodb": "^3.1.8",
+    "ncp": "^2.0.0",
     "ngx-monaco-editor": "^6.0.0",
     "ngx-pagination": "^4.1.0",
+    "node-sass": "^4.14.1",
     "parse5": "^5.1.0",
     "ps-tree": "^1.1.0",
     "request": "^2.88.0",

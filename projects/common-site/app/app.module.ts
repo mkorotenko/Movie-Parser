@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 import { NgxPaginationModule } from 'ngx-pagination';
 import { UiCardModule, UiButtonModule, UiOverlayModule } from 'ui-futuristic';
@@ -43,6 +44,7 @@ const routes: Routes = [
         BrowserAnimationsModule,
         MatProgressSpinnerModule,
         MatSelectModule,
+        MatInputModule,
         NgxPaginationModule,
         UiCardModule,
         UiButtonModule,

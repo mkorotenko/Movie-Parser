@@ -4,7 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Deploy-run",
+            "program": "${workspaceFolder}/scripts/deploy",
+            "request": "launch",
+            "env": {
+                "DIST": "f:/dev/nice-kinogo/dist/common-site",
+                "TARG": "d:/movie-store/dist/tmp"
+            },
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
         {
             "type": "node",
             "request": "launch",

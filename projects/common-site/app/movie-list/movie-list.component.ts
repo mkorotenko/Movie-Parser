@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy, ElementRef } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, shareReplay, tap, catchError, pluck } from 'rxjs/operators';
+
 import { of } from 'rxjs';
+import { switchMap, shareReplay, tap, catchError, pluck } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -37,5 +38,13 @@ export class MovieListComponent {
     private route: ActivatedRoute,
     private elRef: ElementRef
   ) {}
+
+  onUpdateSource(movie: any, href: string) {
+    // if (!Object.values(movie.sources).find(item => item === href)) {
+      this.service.updateSource(movie._id, href).subscribe(
+        () => this.service.updateList()
+      );  
+    // }
+  }
 
 }

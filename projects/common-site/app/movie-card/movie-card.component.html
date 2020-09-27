@@ -6,10 +6,15 @@
         <mat-select *ngIf="sourceList?.length"
             class="nc-card__title--source"
             [value]="currentSource"
+            (openedChange)="onOpenedChange($event)"
             (valueChange)="onSourceChange($event)">
             <mat-option *ngFor="let source of sourceList"
                 [value]="source"
             >{{source}}</mat-option>
+            <input #sourceInput
+                matInput
+                placeholder="Source"
+                [value]="href">
         </mat-select>
         <span class="nc-card__title--rating">
             rating {{rating}}

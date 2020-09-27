@@ -118,6 +118,12 @@ export class MoviePlayerComplexComponent implements OnInit, OnDestroy {
         shareReplay(1)
     );
 
+    movieURL$: Observable<string> = this.currentMovie$.pipe(
+        map((movie: MovieData) => {
+            return movie.url
+        })
+    )
+
     streamList$ = this.movie$.pipe(
         map(movie => {
             if (!movie.streams || movie.streams.length < 2) {

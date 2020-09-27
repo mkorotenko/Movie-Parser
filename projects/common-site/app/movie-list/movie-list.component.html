@@ -13,6 +13,7 @@
         [duration]="movie.duration"
         [countries]="movie.countries"
         [sources]="movie.sources"
+        (updateSource)="onUpdateSource(movie, $event)"
     ></nc-movie-card>
     <div *ngIf="dataLoadError$ | async as error "
         class="error-message"

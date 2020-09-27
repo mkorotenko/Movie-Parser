@@ -50,7 +50,7 @@ export class AppService {
         debounceTime(50)
     );
 
-    private movies$ = combineLatest(this.req$, this.page$).pipe(
+    private movies$ = combineLatest([this.req$, this.page$]).pipe(
         map(([req, page]) => {
             return {
                 ...req,
@@ -93,6 +93,13 @@ export class AppService {
         private client: HttpClient
     ) { }
 
+    updateList() {
+        const reqParameters = this.reqParameters$.value;
+        this.reqParameters$.next({
+            ...reqParameters
+        });
+    }
+
     private _linksCache = {};
     public getLinks(movieID: string): Observable<MoviePathResult> {
         if (this._linksCache[movieID]) {
@@ -116,6 +123,16 @@ export class AppService {
 
     public setMovieSource(movieID: string, href: string) {
         return this.client.patch(`api/acc/source/${movieID}`, {
+            href
+        }).pipe(
+            tap(() => {
+                this._linksCache[movieID] = undefined;
+            })
+        )
+    }
+
+    public updateSource(movieID: string, href: string) {
+        return this.client.patch(`api/acc/updateSources/documents/${movieID}`, {
             href
         }).pipe(
             tap(() => {

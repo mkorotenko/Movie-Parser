@@ -1,8 +1,9 @@
 <div class="ui-card-overlay"
-    [class.plain]="plain"
-    [attr.augmented-ui]="augmented"
->
+    [class.plain]="plain">
     <div>
         <ng-content></ng-content>
     </div>
 </div>
+<ul class="ui-card-state">
+    <li *ngFor="let item of 5|numberToIterable"></li>
+</ul>
