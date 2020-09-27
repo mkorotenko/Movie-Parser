@@ -26,7 +26,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "node ./scripts/deploy",
-    "deploy:common": "npm run deploy -p DIST=\"f:/dev/nice-kinogo/dist/common-site\" TARG=\"d:/movie-store/dist\""
+    "deploy:common": "npm run deploy -p DIST=\"f:/dev/nice-kinogo/dist/common-site\" TARG=\"d:/movie-store/dist\"",
+    "update:common": "npm run build:common && npm run deploy:common"
   },
   "private": true,
   "dependencies": {
