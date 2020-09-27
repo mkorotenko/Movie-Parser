@@ -18,7 +18,7 @@
     "get-urls": "^8.0.0",
     "jsdom": "^13.0.0",
     "migrate": "^1.6.2",
-    "mongodb": "^3.1.9",
+    "mongodb": "^3.1.13",
     "node-windows": "^0.1.14",
     "parse5": "^5.1.0",
     "ps-tree": "^1.1.0",
