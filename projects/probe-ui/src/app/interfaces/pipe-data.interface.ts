@@ -5,6 +5,7 @@ export interface PipeDataInterface {
     date: string;
     serverDate: string;
     pipe: number;
-    tx_res: number;
+    rssi: number;
     bat_v: number;
+    pack_type: number;
 }

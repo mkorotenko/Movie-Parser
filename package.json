@@ -27,7 +27,9 @@
     "e2e": "ng e2e",
     "deploy": "node ./scripts/deploy",
     "deploy:common": "npm run deploy -p DIST=\"f:/dev/nice-kinogo/dist/common-site\" TARG=\"d:/movie-store/dist\"",
-    "update:common": "npm run build:common && npm run deploy:common"
+    "update:common": "npm run build:common && npm run deploy:common",
+    "deploy:probe": "npm run deploy -p DIST=\"f:/dev/nice-kinogo/dist/probe-ui\" TARG=\"f:/dev/home-probe/public\"",
+    "update:probe": "npm run build:probe && npm run deploy:probe"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +51,7 @@
     "@types/socket.io-client": "^1.4.32",
     "augmented-ui": "^1.1.0",
     "concurrently": "^4.0.1",
+    "console-log-html": "^2.0.2",
     "copy-dir": "^0.4.0",
     "core-js": "^2.5.4",
     "fs-extra": "^7.0.1",

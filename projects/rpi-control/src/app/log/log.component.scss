@@ -1,0 +1,18 @@
+.log-overlay {
+    height: 15em;
+    max-height: 15em;
+    overflow: hidden;
+    background: #333;
+    ul {
+        list-style: none;
+        -webkit-padding-start: 0;
+        -webkit-margin-after: 0;
+        -webkit-margin-before: 1em;
+        border: 1px solid #000;
+        overflow-y: auto;
+        width: 100%;
+        background: #333;
+        color: #fff;
+        margin: 0;
+    }    
+}

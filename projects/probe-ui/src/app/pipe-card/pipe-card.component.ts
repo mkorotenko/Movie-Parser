@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, BehaviorSubject, combineLatest, Subject, of } from 'rxjs';
-import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, catchError, tap } from 'rxjs/operators';
+import { switchMap, filter, shareReplay, map, takeUntil, distinctUntilChanged, take, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { SocketService, SocketMessageInterface } from './socket.service';
@@ -17,6 +17,8 @@ import { EditPipeDialogComponent } from '../edit-pipe-dialog/edit-pipe-dialog.co
 import { PipeDataInterface } from '../interfaces';
 
 const TIME_RANGE = 6 * 60 * 60 * 1000;
+const MAX_BAT_V = 4.7;
+const MIN_BAT_V = 3.0;
 
 @Component({
     selector: 'app-pipe-card',
@@ -48,6 +50,9 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     ).pipe(
         filter(([pipe, date]) => !!pipe && !!date),
         switchMap(([pipe, date]) => this.serviceAPI.getPipeData(pipe, date)),
+        map(data => {
+            return data.filter(item => item.pack_type === 2)
+        }),
         shareReplay(1),
     );
 
@@ -56,7 +61,7 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
                 x: new Date(d.date),
                 y: Math.max(d.temp, 15)
             }))
-        )
+        ),
     );
 
     tempGradient = [
@@ -87,7 +92,7 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
                 x: new Date(d.date),
                 y: Math.max(d.hum, 20)
             }))
-        )
+        ),
     );
 
     humGradient = [
@@ -112,16 +117,16 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     timeStart$ = this.tempData$.pipe(
-        map(d => d[0].x)
+        map(d => d[0].x),
     );
 
     timeEnd$ = this.tempData$.pipe(
-        map(d => d[d.length - 1].x)
+        map(d => d[d.length - 1].x),
     );
 
     rssiDB$: Observable<number> = this.data$.pipe(
         filter(data => !!(data && data.length)),
-        map(data => data[data.length - 1].tx_res),
+        map(data => data[data.length - 1].rssi),
         distinctUntilChanged(),
     );
 
@@ -132,7 +137,7 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     batteryPerc$: Observable<number> = this.batteryVolt$.pipe(
-        map(batteryVolt => Math.round(((batteryVolt - 3.5) / (5 - 3.5)) * 100))
+        map(batteryVolt => Math.round(((batteryVolt - MIN_BAT_V) / (MAX_BAT_V - MIN_BAT_V)) * 100))
     );
 
     private destroy$: Subject<void> = new Subject();
@@ -220,5 +225,9 @@ export class PipeCardComponent implements OnInit, OnChanges, OnDestroy {
                 this.socketService.setVoltage(pipe, voltage);
             }
         });
+    }
+
+    onResetPipe(pipe: number) {
+        this.socketService.resetPipe(pipe);
     }
 }

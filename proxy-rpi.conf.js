@@ -4,7 +4,7 @@ const PROXY_CONFIG = [
       '/api',
       '/socket.io'
     ],
-    target: 'http://192.168.1.101:80',
+    target: 'http://192.168.1.200:80',
     secure: false,
     changeOrigin: true
   },

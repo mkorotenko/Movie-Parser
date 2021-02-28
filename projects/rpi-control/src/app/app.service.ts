@@ -66,6 +66,19 @@ export class AppService {
           data
         });
       });
+
+      this.socket.on('rfm69.data', (data) => {
+        console.info('rfm69.data:', data);
+        _observer.next({
+          data
+        });
+      });
+      this.socket.on('rfm69.error', (data) => {
+        console.info('rfm69.error:', data);
+        _observer.next({
+          data
+        });
+      });
       return () => {
         this.socket.disconnect();
       };
@@ -106,6 +119,10 @@ export class AppService {
 
   public getFrequency(): Observable<FrequencyResponse> {
     return this.client.get<FrequencyResponse>(`api/core/frequency`);
+  }
+
+  public startRFM69() {
+    return this.client.post(`api/rfm69/start`, { }).subscribe();
   }
 
 }

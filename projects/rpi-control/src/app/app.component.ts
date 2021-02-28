@@ -171,4 +171,10 @@ export class AppComponent implements OnInit {
     this.checkFreq$.next({});
   }
 
+  onStartChange(start: boolean): void {
+    if (start) {
+      this.service.startRFM69();
+    }
+  }
+
 }

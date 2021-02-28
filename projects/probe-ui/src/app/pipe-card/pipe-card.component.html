@@ -24,8 +24,8 @@
                 >
                     <prb-bottom-time-axis></prb-bottom-time-axis>
                     <prb-scale-y-linear
-                        [yScaleStart]="25"
-                        [yScaleEnd]="60"
+                        [yScaleStart]="10"
+                        [yScaleEnd]="30"
                     >
                         <prb-chart-gradient
                             id="temp-gradient"
@@ -97,5 +97,10 @@
         (click)="onSetVoltage(pipe)">
         <mat-icon>battery_unknown</mat-icon>
         <span>Voltage</span>
+    </button>
+    <button mat-menu-item
+        (click)="onResetPipe(pipe)">
+        <mat-icon>battery_unknown</mat-icon>
+        <span>Reset</span>
     </button>
 </mat-menu>

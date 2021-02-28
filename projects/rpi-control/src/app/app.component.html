@@ -1,6 +1,6 @@
 <ui-layout class="control-layout">
   <div class="layout-wrapper">
-    <ui-card>
+    <ui-card class="card">
       <div class="control-input">
         <input placeholder="Speed"
           type="number"
@@ -63,6 +63,15 @@
           </ui-scale-x-time>
         </ui-chart>
       </div>
+    </ui-card>
+    <ui-card class="card">
+      <div class="control-input">
+        <ui-checkbox type="switch-two"
+          [checked]="false"
+          (checkedChange)="onStartChange($event)"
+        ></ui-checkbox>
+      </div>
+      <rpi-log></rpi-log>
     </ui-card>
   </div>
 </ui-layout>

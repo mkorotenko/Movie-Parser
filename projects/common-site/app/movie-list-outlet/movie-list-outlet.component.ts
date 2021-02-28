@@ -26,17 +26,17 @@ export class MovieListOutletComponent implements OnInit {
 
     public filterList = [
         {
+            title: '2021 год',
+            link: '/movies/1?year=2021'
+        },
+        {
             title: '2020 год',
             link: '/movies/1?year=2020'
         },
         {
             title: '2019 год',
             link: '/movies/1?year=2019'
-        },
-        {
-            title: '2018 год',
-            link: '/movies/1?year=2018'
-        },
+        }
     ]
     public genreList = [
         {
