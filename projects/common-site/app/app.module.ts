@@ -19,6 +19,7 @@ import { MovieCardComponent } from './movie-card/movie-card.component';
 import { MovieListOutletComponent } from './movie-list-outlet/movie-list-outlet.component';
 import { MovieSearchComponent } from './movie-search/movie-search.component';
 import { MovieSortComponent } from './movie-sort/movie-sort.component';
+import { HomeComponent } from './projects/bldc-driver/src/app/home/home.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/movies/1', pathMatch: 'full' },
@@ -34,7 +35,8 @@ const routes: Routes = [
         MovieCardComponent,
         MovieListOutletComponent,
         MovieSearchComponent,
-        MovieSortComponent
+        MovieSortComponent,
+        HomeComponent
     ],
     imports: [
         BrowserModule,
