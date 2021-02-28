@@ -10,6 +10,7 @@
     "start:admin-local": "ng serve --proxy-config proxy-admin-local.conf.json --project admin-site",
     "start:probe": "ng serve --proxy-config proxy-probe.conf.js --project probe-ui",
     "start:rpi": "ng serve --proxy-config proxy-rpi.conf.js --project rpi-control",
+    "start:bldc": "ng serve --proxy-config proxy-bldc.conf.js --project bldc-driver",
     "start:lib": "ng build ui-futuristic --watch",
     "server": "node api/home-portal/dist-server",
     "clean_lock": "rimraf mongo-db/mongod.lock",
