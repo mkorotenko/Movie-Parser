@@ -86,7 +86,7 @@
     "@types/node": "~8.9.4",
     "@types/nvd3": "^1.8.39",
     "codelyzer": "^5.2.0",
-    "d3": "^5.14.2",
+    "d3": "^7.6.1",
     "d3-tip": "^0.9.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
